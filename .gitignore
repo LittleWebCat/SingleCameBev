@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+runs/
+frame_*.png
+models/*.engine
+models/*.onnx
+models/*.pt

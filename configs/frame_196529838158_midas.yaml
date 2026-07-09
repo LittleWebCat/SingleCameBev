@@ -1,0 +1,43 @@
+input:
+  width: 1928
+  height: 1208
+  camera_index_backend: auto
+
+models:
+  detector:
+    backend: ultralytics
+    path: models/yolov8n.pt
+    input_size: 640
+    confidence: 0.25
+    iou: 0.5
+    classes: [person, bicycle, car, motorcycle, bus, truck]
+  depth:
+    backend: midas
+    path: MiDaS_small
+    input_size: 256
+    cadence: 2
+    metric_scale: 6000.0
+    metric_bias: 0.0
+    inverse_depth: true
+
+camera:
+  intrinsics:
+    fx: 1350.0
+    fy: 1350.0
+    cx: 964.0
+    cy: 604.0
+  extrinsics:
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+
+bev:
+  forward_range_m: 80.0
+  lateral_range_m: 50.0
+  pixels_per_meter: 8
+
+runtime:
+  target_fps: 30
+  save_images: true
+  max_frames: 0

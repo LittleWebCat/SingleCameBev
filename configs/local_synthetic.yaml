@@ -1,0 +1,44 @@
+input:
+  width: 1280
+  height: 720
+  camera_index_backend: auto
+
+models:
+  detector:
+    backend: synthetic
+    path: ""
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [car]
+  depth:
+    backend: constant
+    path: ""
+    input_size: 384
+    cadence: 2
+    constant_depth_m: 18.0
+    metric_scale: 1.0
+    metric_bias: 0.0
+    inverse_depth: false
+
+camera:
+  intrinsics:
+    fx: 900.0
+    fy: 900.0
+    cx: 640.0
+    cy: 360.0
+  extrinsics:
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+
+bev:
+  forward_range_m: 60.0
+  lateral_range_m: 15.0
+  pixels_per_meter: 8
+
+runtime:
+  target_fps: 30
+  save_images: true
+  max_frames: 0
