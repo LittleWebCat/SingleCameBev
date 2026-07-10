@@ -8,16 +8,19 @@ import cv2
 import numpy as np
 from PIL import Image
 
+from .config import InputConfig
 from .types import ProjectedDetection
 
 
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 
-def iter_frames(source: str) -> Iterator[tuple[int, float, np.ndarray]]:
+def iter_frames(
+    source: str, input_config: InputConfig | None = None
+) -> Iterator[tuple[int, float, np.ndarray]]:
     path = Path(source)
     if source.isdigit():
-        yield from _iter_capture(int(source))
+        yield from _iter_capture(int(source), input_config)
     elif path.is_dir():
         frame_id = 0
         for image_path in sorted(p for p in path.iterdir() if p.suffix.lower() in IMAGE_SUFFIXES):
@@ -32,13 +35,28 @@ def iter_frames(source: str) -> Iterator[tuple[int, float, np.ndarray]]:
             raise RuntimeError(f"Failed to read image: {source}")
         yield 0, 0.0, frame
     else:
-        yield from _iter_capture(str(path))
+        yield from _iter_capture(str(path), input_config)
 
 
-def _iter_capture(source: int | str) -> Iterator[tuple[int, float, np.ndarray]]:
-    cap = cv2.VideoCapture(source)
+def _iter_capture(
+    source: int | str, input_config: InputConfig | None = None
+) -> Iterator[tuple[int, float, np.ndarray]]:
+    api_preference = cv2.CAP_ANY
+    if input_config is not None and input_config.camera_index_backend.lower() == "v4l2":
+        api_preference = cv2.CAP_V4L2
+    cap = cv2.VideoCapture(source, api_preference)
     if not cap.isOpened():
         raise RuntimeError(f"Failed to open source: {source}")
+    if input_config is not None:
+        if input_config.fourcc:
+            fourcc = cv2.VideoWriter_fourcc(*input_config.fourcc[:4])
+            cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+        if input_config.width > 0:
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, input_config.width)
+        if input_config.height > 0:
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, input_config.height)
+        if input_config.fps > 0:
+            cap.set(cv2.CAP_PROP_FPS, input_config.fps)
     frame_id = 0
     fps = cap.get(cv2.CAP_PROP_FPS) or 0.0
     try:

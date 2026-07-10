@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
+from dataclasses import replace
 from pathlib import Path
 
 import cv2
@@ -22,7 +24,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--config", default="configs/thor_1080p.yaml", help="YAML config path")
     parser.add_argument("--save-dir", default="runs/bev_depth", help="Output directory")
     parser.add_argument("--display", action="store_true", help="Show live annotated and BEV preview")
+    parser.add_argument("--display-bev", action="store_true", help="Show only the live BEV preview")
     parser.add_argument("--no-save-images", action="store_true", help="Write JSONL only")
+    parser.add_argument("--save-bev-only", action="store_true", help="Save BEV images without annotated/depth images")
+    parser.add_argument("--max-frames", type=int, default=None, help="Override config runtime.max_frames")
+    parser.add_argument("--input-width", type=int, default=None, help="Override camera capture width")
+    parser.add_argument("--input-height", type=int, default=None, help="Override camera capture height")
+    parser.add_argument("--input-fps", type=int, default=None, help="Override camera capture FPS")
+    parser.add_argument("--input-fourcc", default=None, help="Override camera capture FOURCC, for example MJPG")
     parser.add_argument("--profile", action="store_true", help="Print stage latency summary")
     return parser.parse_args(argv)
 
@@ -30,16 +39,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     config = load_config(args.config)
+    input_overrides = {}
+    if args.input_width is not None:
+        input_overrides["width"] = args.input_width
+    if args.input_height is not None:
+        input_overrides["height"] = args.input_height
+    if args.input_fps is not None:
+        input_overrides["fps"] = args.input_fps
+    if args.input_fourcc is not None:
+        input_overrides["fourcc"] = args.input_fourcc
+    if input_overrides:
+        config = replace(config, input=replace(config.input, **input_overrides))
     dirs = ensure_output_dirs(args.save_dir)
     detector = create_detector(config.detector)
     depth_backend = create_depth_backend(config.depth)
     profiler = Profiler()
     latest_depth = None
+    processed_frames = 0
+    loop_start = time.perf_counter()
 
     jsonl_path = Path(args.save_dir) / "detections.jsonl"
     with jsonl_path.open("w", encoding="utf-8") as jsonl:
-        for frame_id, timestamp, frame in iter_frames(args.source):
-            if config.runtime.max_frames and frame_id >= config.runtime.max_frames:
+        for frame_id, timestamp, frame in iter_frames(args.source, config.input):
+            max_frames = args.max_frames if args.max_frames is not None else config.runtime.max_frames
+            if max_frames and frame_id >= max_frames:
                 break
 
             with profiler.stage("detect"):
@@ -83,15 +106,21 @@ def main(argv: list[str] | None = None) -> int:
             write_jsonl_record(jsonl, frame_id, timestamp, projected)
 
             save_images = config.runtime.save_images and not args.no_save_images
-            if save_images or args.display:
+            display_any = args.display or args.display_bev
+            if save_images or display_any:
                 with profiler.stage("render"):
-                    annotated = draw_annotated_frame(frame, projected)
-                    depth_vis = render_depth(latest_depth)
+                    annotated = None
+                    depth_vis = None
+                    need_full_render = args.display or (save_images and not args.save_bev_only)
+                    if need_full_render:
+                        annotated = draw_annotated_frame(frame, projected)
+                        depth_vis = render_depth(latest_depth)
                     bev = render_bev(config.bev, projected)
                 if save_images:
                     stem = f"{frame_id:06d}.jpg"
-                    save_bgr_image(dirs["annotated"] / stem, annotated)
-                    save_bgr_image(dirs["depth"] / stem, depth_vis)
+                    if not args.save_bev_only:
+                        save_bgr_image(dirs["annotated"] / stem, annotated)
+                        save_bgr_image(dirs["depth"] / stem, depth_vis)
                     save_bgr_image(dirs["bev"] / stem, bev)
                 if args.display:
                     cv2.imshow("annotated", annotated)
@@ -99,11 +128,21 @@ def main(argv: list[str] | None = None) -> int:
                     cv2.imshow("bev", bev)
                     if cv2.waitKey(1) == 27:
                         break
+                elif args.display_bev:
+                    cv2.imshow("bev", bev)
+                    if cv2.waitKey(1) == 27:
+                        break
+            processed_frames += 1
 
-    if args.display:
+    if args.display or args.display_bev:
         cv2.destroyAllWindows()
     if args.profile:
+        elapsed = time.perf_counter() - loop_start
         print(profiler.summary())
+        print(
+            f"frames={processed_frames} elapsed={elapsed:.2f}s "
+            f"end_to_end_fps={processed_frames / elapsed if elapsed > 0.0 else 0.0:.1f}"
+        )
     return 0
 
 

@@ -1,7 +1,9 @@
 input:
-  width: 1920
-  height: 1080
-  camera_index_backend: auto
+  width: 800
+  height: 600
+  fps: 30
+  fourcc: MJPG
+  camera_index_backend: v4l2
 
 models:
   detector:
@@ -34,7 +36,7 @@ camera:
 
 bev:
   forward_range_m: 80.0
-  lateral_range_m: 20.0
+  lateral_range_m: 40.0
   pixels_per_meter: 10
 
 runtime:

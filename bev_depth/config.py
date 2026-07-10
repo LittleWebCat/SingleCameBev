@@ -8,6 +8,15 @@ import yaml
 
 
 @dataclass(frozen=True)
+class InputConfig:
+    width: int
+    height: int
+    fps: int
+    fourcc: str
+    camera_index_backend: str
+
+
+@dataclass(frozen=True)
 class Intrinsics:
     fx: float
     fy: float
@@ -61,6 +70,7 @@ class RuntimeConfig:
 
 @dataclass(frozen=True)
 class AppConfig:
+    input: InputConfig
     detector: DetectorConfig
     depth: DepthConfig
     intrinsics: Intrinsics
@@ -78,6 +88,7 @@ def _get(mapping: dict[str, Any], key: str, default: Any = None) -> Any:
 
 def load_config(path: str | Path) -> AppConfig:
     data = yaml.safe_load(Path(path).read_text()) or {}
+    input_config = data.get("input", {})
     models = data.get("models", {})
     detector = models.get("detector", {})
     depth = models.get("depth", {})
@@ -88,6 +99,13 @@ def load_config(path: str | Path) -> AppConfig:
     runtime = data.get("runtime", {})
 
     return AppConfig(
+        input=InputConfig(
+            width=int(_get(input_config, "width", 1600)),
+            height=int(_get(input_config, "height", 1200)),
+            fps=int(_get(input_config, "fps", 15)),
+            fourcc=str(_get(input_config, "fourcc", "MJPG")),
+            camera_index_backend=str(_get(input_config, "camera_index_backend", "auto")),
+        ),
         detector=DetectorConfig(
             backend=str(_get(detector, "backend", "ultralytics")),
             path=str(_get(detector, "path", "")),

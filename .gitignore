@@ -1,8 +1,14 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.venv/
 runs/
 frame_*.png
+third_party/
+video.mkv
+yolo*.onnx
+yolo*.pt
+models/
 models/*.engine
 models/*.onnx
 models/*.pt

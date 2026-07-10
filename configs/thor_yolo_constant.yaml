@@ -1,0 +1,46 @@
+input:
+  width: 800
+  height: 600
+  fps: 30
+  fourcc: MJPG
+  camera_index_backend: v4l2
+
+models:
+  detector:
+    backend: ultralytics
+    path: models/yolo_vehicle_fp16.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [person, bicycle, car, motorcycle, bus, truck]
+  depth:
+    backend: constant
+    path: ""
+    input_size: 384
+    cadence: 1
+    constant_depth_m: 18.0
+    metric_scale: 1.0
+    metric_bias: 0.0
+    inverse_depth: false
+
+camera:
+  intrinsics:
+    fx: 1200.0
+    fy: 1200.0
+    cx: 960.0
+    cy: 540.0
+  extrinsics:
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+
+bev:
+  forward_range_m: 80.0
+  lateral_range_m: 40.0
+  pixels_per_meter: 10
+
+runtime:
+  target_fps: 30
+  save_images: true
+  max_frames: 0

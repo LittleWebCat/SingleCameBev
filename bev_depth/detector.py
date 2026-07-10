@@ -8,6 +8,89 @@ import numpy as np
 from .config import DetectorConfig
 from .types import Detection
 
+COCO_CLASS_NAMES = (
+    "person",
+    "bicycle",
+    "car",
+    "motorcycle",
+    "airplane",
+    "bus",
+    "train",
+    "truck",
+    "boat",
+    "traffic light",
+    "fire hydrant",
+    "stop sign",
+    "parking meter",
+    "bench",
+    "bird",
+    "cat",
+    "dog",
+    "horse",
+    "sheep",
+    "cow",
+    "elephant",
+    "bear",
+    "zebra",
+    "giraffe",
+    "backpack",
+    "umbrella",
+    "handbag",
+    "tie",
+    "suitcase",
+    "frisbee",
+    "skis",
+    "snowboard",
+    "sports ball",
+    "kite",
+    "baseball bat",
+    "baseball glove",
+    "skateboard",
+    "surfboard",
+    "tennis racket",
+    "bottle",
+    "wine glass",
+    "cup",
+    "fork",
+    "knife",
+    "spoon",
+    "bowl",
+    "banana",
+    "apple",
+    "sandwich",
+    "orange",
+    "broccoli",
+    "carrot",
+    "hot dog",
+    "pizza",
+    "donut",
+    "cake",
+    "chair",
+    "couch",
+    "potted plant",
+    "bed",
+    "dining table",
+    "toilet",
+    "tv",
+    "laptop",
+    "mouse",
+    "remote",
+    "keyboard",
+    "cell phone",
+    "microwave",
+    "oven",
+    "toaster",
+    "sink",
+    "refrigerator",
+    "book",
+    "clock",
+    "vase",
+    "scissors",
+    "teddy bear",
+    "hair drier",
+    "toothbrush",
+)
+
 
 class DetectorBackend(Protocol):
     def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
@@ -46,21 +129,8 @@ class UltralyticsDetectorBackend:
         self.allowed = set(config.classes)
 
     def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
-        try:
-            from PIL import Image
-            import torch
-        except ImportError as exc:
-            raise RuntimeError("Ultralytics tensor path requires Pillow and torch.") from exc
-        original_h, original_w = frame_bgr.shape[:2]
-        frame_rgb = frame_bgr[:, :, ::-1]
-        image = Image.fromarray(frame_rgb).resize(
-            (self.config.input_size, self.config.input_size)
-        )
-        tensor = torch.frombuffer(bytearray(image.tobytes()), dtype=torch.uint8)
-        tensor = tensor.view(self.config.input_size, self.config.input_size, 3)
-        tensor = tensor.permute(2, 0, 1).unsqueeze(0).float() / 255.0
         results = self.model.predict(
-            source=tensor,
+            source=frame_bgr,
             imgsz=self.config.input_size,
             conf=self.config.confidence,
             iou=self.config.iou,
@@ -74,22 +144,16 @@ class UltralyticsDetectorBackend:
         for box in result.boxes:
             class_id = int(box.cls.item())
             class_name = str(names.get(class_id, class_id))
+            if class_name == f"class{class_id}" and class_id < len(COCO_CLASS_NAMES):
+                class_name = COCO_CLASS_NAMES[class_id]
             if self.allowed and class_name not in self.allowed:
                 continue
             raw_xyxy = [float(v) for v in box.xyxy[0].tolist()]
-            scale_x = original_w / float(self.config.input_size)
-            scale_y = original_h / float(self.config.input_size)
-            xyxy = (
-                raw_xyxy[0] * scale_x,
-                raw_xyxy[1] * scale_y,
-                raw_xyxy[2] * scale_x,
-                raw_xyxy[3] * scale_y,
-            )
             detections.append(
                 Detection(
                     class_name=class_name,
                     confidence=float(box.conf.item()),
-                    bbox_xyxy=xyxy,
+                    bbox_xyxy=tuple(raw_xyxy),
                 )
             )
         return detections

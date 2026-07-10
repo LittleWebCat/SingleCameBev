@@ -124,10 +124,14 @@ class TensorRTDepthBackend:
             ) from exc
         try:
             from cuda import cudart
-        except ImportError as exc:
-            raise RuntimeError(
-                "TensorRT depth backend requires cuda-python bindings: import cuda.cudart failed."
-            ) from exc
+        except ImportError:
+            try:
+                from cuda.bindings import runtime as cudart
+            except ImportError as exc:
+                raise RuntimeError(
+                    "TensorRT depth backend requires CUDA Python bindings. "
+                    "Tried cuda.cudart and cuda.bindings.runtime."
+                ) from exc
 
         self.trt = trt
         self.cudart = cudart
