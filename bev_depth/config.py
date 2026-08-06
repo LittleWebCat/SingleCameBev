@@ -22,6 +22,8 @@ class Intrinsics:
     fy: float
     cx: float
     cy: float
+    calibration_width: int = 0
+    calibration_height: int = 0
 
 
 @dataclass(frozen=True)
@@ -72,6 +74,7 @@ class RuntimeConfig:
 class AppConfig:
     input: InputConfig
     detector: DetectorConfig
+    traffic_detector: DetectorConfig | None
     depth: DepthConfig
     intrinsics: Intrinsics
     extrinsics: Extrinsics
@@ -86,11 +89,23 @@ def _get(mapping: dict[str, Any], key: str, default: Any = None) -> Any:
     return value
 
 
+def _load_detector_config(data: dict[str, Any]) -> DetectorConfig:
+    return DetectorConfig(
+        backend=str(_get(data, "backend", "ultralytics")),
+        path=str(_get(data, "path", "")),
+        input_size=int(_get(data, "input_size", 640)),
+        confidence=float(_get(data, "confidence", 0.35)),
+        iou=float(_get(data, "iou", 0.5)),
+        classes=tuple(str(name) for name in _get(data, "classes", [])),
+    )
+
+
 def load_config(path: str | Path) -> AppConfig:
     data = yaml.safe_load(Path(path).read_text()) or {}
     input_config = data.get("input", {})
     models = data.get("models", {})
     detector = models.get("detector", {})
+    traffic_detector = models.get("traffic_detector")
     depth = models.get("depth", {})
     camera = data.get("camera", {})
     intrinsics = camera.get("intrinsics", {})
@@ -106,13 +121,11 @@ def load_config(path: str | Path) -> AppConfig:
             fourcc=str(_get(input_config, "fourcc", "MJPG")),
             camera_index_backend=str(_get(input_config, "camera_index_backend", "auto")),
         ),
-        detector=DetectorConfig(
-            backend=str(_get(detector, "backend", "ultralytics")),
-            path=str(_get(detector, "path", "")),
-            input_size=int(_get(detector, "input_size", 640)),
-            confidence=float(_get(detector, "confidence", 0.35)),
-            iou=float(_get(detector, "iou", 0.5)),
-            classes=tuple(str(name) for name in _get(detector, "classes", [])),
+        detector=_load_detector_config(detector),
+        traffic_detector=(
+            _load_detector_config(traffic_detector)
+            if isinstance(traffic_detector, dict)
+            else None
         ),
         depth=DepthConfig(
             backend=str(_get(depth, "backend", "tensorrt")),
@@ -131,6 +144,12 @@ def load_config(path: str | Path) -> AppConfig:
             fy=float(_get(intrinsics, "fy", 1200.0)),
             cx=float(_get(intrinsics, "cx", 960.0)),
             cy=float(_get(intrinsics, "cy", 540.0)),
+            calibration_width=int(
+                _get(intrinsics, "calibration_width", _get(input_config, "width", 1600))
+            ),
+            calibration_height=int(
+                _get(intrinsics, "calibration_height", _get(input_config, "height", 1200))
+            ),
         ),
         extrinsics=Extrinsics(
             height_m=float(_get(extrinsics, "height_m", 1.45)),

@@ -7,6 +7,41 @@ import numpy as np
 from .config import BevConfig, Extrinsics, Intrinsics
 
 
+def scale_intrinsics(
+    intrinsics: Intrinsics, frame_width: int, frame_height: int
+) -> Intrinsics:
+    """Scale calibrated pixel intrinsics to the dimensions of an input frame."""
+    calibration_width = intrinsics.calibration_width or frame_width
+    calibration_height = intrinsics.calibration_height or frame_height
+    if calibration_width <= 0 or calibration_height <= 0:
+        raise ValueError("intrinsics calibration dimensions must be positive")
+    if frame_width <= 0 or frame_height <= 0:
+        raise ValueError("frame dimensions must be positive")
+    if intrinsics.fx <= 0.0 or intrinsics.fy <= 0.0:
+        raise ValueError("intrinsics focal lengths must be positive")
+    if not (0.0 <= intrinsics.cx < calibration_width):
+        raise ValueError(
+            f"intrinsics cx={intrinsics.cx} is outside calibration width "
+            f"{calibration_width}"
+        )
+    if not (0.0 <= intrinsics.cy < calibration_height):
+        raise ValueError(
+            f"intrinsics cy={intrinsics.cy} is outside calibration height "
+            f"{calibration_height}"
+        )
+
+    scale_x = frame_width / calibration_width
+    scale_y = frame_height / calibration_height
+    return Intrinsics(
+        fx=intrinsics.fx * scale_x,
+        fy=intrinsics.fy * scale_y,
+        cx=intrinsics.cx * scale_x,
+        cy=intrinsics.cy * scale_y,
+        calibration_width=frame_width,
+        calibration_height=frame_height,
+    )
+
+
 def rotation_matrix(extrinsics: Extrinsics) -> np.ndarray:
     pitch = math.radians(extrinsics.pitch_deg)
     yaw = math.radians(extrinsics.yaw_deg)
