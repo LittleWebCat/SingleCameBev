@@ -12,7 +12,9 @@ Current live-camera defaults:
 
 - Camera node: `/dev/video0`
 - Capture mode: `800x600 MJPG @ 30 FPS`
-- Detector: `models/yolo_vehicle_fp16.engine`
+- Road-user detector: `models/yolo_vehicle_fp16.engine`
+- Traffic-state detector: `models/traffic_light_state_fp32.engine`
+- Detected classes: person, bicycle, car, motorcycle, bus, truck, stop sign, red, yellow, and green
 - Depth: `models/depth_anything_v2_small_fp16.engine`
 - Depth cadence: every 2 frames
 - BEV range: `40m` lateral by `80m` forward
@@ -110,6 +112,59 @@ DISPLAY=:1 .venv/bin/python -m bev_depth.infer \
 
 Press `Esc` in the OpenCV window to stop.
 
+BEV marker legend:
+
+- Stop sign: red octagon
+- Traffic state: vertical black signal with only the detected red, yellow, or green lamp illuminated
+- Other detected classes: orange circle
+
+### GPS and IMU recording controls
+
+The live BEV window includes one `RECORD GPS + IMU` control at the top. One
+click starts both timestamped sensor logs; the next click stops both. If either
+sensor is unavailable, neither recorder remains active.
+
+The ports are detected automatically. The current hardware resolves to the
+Septentrio `USB1` serial interface for GPS and `/dev/ttyUSB0` for the Xsens
+MTi-30 once its kernel driver is loaded. Override detection when needed:
+
+```bash
+.venv/bin/python -m bev_depth.infer \
+  --source 0 \
+  --config configs/thor_1080p.yaml \
+  --save-dir runs/live_camera_bev_display \
+  --no-save-images \
+  --display-bev \
+  --gps-port /dev/ttyACM0 \
+  --imu-port /dev/ttyUSB0 \
+  --profile
+```
+
+Recordings are created only after their button is clicked:
+
+```text
+runs/live_camera_bev_display/sensors/gps_YYYYMMDD_HHMMSS_NNNNNNNNN.jsonl
+runs/live_camera_bev_display/sensors/imu_YYYYMMDD_HHMMSS_NNNNNNNNN.jsonl
+runs/live_camera_bev_display/sensors/session_YYYYMMDD_HHMMSS_NNNNNNNNN.json
+```
+
+GPS records contain the original NMEA sentence. For the connected Septentrio
+receiver, the button temporarily enables `GGA+RMC` at 10 Hz on an otherwise
+unused output stream and disables that stream when recording stops. IMU records
+store lossless base64-encoded Xbus byte chunks for later decoding. Stale serial
+input is cleared before the shared session begins. GPS and IMU records contain
+the same `session_id`, `session_start_monotonic_ns`, and session-relative
+`elapsed_ns`. While recording, camera frames in `detections.jsonl` contain the
+matching `sensor_session_id` and `sensor_elapsed_ns`. The session manifest names
+all three logs and records their common start, stop, and duration timestamps.
+
+An orange `RETRY GPS + IMU` button means at least one port is absent or
+inaccessible. Reconnect the device or correct its permissions/driver, then
+click it again.
+
+Serial access requires membership in the `dialout` group. After adding a user
+to that group, log out and back in before launching the live BEV process.
+
 ## 1600x1200 Camera Mode
 
 Use this when you want higher camera detail:
@@ -188,6 +243,7 @@ Current engine paths:
 
 ```text
 models/yolo_vehicle_fp16.engine
+models/traffic_light_state_fp32.engine
 models/depth_anything_v2_small_fp16.engine
 ```
 
@@ -220,6 +276,22 @@ Place or rename the result to:
 ```text
 models/yolo_vehicle_fp16.engine
 ```
+
+The Thor runtime presets use two detectors. The vehicle model detects people,
+road vehicles, and stop signs; its generic COCO `traffic light` output is
+filtered out. `models/traffic_light_state_fp32.engine` replaces that output with
+`red`, `yellow`, or `green` detections. All detections use the same metric-depth
+sampling and BEV projection, so their estimated depth is shown on annotated/BEV
+frames and written to `detections.jsonl` as `depth_m`.
+
+On a 300-frame unrestricted run of `video.mkv` on Thor, the two detector stages
+averaged `13.90 ms`. The constant-depth pipeline achieved `47.9 FPS` end to end.
+With TensorRT metric depth every other frame, detector time averaged `13.12 ms`,
+depth time averaged `15.70 ms`, and the full pipeline achieved `36.2 FPS` without
+image rendering or saving. After a 10-frame warmup, isolated application latency
+averaged `5.03 ms` for the vehicle model, `3.74 ms` for the traffic-state model,
+and `8.77 ms` combined (`10.35 ms` p95). USB-camera capture was unavailable for
+this benchmark.
 
 ### Export Depth Anything V2 Metric Engine
 
@@ -307,6 +379,10 @@ If you already have a `detections.jsonl`, redraw BEV frames with a new range wit
 - `--input-height N`: override camera capture height
 - `--input-fps N`: override camera capture FPS
 - `--input-fourcc MJPG`: override camera capture FOURCC
+- `--gps-port PATH`: GPS port; default `auto`
+- `--imu-port PATH`: IMU port; default `auto`
+- `--gps-baud N`: GPS baud rate; default `115200`
+- `--imu-baud N`: IMU baud rate; default `115200`
 - `--no-save-images`: JSONL/profile only
 - `--profile`: print stage timing and end-to-end FPS
 
@@ -318,9 +394,15 @@ Update `configs/thor_1080p.yaml` for your final camera mount:
 - `camera.intrinsics.fy`
 - `camera.intrinsics.cx`
 - `camera.intrinsics.cy`
+- `camera.intrinsics.calibration_width`
+- `camera.intrinsics.calibration_height`
 - `camera.extrinsics.height_m`
 - `camera.extrinsics.pitch_deg`
 - `camera.extrinsics.yaw_deg`
 - `camera.extrinsics.roll_deg`
 
-Depth Anything metric gives useful meter-scale depth, but final BEV accuracy still depends on camera intrinsics, pitch, mounting height, and real-world validation.
+Depth Anything metric gives useful meter-scale depth, but final BEV accuracy
+still depends on camera intrinsics, pitch, mounting height, and real-world
+validation. Intrinsics are automatically scaled to the dimensions of each
+decoded frame. The calibration width and height must describe the image
+resolution at which `fx`, `fy`, `cx`, and `cy` were measured.

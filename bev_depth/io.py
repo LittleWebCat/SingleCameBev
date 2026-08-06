@@ -41,13 +41,18 @@ def iter_frames(
 def _iter_capture(
     source: int | str, input_config: InputConfig | None = None
 ) -> Iterator[tuple[int, float, np.ndarray]]:
+    is_camera = isinstance(source, int)
     api_preference = cv2.CAP_ANY
-    if input_config is not None and input_config.camera_index_backend.lower() == "v4l2":
+    if (
+        is_camera
+        and input_config is not None
+        and input_config.camera_index_backend.lower() == "v4l2"
+    ):
         api_preference = cv2.CAP_V4L2
     cap = cv2.VideoCapture(source, api_preference)
     if not cap.isOpened():
         raise RuntimeError(f"Failed to open source: {source}")
-    if input_config is not None:
+    if is_camera and input_config is not None:
         if input_config.fourcc:
             fourcc = cv2.VideoWriter_fourcc(*input_config.fourcc[:4])
             cap.set(cv2.CAP_PROP_FOURCC, fourcc)
@@ -85,11 +90,22 @@ def ensure_output_dirs(save_dir: str | Path) -> dict[str, Path]:
 
 
 def write_jsonl_record(
-    handle, frame_id: int, timestamp: float, detections: list[ProjectedDetection]
+    handle,
+    frame_id: int,
+    timestamp: float,
+    detections: list[ProjectedDetection],
+    wall_time_ns: int | None = None,
+    monotonic_ns: int | None = None,
+    sensor_session_id: str | None = None,
+    sensor_elapsed_ns: int | None = None,
 ) -> None:
     record = {
         "frame_id": frame_id,
         "timestamp": timestamp,
+        "wall_time_ns": wall_time_ns,
+        "monotonic_ns": monotonic_ns,
+        "sensor_session_id": sensor_session_id,
+        "sensor_elapsed_ns": sensor_elapsed_ns,
         "objects": [
             {
                 "class_name": item.detection.class_name,

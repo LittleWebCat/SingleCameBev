@@ -109,6 +109,17 @@ class SyntheticDetectorBackend:
         ]
 
 
+class CompositeDetectorBackend:
+    def __init__(self, backends: tuple[DetectorBackend, ...]) -> None:
+        self.backends = backends
+
+    def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
+        detections: list[Detection] = []
+        for backend in self.backends:
+            detections.extend(backend.infer(frame_bgr))
+        return detections
+
+
 class UltralyticsDetectorBackend:
     def __init__(self, config: DetectorConfig) -> None:
         if not config.path:
@@ -124,7 +135,7 @@ class UltralyticsDetectorBackend:
                 "Ultralytics detector backend requires `pip install ultralytics`. "
                 "Use a .engine model path on Thor for TensorRT inference."
             ) from exc
-        self.model = YOLO(config.path)
+        self.model = YOLO(config.path, task="detect")
         self.config = config
         self.allowed = set(config.classes)
 
@@ -159,10 +170,19 @@ class UltralyticsDetectorBackend:
         return detections
 
 
-def create_detector(config: DetectorConfig) -> DetectorBackend:
+def _create_single_detector(config: DetectorConfig) -> DetectorBackend:
     backend = config.backend.lower()
     if backend == "synthetic":
         return SyntheticDetectorBackend()
     if backend == "ultralytics":
         return UltralyticsDetectorBackend(config)
     raise ValueError(f"Unsupported detector backend: {config.backend}")
+
+
+def create_detector(
+    config: DetectorConfig, traffic_config: DetectorConfig | None = None
+) -> DetectorBackend:
+    primary = _create_single_detector(config)
+    if traffic_config is None:
+        return primary
+    return CompositeDetectorBackend((primary, _create_single_detector(traffic_config)))
