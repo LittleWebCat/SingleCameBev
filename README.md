@@ -155,12 +155,58 @@ Press `Esc` in the OpenCV window to stop.
 
 `configs/three_camera_bev.yaml` uses the verified physical layout:
 
-- Left: `/dev/video0`, object detection and depth
-- Middle: `/dev/video4`, object detection, depth, and red/yellow/green classification
-- Right: `/dev/video2`, object detection and depth
+- Left: `/dev/video0`, yaw `-90°`, object detection and depth
+- Middle: `/dev/video4`, yaw `0°`, object detection, depth, and red/yellow/green classification
+- Right: `/dev/video2`, yaw `+90°`, object detection and depth
 
-An experimental fixed-batch engine is available at
-`models/yolo_vehicle_batch3_fp16.engine`. Run it with:
+All three cameras use `640x480 YUYV @ 20 FPS`. The device numbers identify the
+current USB topology; verify them with `v4l2-ctl --list-devices` after moving a
+camera to another hub port.
+
+### Required local models
+
+Model binaries are intentionally excluded from Git. A clean checkout needs
+these files copied or generated locally before running the three-camera BEV:
+
+```text
+models/yolo_vehicle_fp16.engine
+models/depth_anything_v2_small_fp16.engine
+untested_model/best.engine
+```
+
+The last file is the Middle-camera red/yellow/green detector. Left and Right do
+not invoke it.
+
+### Three simultaneous UVC streams
+
+These uncompressed camera streams require the Linux UVC bandwidth correction
+quirk on the current host. Stop programs using the cameras, then reload the
+driver:
+
+```bash
+sudo modprobe -r uvcvideo
+sudo modprobe uvcvideo quirks=0x80
+cat /sys/module/uvcvideo/parameters/quirks
+```
+
+The last command should print `128`. This setting is temporary and must be
+reapplied after a reboot or UVC driver reload unless it is made persistent in a
+system modprobe configuration. The correction applies to the verified YUYV
+mode; it did not allow three simultaneous MJPG streams on the current USB 2.0
+topology.
+
+An experimental fixed-batch engine can be generated locally as
+`models/yolo_vehicle_batch3_fp16.engine`. Because model binaries are not stored
+in Git, build or copy that engine before running. To build it from local
+`yolo11n.pt` weights:
+
+```bash
+.venv/bin/python scripts/export_yolo_engine.py \
+  --weights yolo11n.pt --imgsz 640 --batch 3 --quantize 16 --no-simplify
+mv yolo11n.engine models/yolo_vehicle_batch3_fp16.engine
+```
+
+Then run:
 
 ```bash
 DISPLAY=:1 .venv/bin/python -m bev_depth.multicam_infer \
@@ -191,6 +237,21 @@ Use `--display-bev` instead of `--display` to show only the fused BEV. Press
 estimates; calibrate all three cameras before relying on fused positions or
 depth values as ground truth.
 
+Run only the live fused BEV while saving one semantic matrix per frame:
+
+```bash
+DISPLAY=:1 PYTHONPATH=. .venv/bin/python -m bev_depth.multicam_infer \
+  --config configs/three_camera_bev.yaml \
+  --save-dir runs/three_camera_bev_live \
+  --no-save-images \
+  --display-bev \
+  --profile
+```
+
+`--no-save-images` disables annotated, depth, dashboard, and BEV image files;
+it does not disable semantic matrices because `save_matrices: true` is set in
+the three-camera config.
+
 The fused map covers 40 m to either side, 80 m forward, and 40 m rearward
 (80 m lateral by 120 m longitudinal). This retains the requested side/rear
 range while keeping the longer forward range for the middle camera. The
@@ -203,6 +264,33 @@ The physical grid is 80 cells wide by 120 cells longitudinal, represented in
 NumPy as shape `(120, 80)`. Row 0 is 80 m forward; the last row is 40 m rear.
 Column 0 is 40 m left; the last column is 40 m right. Empty cells are `0`.
 Class IDs and axis metadata are stored in `matrix/metadata.json`.
+
+| Value | Meaning |
+| ---: | --- |
+| `0` | empty |
+| `1` | person |
+| `2` | bicycle |
+| `3` | car |
+| `4` | motorcycle |
+| `5` | bus |
+| `6` | truck |
+| `7` | stop sign |
+| `8` | traffic light |
+| `9` | red traffic light |
+| `10` | yellow traffic light |
+| `11` | green traffic light |
+| `255` | unknown class |
+
+If multiple detections occupy the same one-meter cell, the
+highest-confidence detection supplies that cell's value. Load a saved matrix
+with:
+
+```python
+import numpy as np
+
+matrix = np.load("runs/three_camera_bev_live/matrix/000000.npy")
+assert matrix.shape == (120, 80)
+```
 
 BEV marker legend:
 
