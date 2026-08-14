@@ -96,6 +96,45 @@ ffmpeg -y -framerate 30 -i runs/live_camera_bev/bev/%06d.jpg \
   runs/live_camera_bev/bev.mp4
 ```
 
+## New Global-Shutter Camera BEV
+
+`configs/new_camera_bev.yaml` combines the new `1920x1200 MJPG @ 90 FPS`
+camera stream with:
+
+- `models/yolo_vehicle_fp16.engine` for road-user/object detection
+- `untested_model/best.engine` for red/yellow/green traffic-light state
+- `models/depth_anything_v2_small_fp16.engine` for metric-depth estimation
+- Front BEV projection with class, confidence, and estimated distance
+
+Show the annotated camera, depth map, and BEV together without saving frames:
+
+```bash
+DISPLAY=:1 .venv/bin/python -m bev_depth.infer \
+  --source 0 \
+  --config configs/new_camera_bev.yaml \
+  --save-dir runs/new_camera_bev_live \
+  --no-save-images \
+  --display \
+  --profile
+```
+
+Show only the live BEV window:
+
+```bash
+DISPLAY=:1 .venv/bin/python -m bev_depth.infer \
+  --source 0 \
+  --config configs/new_camera_bev.yaml \
+  --save-dir runs/new_camera_bev_live \
+  --no-save-images \
+  --display-bev \
+  --profile
+```
+
+Press `Esc` to stop either live view. Remove `--no-save-images` to record the
+annotated camera, depth, and BEV frames. The new camera configuration contains
+estimated intrinsics and mounting values; calibrate the lens and measure the
+final camera pose before relying on BEV positions or distances.
+
 ## Live BEV Visualization
 
 Use `--display-bev` to show only the BEV window in real time. This avoids the extra annotated-camera and depth preview windows.
@@ -111,6 +150,59 @@ DISPLAY=:1 .venv/bin/python -m bev_depth.infer \
 ```
 
 Press `Esc` in the OpenCV window to stop.
+
+## Three-Camera Fused BEV
+
+`configs/three_camera_bev.yaml` uses the verified physical layout:
+
+- Left: `/dev/video0`, object detection and depth
+- Middle: `/dev/video4`, object detection, depth, and red/yellow/green classification
+- Right: `/dev/video2`, object detection and depth
+
+An experimental fixed-batch engine is available at
+`models/yolo_vehicle_batch3_fp16.engine`. Run it with:
+
+```bash
+DISPLAY=:1 .venv/bin/python -m bev_depth.multicam_infer \
+  --config configs/three_camera_bev.yaml \
+  --batch-detector-model models/yolo_vehicle_batch3_fp16.engine \
+  --save-dir runs/three_camera_bev_batch3 \
+  --no-save-images --display-bev --profile
+```
+
+On the current hardware, batch-3 reduced vehicle inference from about 22 ms to
+18 ms, but the measured 200-frame end-to-end rate was 7.4 FPS versus 8.5 FPS
+sequentially because camera acquisition waited longer. Sequential mode remains
+the default. Traffic-color inference is middle-camera-only in both modes.
+
+Run the synchronized three-camera dashboard and fused BEV:
+
+```bash
+DISPLAY=:1 .venv/bin/python -m bev_depth.multicam_infer \
+  --config configs/three_camera_bev.yaml \
+  --save-dir runs/three_camera_bev_live \
+  --no-save-images \
+  --display \
+  --profile
+```
+
+Use `--display-bev` instead of `--display` to show only the fused BEV. Press
+`q` or `Esc` to stop. The current intrinsics, camera offsets, and yaw angles are
+estimates; calibrate all three cameras before relying on fused positions or
+depth values as ground truth.
+
+The fused map covers 40 m to either side, 80 m forward, and 40 m rearward
+(80 m lateral by 120 m longitudinal). This retains the requested side/rear
+range while keeping the longer forward range for the middle camera. The
+directly rear-facing sector remains unseen because no rear camera is configured.
+
+### Semantic matrix output
+
+Every fused frame also writes a one-meter semantic matrix to `matrix/NNNNNN.npy`.
+The physical grid is 80 cells wide by 120 cells longitudinal, represented in
+NumPy as shape `(120, 80)`. Row 0 is 80 m forward; the last row is 40 m rear.
+Column 0 is 40 m left; the last column is 40 m right. Empty cells are `0`.
+Class IDs and axis metadata are stored in `matrix/metadata.json`.
 
 BEV marker legend:
 

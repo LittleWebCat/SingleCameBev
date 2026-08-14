@@ -103,17 +103,29 @@ def _draw_bev_marker(draw: ImageDraw.ImageDraw, x: int, y: int, class_name: str)
 
 def render_bev(bev: BevConfig, detections: list[ProjectedDetection]) -> np.ndarray:
     width = int(round(bev.lateral_range_m * bev.pixels_per_meter))
-    height = int(round(bev.forward_range_m * bev.pixels_per_meter))
+    height = int(
+        round((bev.forward_range_m + bev.rear_range_m) * bev.pixels_per_meter)
+    )
     image = Image.new("RGB", (width, height), (245, 245, 245))
     draw = ImageDraw.Draw(image)
     center_x = width // 2
 
-    for meters in range(0, int(bev.forward_range_m) + 1, 10):
-        y = int(round(height - meters * bev.pixels_per_meter))
+    rear_limit = int(bev.rear_range_m)
+    forward_limit = int(bev.forward_range_m)
+    first_grid_m = -((rear_limit // 10) * 10)
+    for meters in range(first_grid_m, forward_limit + 1, 10):
+        y = int(round((bev.forward_range_m - meters) * bev.pixels_per_meter))
         draw.line((0, y, width, y), fill=(220, 220, 220), width=1)
-        draw.text((5, max(2, y - 14)), f"{meters}m", fill=(90, 90, 90))
+        distance_label = f"{meters}m" if meters >= 0 else f"rear {abs(meters)}m"
+        draw.text((5, max(2, y - 14)), distance_label, fill=(90, 90, 90))
     draw.line((center_x, 0, center_x, height), fill=(130, 130, 130), width=1)
-    draw.rectangle((center_x - 8, height - 18, center_x + 8, height - 2), fill=(30, 30, 30))
+    ego_y = int(round(bev.forward_range_m * bev.pixels_per_meter))
+    vehicle_top = max(0, ego_y - 12)
+    vehicle_bottom = min(height - 1, ego_y + (10 if bev.rear_range_m else -2))
+    draw.rectangle(
+        (center_x - 8, vehicle_top, center_x + 8, vehicle_bottom),
+        fill=(30, 30, 30),
+    )
 
     for item in detections:
         if item.bev_xy is None:
@@ -121,6 +133,8 @@ def render_bev(bev: BevConfig, detections: list[ProjectedDetection]) -> np.ndarr
         x, y = item.bev_xy
         label_color = _draw_bev_marker(draw, x, y, item.detection.class_name)
         label = item.detection.class_name
+        if item.camera_name:
+            label = f"{item.camera_name[0].upper()}:{label}"
         if item.z_m_forward is not None:
             label += f" {item.z_m_forward:.1f}m"
         draw.text((min(x + 10, width - 80), max(2, y - 14)), label, fill=label_color)

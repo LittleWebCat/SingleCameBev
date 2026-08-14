@@ -116,6 +116,7 @@ def write_jsonl_record(
                 "z_m_forward": item.z_m_forward,
                 "bev_xy": list(item.bev_xy) if item.bev_xy is not None else None,
                 "depth_source": item.depth_source,
+                "camera_name": item.camera_name,
             }
             for item in detections
         ],

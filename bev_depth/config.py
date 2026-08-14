@@ -32,6 +32,8 @@ class Extrinsics:
     pitch_deg: float
     yaw_deg: float
     roll_deg: float
+    lateral_offset_m: float = 0.0
+    forward_offset_m: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -61,6 +63,7 @@ class BevConfig:
     forward_range_m: float
     lateral_range_m: float
     pixels_per_meter: int
+    rear_range_m: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -68,6 +71,7 @@ class RuntimeConfig:
     target_fps: int
     save_images: bool
     max_frames: int
+    save_matrices: bool = False
 
 
 @dataclass(frozen=True)
@@ -156,15 +160,19 @@ def load_config(path: str | Path) -> AppConfig:
             pitch_deg=float(_get(extrinsics, "pitch_deg", 0.0)),
             yaw_deg=float(_get(extrinsics, "yaw_deg", 0.0)),
             roll_deg=float(_get(extrinsics, "roll_deg", 0.0)),
+            lateral_offset_m=float(_get(extrinsics, "lateral_offset_m", 0.0)),
+            forward_offset_m=float(_get(extrinsics, "forward_offset_m", 0.0)),
         ),
         bev=BevConfig(
             forward_range_m=float(_get(bev, "forward_range_m", 80.0)),
             lateral_range_m=float(_get(bev, "lateral_range_m", 20.0)),
             pixels_per_meter=int(_get(bev, "pixels_per_meter", 10)),
+            rear_range_m=float(_get(bev, "rear_range_m", 0.0)),
         ),
         runtime=RuntimeConfig(
             target_fps=int(_get(runtime, "target_fps", 30)),
             save_images=bool(_get(runtime, "save_images", True)),
             max_frames=int(_get(runtime, "max_frames", 0)),
+            save_matrices=bool(_get(runtime, "save_matrices", False)),
         ),
     )

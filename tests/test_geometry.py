@@ -12,6 +12,20 @@ class GeometryTest(unittest.TestCase):
         self.assertAlmostEqual(x_m, 0.0, places=4)
         self.assertAlmostEqual(z_m, 20.0, places=4)
 
+    def test_camera_mount_offsets_are_applied_in_ego_frame(self):
+        intrinsics = Intrinsics(fx=1000.0, fy=1000.0, cx=640.0, cy=360.0)
+        extrinsics = Extrinsics(
+            height_m=1.4,
+            pitch_deg=0.0,
+            yaw_deg=0.0,
+            roll_deg=0.0,
+            lateral_offset_m=-0.6,
+            forward_offset_m=1.2,
+        )
+        x_m, z_m = pixel_depth_to_ego(640.0, 360.0, 20.0, intrinsics, extrinsics)
+        self.assertAlmostEqual(x_m, -0.6, places=4)
+        self.assertAlmostEqual(z_m, 21.2, places=4)
+
     def test_intrinsics_scale_to_actual_frame_dimensions(self):
         intrinsics = Intrinsics(
             fx=1200.0,
@@ -48,6 +62,17 @@ class GeometryTest(unittest.TestCase):
         bev = BevConfig(forward_range_m=50.0, lateral_range_m=20.0, pixels_per_meter=10)
         self.assertIsNone(ego_to_bev_pixel(20.0, 10.0, bev))
         self.assertIsNone(ego_to_bev_pixel(0.0, 60.0, bev))
+
+    def test_bev_accepts_configured_rear_area(self):
+        bev = BevConfig(
+            forward_range_m=80.0,
+            lateral_range_m=160.0,
+            pixels_per_meter=5,
+            rear_range_m=80.0,
+        )
+        self.assertEqual(ego_to_bev_pixel(0.0, 0.0, bev), (400, 400))
+        self.assertEqual(ego_to_bev_pixel(-40.0, -40.0, bev), (200, 600))
+        self.assertIsNone(ego_to_bev_pixel(0.0, -81.0, bev))
 
 
 if __name__ == "__main__":
