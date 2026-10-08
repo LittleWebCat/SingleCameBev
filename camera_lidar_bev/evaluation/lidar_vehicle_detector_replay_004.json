@@ -1,0 +1,471 @@
+{
+  "created_at_utc": "2026-10-08T21:06:46.416682+00:00",
+  "passed": true,
+  "domain_id": 76,
+  "software_only": true,
+  "trained_engine_used": true,
+  "physical_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "source_is_real_captured_scan": true,
+  "source_index_refers_to_replayed_npz_row": true,
+  "capture": "/home/agxthor/SingleCameraBev/camera_lidar_bev/recordings/lidar_detector_input_001/raw_points.npz",
+  "capture_sha256": "ed4021d0713e4fdb32d629969a48d6e49938cfbe7b489ccec2ec9f4e141c41a6",
+  "capture_points": 98518,
+  "capture_input_frame": "os_lidar",
+  "kitti_reference": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/lidar_objects_001/kitti_reference_000000.bin",
+  "kitti_reference_sha256": "26d9ca482b2bc36c731094965166598b11095e03961c486cbf49cd78486fb34a",
+  "kitti_reference_points": 20285,
+  "kitti_input_frame": "os_sensor",
+  "kitti_intensity_adaptation": "FLOAT32 reflectivity = original normalized intensity * 255",
+  "engine": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/lidar_objects_001/pointpillar_fp16.plan",
+  "engine_sha256": "787bb815e61006db56916b4e3479476c0c6d9a2e716fbe2c824da32fcb967738",
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_lidar_detection/lib/bev_lidar_detection/lidar_vehicle_detector",
+  "executable_sha256": "5a3364afb01bd75a5b847d6819d4f8d32d596e66d8d0bd15506e0f6bb0e3c9e7",
+  "stages": [
+    {
+      "name": "missing_driver_tf",
+      "passed": true,
+      "clear_stamp_ns": 1791493606888086413,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "positive_before_wrong_frame",
+      "passed": true,
+      "source_stamp_ns": 1791493606870256732,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4745,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6177120208740234,
+          1.4144269227981567
+        ],
+        [
+          4.060187816619873,
+          1.6754556894302368,
+          1.5342919826507568
+        ],
+        [
+          4.334331512451172,
+          1.7053756713867188,
+          1.5617460012435913
+        ],
+        [
+          4.426297187805176,
+          1.6756601333618164,
+          1.568658709526062
+        ],
+        [
+          4.062542915344238,
+          1.6358197927474976,
+          1.5157690048217773
+        ],
+        [
+          4.396411418914795,
+          1.7068334817886353,
+          1.5810039043426514
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835737943649292
+        ],
+        [
+          3.885981321334839,
+          1.5702508687973022,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "wrong_frame",
+      "passed": true,
+      "clear_stamp_ns": 1791493607088200412,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "positive_before_missing_reflectivity",
+      "passed": true,
+      "source_stamp_ns": 1791493607131060812,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4749,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6177120208740234,
+          1.414513111114502
+        ],
+        [
+          4.057834625244141,
+          1.6726969480514526,
+          1.5338470935821533
+        ],
+        [
+          4.334596157073975,
+          1.7054798603057861,
+          1.5613996982574463
+        ],
+        [
+          4.428999900817871,
+          1.6753534078598022,
+          1.5683057308197021
+        ],
+        [
+          4.062294960021973,
+          1.6356700658798218,
+          1.515745997428894
+        ],
+        [
+          4.396679878234863,
+          1.7068334817886353,
+          1.5810643434524536
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835737943649292
+        ],
+        [
+          3.8859663009643555,
+          1.570226788520813,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "missing_reflectivity",
+      "passed": true,
+      "clear_stamp_ns": 1791493607338163955,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "positive_before_future",
+      "passed": true,
+      "source_stamp_ns": 1791493607380302044,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4746,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6177120208740234,
+          1.414513111114502
+        ],
+        [
+          4.055729866027832,
+          1.6730031967163086,
+          1.5343387126922607
+        ],
+        [
+          4.334596157073975,
+          1.7051676511764526,
+          1.5608749389648438
+        ],
+        [
+          4.42575740814209,
+          1.6755579710006714,
+          1.5682698488235474
+        ],
+        [
+          4.062294960021973,
+          1.6356452703475952,
+          1.5156766176223755
+        ],
+        [
+          4.393460750579834,
+          1.7060003280639648,
+          1.5812814235687256
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835283756256104
+        ],
+        [
+          3.8859663009643555,
+          1.570226788520813,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "future",
+      "passed": true,
+      "clear_stamp_ns": 1791493607588069251,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "positive_before_duplicate",
+      "passed": true,
+      "source_stamp_ns": 1791493607630137164,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4746,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6177120208740234,
+          1.414513111114502
+        ],
+        [
+          4.05672025680542,
+          1.672645926475525,
+          1.5343152284622192
+        ],
+        [
+          4.333802700042725,
+          1.7053756713867188,
+          1.5613967180252075
+        ],
+        [
+          4.4252166748046875,
+          1.6754045486450195,
+          1.5682339668273926
+        ],
+        [
+          4.0624189376831055,
+          1.6355453729629517,
+          1.5156302452087402
+        ],
+        [
+          4.396679878234863,
+          1.7068334817886353,
+          1.5810281038284302
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835737943649292
+        ],
+        [
+          3.885981321334839,
+          1.5702508687973022,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "duplicate",
+      "passed": true,
+      "clear_stamp_ns": 1791493607838153835,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "positive_before_stale",
+      "passed": true,
+      "source_stamp_ns": 1791493607881135735,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4748,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6176996231079102,
+          1.414513111114502
+        ],
+        [
+          4.056967258453369,
+          1.6727479696273804,
+          1.5342217683792114
+        ],
+        [
+          4.334860324859619,
+          1.705271601676941,
+          1.561112403869629
+        ],
+        [
+          4.42575740814209,
+          1.6756089925765991,
+          1.5681980848312378
+        ],
+        [
+          4.0624189376831055,
+          1.6356700658798218,
+          1.5156996250152588
+        ],
+        [
+          4.393192768096924,
+          1.7060003280639648,
+          1.581233263015747
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835737943649292
+        ],
+        [
+          3.885981321334839,
+          1.5702508687973022,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "stale",
+      "passed": true,
+      "clear_stamp_ns": 1791493608538081976,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    },
+    {
+      "name": "kitti_trained_person",
+      "passed": true,
+      "source_stamp_ns": 1791493608703542840,
+      "cars": 0,
+      "people": 1,
+      "vehicle_points": 398,
+      "input_frame": "os_sensor",
+      "predicted_size_m": [
+        [
+          1.2032902240753174,
+          0.6252546310424805,
+          1.8393287658691406
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "positive_before_tf_conflict",
+      "passed": true,
+      "source_stamp_ns": 1791493608862152455,
+      "cars": 8,
+      "people": 0,
+      "vehicle_points": 4747,
+      "input_frame": "os_lidar",
+      "predicted_size_m": [
+        [
+          4.531817436218262,
+          1.6177120208740234,
+          1.4144269227981567
+        ],
+        [
+          4.05634880065918,
+          1.6729011535644531,
+          1.5341981649398804
+        ],
+        [
+          4.334860324859619,
+          1.7053756713867188,
+          1.5612621307373047
+        ],
+        [
+          4.426297187805176,
+          1.6757625341415405,
+          1.568963885307312
+        ],
+        [
+          4.0624189376831055,
+          1.6355704069137573,
+          1.515584111213684
+        ],
+        [
+          4.396679878234863,
+          1.7068334817886353,
+          1.5810643434524536
+        ],
+        [
+          4.31164026260376,
+          1.6454830169677734,
+          1.4835737943649292
+        ],
+        [
+          3.885981321334839,
+          1.5702508687973022,
+          1.498315691947937
+        ]
+      ],
+      "oriented_flat_footprints_verified": true,
+      "size_labels_verified": true,
+      "transformed_source_rows_verified": true,
+      "points_inside_predicted_cuboids": true
+    },
+    {
+      "name": "conflicting_driver_tf",
+      "passed": true,
+      "clear_stamp_ns": 1791493609088059507,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    }
+  ],
+  "last_diagnostics": {
+    "model": "PointPillars_KITTI_FP16",
+    "trained_3d_detector": "true",
+    "full_dimensions_predicted": "true",
+    "heading_predicted": "true",
+    "physical_accuracy_validated": "false",
+    "tracking_enabled": "false",
+    "frame": "os_sensor",
+    "driver_tf_valid": "false",
+    "publishing_fresh_output": "false",
+    "vehicle_class": "Car_and_Pedestrian",
+    "intensity_field": "reflectivity",
+    "intensity_scale": "255.000000",
+    "received_scans": "19",
+    "processed_scans": "13",
+    "cleared_outputs": "7",
+    "vehicle_boxes": "0",
+    "person_boxes": "0",
+    "object_boxes": "0",
+    "vehicle_points": "0",
+    "self_masked_points": "1828",
+    "model_input_points": "33062",
+    "detector_ms": "6.472013",
+    "input_pillars": "10897",
+    "accepted_pillars": "10000",
+    "truncated_pillars": "897",
+    "processing_ms": "10.776603",
+    "source_age_s": "0.064059",
+    "publication_cap_hz": "20.000000"
+  },
+  "child_returncode": 0,
+  "node_log_tail": "[WARN] [1791493606.838003342] [lidar_vehicle_detector]: PointPillars KITTI car/person predictions: complete dimensions/yaw; Ouster accuracy and reflectivity adaptation remain unvalidated. Flat BEV display, no vehicle TF or tracking.\n[INFO] [1791493609.839457109] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

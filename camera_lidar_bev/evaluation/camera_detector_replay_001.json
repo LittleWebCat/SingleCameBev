@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T17:48:13.793947+00:00",
+  "purpose": "native_tensor_rt_camera_detector_software_check",
+  "ros_domain_id": 74,
+  "live_hardware_used": false,
+  "physical_calibration_accuracy_validated": false,
+  "timing_and_motion_validated": false,
+  "learned_3d_detection_validated": false,
+  "image_size": [
+    1024,
+    768
+  ],
+  "camera_frame": "camera_front_optical_frame",
+  "source_files": {
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine": "3c4805022a0677b8961c60b9d5d30afb862f9ef29f545e65f339f911b7165475",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n.engine": "a023e0b2d3f2afe2d28d86a3bd0153fc1343ff33906a829eed437f7898671665",
+    "/home/agxthor/SingleCameraBev/.venv/lib/python3.12/site-packages/ultralytics/assets/bus.jpg": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63"
+  },
+  "reference": {
+    "detections": [
+      {
+        "class_name": "person",
+        "score": 0.88623046875,
+        "bbox_xyxy": [
+          846.4000244140625,
+          279.5,
+          1024.0,
+          622.9000244140625
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.880859375,
+        "bbox_xyxy": [
+          63.400001525878906,
+          281.5,
+          300.8000183105469,
+          646.5
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.8681640625,
+        "bbox_xyxy": [
+          283.6000061035156,
+          287.0,
+          434.0,
+          610.6000366210938
+        ]
+      },
+      {
+        "class_name": "bus",
+        "score": 0.859375,
+        "bbox_xyxy": [
+          158.40000915527344,
+          167.3000030517578,
+          1020.7999877929688,
+          531.1000366210938
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.69384765625,
+        "bbox_xyxy": [
+          0.25,
+          393.6000061035156,
+          92.8499984741211,
+          619.2000122070312
+        ]
+      }
+    ],
+    "setup_and_prediction_ms": 1906.4083409994055,
+    "speed_ms": {
+      "preprocess": 2.960449000056542,
+      "inference": 1.9780829998126137,
+      "postprocess": 31.082518999937747
+    },
+    "confidence": 0.35,
+    "nms_iou": 0.5,
+    "rect": false,
+    "engine_metadata": {
+      "version": "8.4.90",
+      "description": "Ultralytics YOLO11n model trained on /usr/src/ultralytics/ultralytics/cfg/datasets/coco.yaml",
+      "batch": 1,
+      "imgsz": [
+        640,
+        640
+      ],
+      "license": "AGPL-3.0 License (https://ultralytics.com/license)"
+    },
+    "native_box_tolerance_px": 2.0,
+    "score_tolerance": 0.005
+  },
+  "stage_results": {},
+  "errors": [
+    "TypeError: 'int' object is not callable"
+  ],
+  "detection_messages": 0,
+  "labeled_image_messages": 0,
+  "verified_source_pairs": 0,
+  "verified_clear_pairs": 0,
+  "node_arguments": [
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_object_detector",
+    "--ros-args",
+    "-r",
+    "__node:=camera_detector_check_cpp",
+    "-r",
+    "/camera_lidar_bev/diagnostics:=/camera_detector_check/diagnostics",
+    "-p",
+    "image_topic:=/camera_detector_check/input",
+    "-p",
+    "detections_topic:=/camera_detector_check/detections",
+    "-p",
+    "labeled_image_topic:=/camera_detector_check/labeled_image",
+    "-p",
+    "engine_file:=/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+    "-p",
+    "camera_frame:=camera_front_optical_frame",
+    "-p",
+    "image_width:=1024",
+    "-p",
+    "image_height:=768",
+    "-p",
+    "max_publish_hz:=20.0",
+    "-p",
+    "stale_after_s:=0.75",
+    "-p",
+    "confidence:=0.35",
+    "-p",
+    "nms_iou:=0.5",
+    "-p",
+    "max_detections:=100",
+    "-p",
+    "classes:=[\"person\", \"bicycle\", \"car\", \"motorcycle\", \"bus\", \"truck\"]"
+  ],
+  "node_log_tail": "[INFO] [1791481698.729547957] [camera_detector_check_cpp]: Native TensorRT COCO road-user labels: /home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine, 640x640 batch 1, 20.0 Hz maximum\n[INFO] [1791481698.734134978] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n",
+  "child_returncode": 0,
+  "passed": false,
+  "elapsed_s": 5.312184483999772
+}

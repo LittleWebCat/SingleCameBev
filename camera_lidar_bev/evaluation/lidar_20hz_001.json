@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T15:58:08.856105+00:00",
+  "requested_mode": "1024x20",
+  "reported_sensor_mode": "1024x20",
+  "product": "OS-1-128",
+  "firmware": "v3.1.0",
+  "driver_transform_unchanged": true,
+  "timestamp_mode": "TIME_FROM_ROS_TIME",
+  "point_type": "original",
+  "physical_camera_alignment_validated": false,
+  "synchronization_validated": false,
+  "errors": [],
+  "first_cloud": {
+    "frame_id": "os_lidar",
+    "width": 1024,
+    "height": 128,
+    "point_count": 131072,
+    "point_step": 48,
+    "bytes": 6291456,
+    "point_time_field": {
+      "name": "t",
+      "datatype": "UINT32",
+      "units": "relative_nanoseconds",
+      "min": 0,
+      "max": 49953984
+    }
+  },
+  "received_scans": 81,
+  "header_rate_hz": 19.998870523789428,
+  "receipt_rate_hz": 19.999770902655165,
+  "maximum_header_gap_s": 0.050454468,
+  "checks_passed": true
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>bev_sensor_bridge</name>
+  <version>0.1.0</version>
+  <description>Front-camera capture and input diagnostics for local camera and LiDAR BEV development.</description>
+  <maintainer email="maintainer@example.com">BEV project maintainers</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>libopencv-dev</depend>
+  <depend>yaml_cpp_vendor</depend>
+  <test_depend>rclpy</test_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

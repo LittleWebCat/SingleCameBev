@@ -1,0 +1,17 @@
+# Driver parameters used by tools/start_lidar.py for this project.
+# This file is NOT launched by sensor_probe.launch.py.
+# Confirm sensor hostname, actual frames and timing before applying.
+# User-selected 20 Hz mode, 1024 horizontal columns; original preserves t (relative ns).
+# Reception-based ROS stamps do NOT establish camera/LiDAR synchronization.
+os_driver:
+  ros__parameters:
+    auto_start: false
+    sensor_hostname: "169.254.213.23"
+    lidar_mode: "1024x20"
+    use_system_default_qos: true
+    proc_mask: "PCL|IMU"
+    timestamp_mode: "TIME_FROM_ROS_TIME"
+    point_type: "original"
+    sensor_frame: "os_sensor"
+    lidar_frame: "os_lidar"
+    imu_frame: "os_imu"

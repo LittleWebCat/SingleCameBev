@@ -1,0 +1,125 @@
+{
+  "checked_at_utc": "2026-10-08T20:14:49.068544+00:00",
+  "duration_s": 10.01366226799928,
+  "purpose": "read_only_live_trained_lidar_vehicle_detection",
+  "physical_accuracy_validated": false,
+  "streams": {
+    "detections": {
+      "messages": 201,
+      "distinct_sources": 201,
+      "nonempty_updates": 201,
+      "max_count": 14,
+      "hz": 19.995218997171516
+    },
+    "markers": {
+      "messages": 200,
+      "distinct_sources": 200,
+      "nonempty_updates": 200,
+      "max_count": 26,
+      "hz": 19.99409610713169
+    },
+    "points": {
+      "messages": 200,
+      "distinct_sources": 200,
+      "nonempty_updates": 200,
+      "max_count": 2091,
+      "hz": 19.993979537467226
+    }
+  },
+  "examples": [
+    {
+      "score": 0.9197867512702942,
+      "center_m": [
+        13.51445198059082,
+        6.2664899826049805,
+        -0.9208764433860779
+      ],
+      "predicted_size_m": [
+        3.8424665927886963,
+        1.644504189491272,
+        1.570143461227417
+      ],
+      "yaw_rad": 1.2755664317352593
+    },
+    {
+      "score": 0.8728901743888855,
+      "center_m": [
+        24.012571334838867,
+        3.2155580520629883,
+        -1.0219470262527466
+      ],
+      "predicted_size_m": [
+        3.69943904876709,
+        1.6076353788375854,
+        1.4819446802139282
+      ],
+      "yaw_rad": 1.3099903275756668
+    },
+    {
+      "score": 0.8100284934043884,
+      "center_m": [
+        10.819905281066895,
+        6.974949836730957,
+        -1.0524157285690308
+      ],
+      "predicted_size_m": [
+        3.975585699081421,
+        1.5323787927627563,
+        1.4251723289489746
+      ],
+      "yaw_rad": 1.2824023800353515
+    }
+  ],
+  "diagnostic_samples": 10,
+  "timings": {
+    "detector_ms": {
+      "median": 5.8290565,
+      "p95": 7.64350305,
+      "max": 7.891071
+    },
+    "processing_ms": {
+      "median": 11.886305,
+      "p95": 14.0468958,
+      "max": 14.151834
+    },
+    "source_age_s": {
+      "median": 0.1453925,
+      "p95": 0.14766100000000001,
+      "max": 0.147733
+    },
+    "truncated_pillars": {
+      "median": 1558.0,
+      "p95": 1578.75,
+      "max": 1581.0
+    }
+  },
+  "last_diagnostics": {
+    "model": "PointPillars_KITTI_FP16",
+    "trained_3d_detector": "true",
+    "full_dimensions_predicted": "true",
+    "heading_predicted": "true",
+    "physical_accuracy_validated": "false",
+    "tracking_enabled": "false",
+    "frame": "os_sensor",
+    "driver_tf_valid": "true",
+    "publishing_fresh_output": "true",
+    "vehicle_class": "Car_only",
+    "intensity_field": "reflectivity",
+    "intensity_scale": "255.000000",
+    "received_scans": "2093",
+    "processed_scans": "2091",
+    "cleared_outputs": "2",
+    "vehicle_boxes": "12",
+    "vehicle_points": "1921",
+    "self_masked_points": "1857",
+    "model_input_points": "35595",
+    "detector_ms": "5.640982",
+    "input_pillars": "11525",
+    "accepted_pillars": "10000",
+    "truncated_pillars": "1525",
+    "processing_ms": "11.709679",
+    "source_age_s": "0.145344",
+    "publication_cap_hz": "20.000000"
+  },
+  "passed": true
+}

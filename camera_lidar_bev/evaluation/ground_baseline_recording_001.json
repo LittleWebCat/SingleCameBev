@@ -1,0 +1,17 @@
+{
+  "bag_path": "data/geometry/ground_stationary_001",
+  "bag_duration_s": 4.607037914,
+  "topic_counts": {
+    "/camera/front/camera_info": 92,
+    "/camera/front/image_raw": 92,
+    "/camera_lidar_bev/diagnostics": 9,
+    "/imu": 461,
+    "/points": 51,
+    "/metadata": 1,
+    "/tf_static": 1
+  },
+  "purpose": "Short stationary baseline, multi-subscriber transport rates measured during recording.",
+  "ground_height_user_m": 1.8,
+  "physical_stationarity_verified": false,
+  "known_distance_object_test_completed": false
+}

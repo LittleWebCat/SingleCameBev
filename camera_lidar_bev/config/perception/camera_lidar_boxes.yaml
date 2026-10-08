@@ -1,0 +1,19 @@
+# Camera labels associated with learned LiDAR geometry; no camera-only 3D bodies.
+/**:
+  ros__parameters:
+    lidar_detections_topic: /camera_lidar_bev/lidar_detections_3d
+    lidar_points_topic: /camera_lidar_bev/lidar_vehicle_points
+    camera_detections_topic: /camera_lidar_bev/detections_2d
+    camera_info_topic: /camera/front/camera_info
+    markers_topic: /camera_lidar_bev/camera_lidar_markers
+    points_topic: /camera_lidar_bev/camera_lidar_points
+    output_detections_topic: /camera_lidar_bev/camera_lidar_detections_3d
+    require_camera_match: true
+    camera_frame: camera_front_optical_frame
+    allow_provisional_calibration: true
+    max_pair_delta_s: 0.15
+    stale_after_s: 0.5
+    max_publish_hz: 20.0
+    min_iou: 0.20
+    ambiguity_margin: 0.05
+    min_camera_confidence: 0.35

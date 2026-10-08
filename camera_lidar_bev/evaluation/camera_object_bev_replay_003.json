@@ -1,0 +1,176 @@
+{
+  "created_at_utc": "2026-10-08T18:04:30.971713+00:00",
+  "passed": true,
+  "domain_id": 75,
+  "software_only": true,
+  "physical_accuracy_validated": false,
+  "learned_detector_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "calibration_status": "external_candidate_unvalidated",
+  "stages": [
+    {
+      "name": "positive",
+      "passed": true,
+      "cloud_stamp_ns": 1791482671230064126,
+      "semantic_points": 205,
+      "observed_center_m": [
+        6.150000095367432,
+        0.0,
+        -0.7999999895691872
+      ],
+      "observed_size_m": [
+        0.3000001907348633,
+        0.4000000059604645,
+        1.1999999731779099
+      ]
+    },
+    {
+      "name": "delayed_classified",
+      "passed": true,
+      "cloud_stamp_ns": 1791482671850720741,
+      "semantic_points": 205,
+      "observed_center_m": [
+        6.150000095367432,
+        0.0,
+        -0.7999999895691872
+      ],
+      "observed_size_m": [
+        0.3000001907348633,
+        0.4000000059604645,
+        1.1999999731779099
+      ],
+      "cached_image_pair_delta_s": 0.019138,
+      "cached_image_source_age_s": 0.237189
+    },
+    {
+      "name": "empty",
+      "passed": true,
+      "clear_stamp_ns": 1791482672333918538,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "empty_barrier",
+      "passed": true,
+      "clear_stamp_ns": 1791482672453529387,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "wrong_frame",
+      "passed": true,
+      "clear_stamp_ns": 1791482672603677039,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "bad_info",
+      "passed": true,
+      "clear_stamp_ns": 1791482672753592072,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "pair_delta",
+      "passed": true,
+      "clear_stamp_ns": 1791482672953713047,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "no_floor",
+      "passed": true,
+      "clear_stamp_ns": 1791482673462340816,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "masked_occlusion",
+      "passed": true,
+      "clear_stamp_ns": 1791482673611494713,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "full_stamp_mismatch",
+      "passed": true,
+      "clear_stamp_ns": 1791482673703476893,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    },
+    {
+      "name": "recovery",
+      "passed": true,
+      "cloud_stamp_ns": 1791482674167794073,
+      "semantic_points": 205,
+      "observed_center_m": [
+        6.150000095367432,
+        0.0,
+        -0.7999999895691872
+      ],
+      "observed_size_m": [
+        0.3000001907348633,
+        0.4000000059604645,
+        1.1999999731779099
+      ]
+    },
+    {
+      "name": "stale_clear",
+      "passed": true,
+      "clear_stamp_ns": 1791482675003552575,
+      "empty_detections": true,
+      "empty_semantic_cloud": true,
+      "markers_delete_all": true
+    }
+  ],
+  "synthetic_points": 225,
+  "input_source_indices_nonsequential": true,
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_object_bev",
+  "executable_sha256": "c6d5a7882b3cd8c0e66f310552f9c961db84e822af1d5c041a8010a0456f34db",
+  "executable_mtime_ns": 1791482589824617104,
+  "last_diagnostics": {
+    "model": "software_synthetic_person",
+    "calibration_status": "external_candidate_unvalidated",
+    "accuracy_validated": "false",
+    "synchronization_validated": "false",
+    "tf_published": "false",
+    "output_frame": "os_sensor",
+    "observed_extent": "true",
+    "heading_estimated": "false",
+    "tracking_enabled": "false",
+    "occupancy_modified": "false",
+    "driver_tf_observed": "true",
+    "publishing_fresh_output": "false",
+    "received_arrays": "174",
+    "processed_arrays": "30",
+    "cleared_outputs": "6",
+    "publication_cap_hz": "20.000000",
+    "camera_detections": "1",
+    "supported_camera_boxes": "1",
+    "object_candidates": "0",
+    "semantic_points": "0",
+    "visible_geometry_points": "205",
+    "supported_obstacle_points": "205",
+    "rejected_invalid_detections": "0",
+    "rejected_unsupported": "0",
+    "rejected_ambiguous": "0",
+    "header_delta_s": "0.020000",
+    "source_age_at_processing_s": "0.069834",
+    "image_header_ns": "1791482674236496525",
+    "cloud_header_ns": "1791482674216496525",
+    "processing_ms": "2.951875",
+    "decode_ms": "0.011861",
+    "fusion_ms": "2.762382",
+    "last_output_receipt_age_s": "0.847107"
+  },
+  "child_returncode": 0,
+  "node_log_tail": "[WARN] [1791482671.153415543] [camera_object_bev]: Camera labels + observed LiDAR extents use provisional B calibration. No complete 3D box, heading, tracking or TF is inferred.\n[INFO] [1791482675.184986790] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

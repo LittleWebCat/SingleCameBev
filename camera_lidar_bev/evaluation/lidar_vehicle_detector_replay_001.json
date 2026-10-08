@@ -1,0 +1,34 @@
+{
+  "created_at_utc": "2026-10-08T20:10:18.812220+00:00",
+  "passed": false,
+  "domain_id": 76,
+  "software_only": true,
+  "trained_engine_used": true,
+  "physical_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "source_is_real_captured_scan": true,
+  "source_index_refers_to_replayed_npz_row": true,
+  "capture": "/home/agxthor/SingleCameraBev/camera_lidar_bev/recordings/lidar_detector_input_001/raw_points.npz",
+  "capture_sha256": "ed4021d0713e4fdb32d629969a48d6e49938cfbe7b489ccec2ec9f4e141c41a6",
+  "capture_points": 98518,
+  "capture_input_frame": "os_lidar",
+  "engine": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/lidar_objects_001/pointpillar_fp16.plan",
+  "engine_sha256": "787bb815e61006db56916b4e3479476c0c6d9a2e716fbe2c824da32fcb967738",
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_lidar_detection/lib/bev_lidar_detection/lidar_vehicle_detector",
+  "executable_sha256": "7959111e1db3832bb241667413dafaf7c40e79acabedcb4cb8bbd98f293053e7",
+  "stages": [
+    {
+      "name": "missing_driver_tf",
+      "passed": true,
+      "clear_stamp_ns": 1791490219253305776,
+      "empty_detections": true,
+      "empty_points": true,
+      "explicit_markers_delete_all": true,
+      "three_headers_matched": true
+    }
+  ],
+  "error": "AssertionError: Missing real trained positive output during positive_before_wrong_frame",
+  "failed_stage": "positive_before_wrong_frame",
+  "child_returncode": 0,
+  "node_log_tail": "[WARN] [1791490219.203244187] [lidar_vehicle_detector]: PointPillars KITTI Car model: predicted complete dimensions/yaw; Ouster accuracy and reflectivity adaptation remain unvalidated. Flat BEV display, no vehicle TF or tracking.\n[INFO] [1791490221.273546552] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

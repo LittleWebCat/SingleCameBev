@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-08T18:01:16.261581+00:00",
+  "purpose": "CPU-only nonempty object fusion core benchmark",
+  "input_provenance": "Recorded native os_sensor background plus inserted synthetic person, bicycle and car surfaces; source return identities preserved.",
+  "live_hardware_used": false,
+  "ros_transport_included": false,
+  "gpu_inference_included": false,
+  "pointcloud_decode_included": false,
+  "ground_classification_timed": false,
+  "real_detection_accuracy_validated": false,
+  "physical_calibration_accuracy_validated": false,
+  "full_pipeline_throughput_validated": false,
+  "worst_case_claimed": false,
+  "timed_scope": "Complete fuse_camera_objects call: source-ID matching, native distorted projection, full-background visibility, component selection and observed extent assembly.",
+  "warmup_runs": 5,
+  "timed_runs": 30,
+  "percentile_method": "p95 nearest-rank sample 29 of 30; median average of sorted samples 15 and 16",
+  "machine": {
+    "architecture": "aarch64",
+    "system": "Linux"
+  },
+  "ground_classification": {
+    "core": "bev_geometry",
+    "once_before_timer": true,
+    "height_prior_m": 1.8,
+    "self_mask_enabled": true,
+    "self_bounds_m": {
+      "x": [
+        -2.131,
+        2.35
+      ],
+      "y": [
+        -0.905,
+        0.885
+      ],
+      "z": [
+        -1.8,
+        0.0
+      ]
+    }
+  },
+  "synthetic_objects": [
+    {
+      "class_name": "person",
+      "x_m": 4.0,
+      "y_center_m": 0.0,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    },
+    {
+      "class_name": "bicycle",
+      "x_m": 5.0,
+      "y_center_m": -0.8,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    },
+    {
+      "class_name": "car",
+      "x_m": 6.0,
+      "y_center_m": 0.9,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    }
+  ],
+  "camera": {
+    "native_image_size": [
+      1024,
+      768
+    ],
+    "projection": "native raw plumb_bob K/D and provisional T_camera_from_os_sensor",
+    "rois": "Bounds of independently projected inserted surfaces, padded 2 native pixels and clipped to image"
+  },
+  "source_sha256": {
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/geometry/ground_baseline_001/input_points_rgb.bin": "47a08b7efde26dc2661e8414abfdad5d429b36fefbe1010b5a5d89c6ff87bdd4",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/geometry/ground_baseline_001/input_metadata.json": "93d28ffb643b082ebb3e33b88cd9f679c6a526c4adfb01cb000d71d73b3a3dbf",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml": "4e258e0b0959b9b624b726dffb26303421112f186c53dddb8e6689ceec8133db",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml": "7473945aaaeb04b64c002ef65038b9a38f0cdec80c025365358494feea32dce6",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/build/bev_visualization/librgb_projection.a": "a92a7e3e3cf463fce544bff24f55ae29d298e459c6ede8f9cd479c5876458c6d",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/build/bev_geometry/libbev_geometry.a": "e39b69b7b4e8e044bf374216520d695f222f28487a33f4410b479818ca4ce5b9",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/build/bev_core/libbev_core.a": "8b2b0a2b80e0661ef8fac4109608adb47ad0c0da58914f950e3f2ccc776ac25a"
+  },
+  "benchmark_source_path": "/tmp/object_fusion_benchmark.cpp",
+  "benchmark_source_sha256": "e74a970ed1039fd40586a859e0a1af56f5a7a10d2c8bb7437cc552cff4ff3988",
+  "benchmark_executable_sha256": "3215ab015592922dcd07d0d17a185218d7a77bdc097bb68b76625c3b779812c9",
+  "compile": "g++ -std=c++17 -O3, existing built static libraries, yaml-cpp and OpenCV core",
+  "metrics": {
+    "recorded_input_points": 129442,
+    "inserted_synthetic_points": 351,
+    "full_geometry_points": 129793,
+    "classified_points": 122814,
+    "camera_detections": 3,
+    "warmup_runs": 5,
+    "timed_runs": 30,
+    "ground_plane_valid": true,
+    "ground_plane_c_m": -1.86938,
+    "accepted_candidates_min": 3,
+    "accepted_candidates_max": 3,
+    "visible_geometry_points": 9534,
+    "supported_obstacle_points": 4303,
+    "wall_ms": {
+      "min": 13.8572,
+      "median": 14.3269,
+      "p95": 15.0569,
+      "max": 15.1315
+    },
+    "candidate_support": [
+      {
+        "class_name": "person",
+        "visible_support": 117
+      },
+      {
+        "class_name": "bicycle",
+        "visible_support": 117
+      },
+      {
+        "class_name": "car",
+        "visible_support": 117
+      }
+    ],
+    "sorted_samples_ms": [
+      13.8572,
+      14.0496,
+      14.0521,
+      14.1148,
+      14.1273,
+      14.1538,
+      14.1948,
+      14.2099,
+      14.2227,
+      14.2564,
+      14.2578,
+      14.2606,
+      14.2791,
+      14.2865,
+      14.3224,
+      14.3314,
+      14.4325,
+      14.4485,
+      14.5055,
+      14.5675,
+      14.5999,
+      14.6127,
+      14.6264,
+      14.6325,
+      14.6445,
+      14.6458,
+      14.7527,
+      15.0026,
+      15.0569,
+      15.1315
+    ]
+  },
+  "passed": true
+}

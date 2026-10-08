@@ -4,6 +4,8 @@ Single-camera object detection, metric depth, and front BEV projection for NVIDI
 
 The pipeline can process videos, image folders, single images, or a live camera. It writes annotated camera frames, depth previews, BEV frames, and per-frame JSONL records.
 
+The separate [ROS 2 camera + LiDAR BEV project](camera_lidar_bev/README.md) provides the current Ouster/front-camera preview: native C++/TensorRT detection, a flat 60 m BEV, camera-matched learned boxes and a labeled camera pane. Its README contains the launch command, display behavior, measured 20 Hz updates and remaining calibration checks.
+
 ## Current Thor Setup
 
 The main runtime config is `configs/thor_1080p.yaml`.
