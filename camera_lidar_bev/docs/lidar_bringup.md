@@ -40,7 +40,7 @@ sudo sysctl -w net.core.rmem_max=16777216 net.core.rmem_default=4194304 \
   net.ipv4.ipfrag_time=3 net.ipv4.ipfrag_high_thresh=134217728
 ```
 
-These settings are not made persistent. The launcher does not run sudo or change them automatically. Runtime sensor metadata is saved under the ignored `data/lidar_runtime/` directory. See [first_steps.md](first_steps.md) for the integration procedure.
+The command above is temporary. To apply the project settings now and persist them across reboot, run `sudo bash tools/setup_dds_transport.sh` from the project directory. The launcher does not run sudo or change them automatically. Runtime sensor metadata is saved under the ignored `data/lidar_runtime/` directory. See [first_steps.md](first_steps.md) for the integration procedure.
 
 Inspect the effective cloud before collecting data:
 

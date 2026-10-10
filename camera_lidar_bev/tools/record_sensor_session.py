@@ -82,6 +82,11 @@ def main():
     parser.add_argument("--output", required=True, type=Path, help="new bag directory; existing paths are refused")
     parser.add_argument("--duration", type=positive_duration, default=10.0, help="recording seconds (default: 10)")
     parser.add_argument("--topics", nargs="+", default=DEFAULT_TOPICS, help="replace the default absolute topic list")
+    parser.add_argument("--storage-preset-profile", choices=("none", "fastwrite", "zstd_fast", "zstd_small"), default="none")
+    parser.add_argument("--qos-overrides", type=Path, help="explicit ROS recorder QoS YAML")
+    parser.add_argument("--max-bag-size", type=int, default=0, help="split files at this byte size; 0 disables splitting")
+    parser.add_argument("--max-cache-size", type=int, default=104857600, help="recorder message cache in bytes")
+    parser.add_argument("--min-free-gib", type=float, default=0, help="stop cleanly before free space falls below this floor")
     parser.add_argument("--dry-run", action="store_true", help="print the exact argument list without DDS or file writes")
     args = parser.parse_args()
     output = Path(os.path.abspath(args.output.expanduser()))
@@ -94,8 +99,19 @@ def main():
         if not topic.startswith("/") or any(character.isspace() for character in topic):
             parser.error(f"expected an absolute ROS topic without whitespace: {topic!r}")
     topics = list(dict.fromkeys(args.topics))
+    if args.max_bag_size < 0 or args.max_cache_size < 0 or not math.isfinite(args.min_free_gib) or args.min_free_gib < 0:
+        parser.error("bag/cache sizes and free-space floor must be finite and nonnegative")
+    if args.qos_overrides and not args.qos_overrides.is_file():
+        parser.error("QoS overrides file is missing")
     storage = storage_id()
     command = ["ros2", "bag", "record", "--storage", storage, "--output", str(output), "--topics", *topics]
+    command += ["--max-cache-size", str(args.max_cache_size), "--disable-keyboard-controls"]
+    if storage == "mcap" and args.storage_preset_profile != "none":
+        command += ["--storage-preset-profile", args.storage_preset_profile]
+    if args.max_bag_size:
+        command += ["--max-bag-size", str(args.max_bag_size)]
+    if args.qos_overrides:
+        command += ["--qos-profile-overrides-path", str(args.qos_overrides.resolve())]
     print("Command arguments: " + json.dumps(command), flush=True)
     print("Shell equivalent: " + shlex.join(command), flush=True)
     print(f"Duration: {args.duration:g} seconds; stop with SIGINT, with a bounded termination fallback.", flush=True)
@@ -121,6 +137,8 @@ def main():
         "command": command,
         "commanded_topics": topics,
         "storage_id": storage,
+        "storage_preset_profile": args.storage_preset_profile if storage == "mcap" else "none",
+        "minimum_free_gib": args.min_free_gib,
         "commanded_duration_seconds": args.duration,
         "started_utc": None,
         "ended_utc": None,
@@ -156,6 +174,10 @@ def main():
             deadline = started + args.duration
             report["status"] = "recording"
             while process.poll() is None:
+                if args.min_free_gib and shutil.disk_usage(output.parent).free < args.min_free_gib*1024**3:
+                    report["status"] = "disk_space_low"
+                    report["error"] = "Recording stopped before the configured free-space floor"
+                    break
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
                     report["status"] = "duration_reached"

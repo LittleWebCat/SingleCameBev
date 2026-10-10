@@ -1,6 +1,19 @@
 # Camera + LiDAR BEV
 
-A ROS 2 Jazzy/C++ project for one front camera and Ouster LiDAR on NVIDIA AGX Thor, based on the supplied [BEV_README.md](docs/BEV_README.md). The current system provides a stationary camera/LiDAR preview; motion processing and additional cameras follow geometry and timing validation.
+A ROS 2 Jazzy/C++ project for one front camera and Ouster LiDAR on NVIDIA AGX Thor, based on the supplied [BEV_README.md](docs/BEV_README.md). It provides recording, camera/LiDAR object BEV, local mapping and experimental localization against a GPS-aligned saved map. The live localized display places the sensor and detected objects on that map; timing and absolute accuracy remain provisional.
+
+## Record camera + LiDAR test data
+
+For a five-minute sensors-only session with several scenes, position the stationary rig and run:
+
+```bash
+cd /home/agxthor/SingleCameraBev/camera_lidar_bev
+bash tools/collect_camera_lidar.sh --duration 300 --scene 'multi_scene_test'
+```
+
+This records the calibrated native camera and original Ouster scans, without starting detectors or RViz. Calibration/configuration snapshots and bag validation stay with the local recording. Five minutes is approximately 60 GB uncompressed; MCAP uses lossless compression when available. With approximately 31 GiB free on this host at preparation, the full duration may not fit: the collector stops cleanly at a 2 GiB free-space floor. Use `--output` on a larger disk if needed. See [the recording guide](docs/camera_lidar_recording.md) for scene ideas, output paths, validation and unverified sensor timing. Preparing the code does not start a recording.
+
+For dense **10 Hz** scans, stop an existing LiDAR/BEV launcher with Ctrl+C, then run `bash tools/collect_camera_lidar.sh --lidar-mode 2048x10 --duration 300 --scene '10hz_test'`. This uses a separate recording profile and preserves the usual 20 Hz live default.
 
 ## Run the live camera + LiDAR BEV
 
@@ -25,11 +38,24 @@ The local runtime needs `models/camera_objects_001/yolo11n_fp16_raw.engine` and 
 
 ## View modes
 
+The combined image/BEV view also includes [camera road/lane segmentation](docs/road_lane_detection.md) and semantic road-mask edges on the camera image. Road-to-BEV geometry and curb processing have been removed. Run `bash tools/replay_combined_bev.sh` to view the saved outdoor recording. Keys `6`–`8` toggle image road masks, lane masks and edges.
+
+For the camera image with LiDAR projections, YOLO 2D boxes and projected LiDAR 3D boxes beside a flat 80 m BEV with object details:
+
+```bash
+bash tools/run_bev.sh --combined-view
+```
+
+The [combined display guide](docs/combined_bev_display.md) also covers bag replay and browsing the ten cached comparison samples without running models.
+
+The combined display includes raw points to 80 m forward. PointPillars box centers are limited to its trained 69.12 m forward range. Other RViz object modes keep their existing 60 m profiles.
+
 Run `bash tools/run_bev.sh` with one of these display modes:
 
 | Flag | View |
 | --- | --- |
 | `--camera-lidar-boxes` | Labeled camera, native car/person points and camera-matched learned boxes; current combined view |
+| `--combined-view` | Camera 2D labels, LiDAR 3D boxes, road/lane masks, projected LiDAR returns, flat BEV and object details |
 | `--lidar-3d-boxes` | LiDAR-only car/person predictions, flat footprints and predicted dimensions |
 | `--camera-labels` | Camera labels and boxes around associated visible LiDAR returns |
 | `--bev-only` | Ground/obstacle points and camera-associated observed boxes in one flat BEV |
@@ -39,6 +65,8 @@ Run `bash tools/run_bev.sh` with one of these display modes:
 
 Observed-return boxes describe the visible points. Learned PointPillars boxes predict full dimensions and yaw. The `--lidar-3d-boxes` and `--camera-lidar-boxes` modes both retain the flat layout. Their enabled LiDAR classes are `car` and `person`; cyclists remain disabled.
 
+Camera-only SMOKE 3D detection has been removed from the active live/replay pipeline and display controls. Its source, models and earlier results remain as an [archived experiment](docs/camera_3d_detection.md).
+
 ## If points are visible but boxes are missing
 
 The combined profile requires a compatible camera detection, fresh inputs and sufficient projected overlap. Objects outside the front camera's field of view, missed detections or disagreement between projected LiDAR and camera boxes can leave the BEV without boxes even when the LiDAR is healthy.
@@ -47,14 +75,13 @@ The default RViz point display uses `/camera_lidar_bev/lidar_vehicle_points`. Th
 
 Association currently requires camera confidence ≥ 0.35, projected image-box IoU ≥ 0.20, compatible classes and camera/LiDAR header differences ≤ 0.15 s. Inputs expire after 0.5 s. The [combined guide](docs/camera_lidar_boxes.md) describes the remaining checks and diagnostics.
 
-If startup reports a DDS socket receive-buffer error after a reboot, apply the temporary host settings reported by the launcher:
+If startup reports a DDS socket receive-buffer error, install the host settings once so they survive reboot:
 
 ```bash
-sudo sysctl -w net.core.rmem_max=16777216 net.core.rmem_default=4194304 \
-  net.ipv4.ipfrag_time=3 net.ipv4.ipfrag_high_thresh=134217728
+sudo bash tools/setup_dds_transport.sh
 ```
 
-Then rerun the launcher. It checks these prerequisites and does not change them automatically; see [LiDAR bring-up](docs/lidar_bringup.md).
+Then rerun the launcher. The helper applies only `/etc/sysctl.d/90-camera-lidar-bev.conf` and retains larger existing buffer limits. The launcher checks these prerequisites and does not run sudo itself; see [LiDAR bring-up](docs/lidar_bringup.md).
 
 ## Measured performance and validation
 
@@ -83,7 +110,7 @@ colcon build --base-paths src --packages-up-to bev_bringup --symlink-install --c
   -DPython3_EXECUTABLE=/usr/bin/python3 -DCMAKE_BUILD_TYPE=Release
 ```
 
-Building the packages does not generate the model engines. See [camera object detection](docs/camera_objects.md), [LiDAR detection](docs/lidar_vehicle_detection.md) and [first steps](docs/first_steps.md) for model preparation and checks.
+Building the packages does not generate the model engines. See [camera object detection](docs/camera_objects.md), [LiDAR detection](docs/lidar_vehicle_detection.md), [road/lane segmentation](docs/road_lane_detection.md) and [first steps](docs/first_steps.md) for model preparation and checks.
 
 ## Current implementation
 
@@ -103,9 +130,10 @@ The project provides live sensor inputs, camera-colored LiDAR, stationary ground
 - [Stationary ground and occupancy](docs/ground_bev.md): green ground, red obstacles and gray unknown evidence, with a separate live occupancy window covering 40 m forward × 30 m wide at 0.20 m per cell. It uses `os_sensor`, the approximate 1.8 m mounting-height prior, and the user's measured body footprint; mirrors are excluded from the mask. Physical accuracy, vehicle-frame and moving-scene checks remain pending.
 - [Camera object labels and observed extents](docs/camera_objects.md): native C++/TensorRT YOLO11n labels people and vehicles, with consistent camera/BEV colors and boxes enclosing accepted visible LiDAR returns. Bicycle labeling is available in the detector configuration. This association path does not infer complete 3D dimensions or heading.
 - [Camera labels on learned LiDAR boxes](docs/camera_lidar_boxes.md): camera-matched car/person predictions with unchanged LiDAR dimensions, yaw and score, native points for context, and a labeled camera pane beside the flat BEV.
+- [Combined image/BEV display](docs/combined_bev_display.md): camera 2D labels, projected LiDAR 3D boxes and image road/lane masks, with live and recorded-data entry points.
 - Documentation, an intentionally incomplete calibration example, and a first-recording checklist.
 
-Stationary ground classification, conservative observed occupancy, camera object association and trained LiDAR car/person detection are implemented. Deskewing, vehicle-frame rolling maps, road segmentation, dense semantic fusion, Ouster-domain detector accuracy validation and object tracking remain subsequent milestones. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; geometry, camera-label and object-output rates are measured separately.
+Stationary ground classification, conservative observed occupancy, camera object association, trained LiDAR car/person detection and camera road/lane segmentation are implemented. Deskewing, vehicle-frame rolling maps, dense semantic fusion, Ouster-domain detector accuracy validation and object tracking remain subsequent milestones. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; geometry, camera-label and object-output rates are measured separately.
 
 After building and sourcing the overlay, start the front camera with:
 
@@ -161,3 +189,42 @@ The next practical step is to validate camera–LiDAR alignment using projected 
 5. **Objects and performance:** detection/tracking, expiration, sustained latency/freshness measurements, then held-out shadow-mode evaluation.
 
 Large bags, datasets, build outputs, TensorRT engines and captured evaluation images remain local and are excluded from source control. The repository includes source, configuration, documentation, model provenance and JSON validation reports; references to captured image evidence require the local artifacts. The supplied [source plan](docs/BEV_README.md) is retained verbatim as a requirements reference; its component suggestions are candidates awaiting compatibility and accuracy checks.
+
+## Local LiDAR–IMU mapping
+
+[FAST-LIO2 local mapping](docs/lidar_imu_mapping.md) adds scan deskew, local odometry, a point-cloud map and trajectory export. To build a new map from the dense 10 Hz bag, run:
+
+```bash
+bash tools/run_mapping.sh \
+  --bag bags/camera_lidar_20261010T221427_088256Z --domain 90 --rate 0.5 \
+  --max-map-voxels 8000000 --map-publish-period 600
+```
+
+For the same map behind the existing image/BEV replay, add `--mapping` to `bash tools/replay_combined_bev.sh <bag>` and press `9` to toggle it. Mapping runs once and saves under `maps/local_<UTC timestamp>/`; it waits for a two-second low-motion initialization interval. This is local mapping with provisional timing/accuracy, without GNSS alignment, loop closure or HD-map lane annotations. The [guide](docs/lidar_imu_mapping.md) covers build dependencies, a later initialization attempt and live operation in domain 1.
+
+To collect the next map dataset with GPS, run `ROS_DOMAIN_ID=1 bash tools/collect_camera_lidar.sh --lidar-mode 2048x10 --gps --duration 300 --scene '10hz_gps_mapping'`. Keep the rig still for about 10 seconds after recording starts, then collect the route. The [GPS recording guide](docs/camera_lidar_recording.md#record-10-hz-lidar-with-gps) covers the passive receiver stream, required fresh fix and saved covariance/status. Recorded GPS now supports a separate offline anchor of a saved map; the LiDAR–IMU estimator does not fuse it.
+
+The latest saved map and its GPS anchor can replay beside the camera and flat BEV without rebuilding the map:
+
+```bash
+bash tools/replay_combined_bev.sh --saved-map maps/local_gps_recording_002 \
+  --no-road-lanes --max-points 300000 --range-m 80
+```
+
+The helper checks the original source recording and detects `gps_alignment/` automatically. Press `9` to toggle the saved map/route or `q` to stop. See [GPS alignment and saved-map replay](docs/lidar_imu_mapping.md#gps-alignment-of-a-saved-map) for the ENU outputs, source timing and approximate geographic anchor. This display uses recorded trajectory poses.
+
+A separate experimental view compares live GPS with new LiDAR poses matched against the frozen map:
+
+```bash
+bash tools/run_localization_compare.sh --live --start-sensors --max-rate 10
+```
+
+Orange is GPS; cyan is the independently estimated LiDAR sensor pose and heading. The stationary live test measured about 10 Hz for both methods, with median callback/scan processing of 0.62 ms and 76.6 ms respectively. New-drive accuracy remains unmeasured. See [live GPS and LiDAR localization](docs/lidar_imu_mapping.md#compare-live-gps-with-lidar-localization) for replay commands, startup/processing costs, rejection states and comparison evidence.
+
+To use this live position with the camera image, flat 80 m BEV and detected objects on the saved map:
+
+```bash
+bash tools/run_localized_bev.sh --map maps/local_gps_recording_002
+```
+
+This runs dense `2048x10` LiDAR localization and the existing camera/LiDAR detectors together. The north-up inset shows the live trajectory and object footprints; camera-matched LiDAR boxes are also published in ENU. It starts no recording, keeps the map unchanged and omits road/lane inference by default. See [the live map display](docs/combined_bev_display.md#live-vehicle-and-objects-on-the-saved-map). The new-drive localization session sustained 9.96 Hz with median processing of 77.1 ms and no tracking failures after startup; absolute position accuracy remains unmeasured.

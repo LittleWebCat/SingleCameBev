@@ -1,5 +1,7 @@
 # First steps
 
+For a five-minute camera/LiDAR test session, follow [camera_lidar_recording.md](camera_lidar_recording.md) and run `bash tools/collect_camera_lidar.sh --duration 300 --scene 'multi_scene_test'` from the project directory after positioning the stationary rig. This starts only the required sensors and records their data; detectors and RViz are not needed. The guide explains storage, scene notes and bag validation.
+
 The project now provides stationary camera-colored LiDAR, supported ground/obstacle classification, an observed free/occupied/unknown grid and camera object labels with LiDAR-supported observed extents. The steps below retain the input, recording and calibration workflow; the geometry live view starts with:
 
 ```bash
@@ -32,6 +34,8 @@ bash tools/run_bev.sh --camera-lidar-boxes
 ```
 
 The default display shows native car/person points as context and only camera-matched boxes, with the labeled camera image beside the flat BEV. Filtered camera-matched points remain available as an optional display. Matching does not alter LiDAR dimensions, yaw or confidence, and raw LiDAR predictions continue independently. This mode needs both saved engines and the provisional camera calibration. See [camera_lidar_boxes.md](camera_lidar_boxes.md) for timestamp matching and association limits.
+
+For genuine camera-only 3D predictions, use `bash tools/run_bev.sh --camera-3d-boxes`. This separate mode runs the SMOKE model using the calibrated camera image and CameraInfo, with no LiDAR input. It shows the labeled image beside flat boxes in `camera_front_bev`, whose origin is the camera. The saved engine is required, and predicted depth and dimensions remain unvalidated on this rig; see [camera_3d_detection.md](camera_3d_detection.md).
 
 ## 1. Build and check the foundation
 

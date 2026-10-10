@@ -1,0 +1,62 @@
+{
+  "created_at_utc": "2026-10-09T18:49:52.356086+00:00",
+  "passed": false,
+  "domain_id": 88,
+  "software_only": true,
+  "actual_trained_engine": true,
+  "physical_accuracy_validated": false,
+  "learned_detection_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "lidar_inputs_used": false,
+  "source_image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/camera_3d_demo_001/kitti_000008.png",
+  "source_image_sha256": "5b988d2a04d51850610b38ce50a66fd4027f3f5e645e5f2198d0522f4cf9a640",
+  "engine": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_3d_001/smoke_fp16_raw.engine",
+  "engine_sha256": "4c63e3519cb15b95026ca77446a00288e48cde1b0d843a53e705145b93568a0b",
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_3d_detector",
+  "executable_sha256": "5929912bb0a2100c3c74a44d5498c4b263df21007eb6989f26457b94a7ed3948",
+  "calibration": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/camera_3d_demo_001/kitti_000008.calib.txt",
+  "native_size": [
+    1242,
+    375
+  ],
+  "require_predictions": true,
+  "intrinsics_sha256": "1a10efe4117db774b63d73480b71728639b778a3ac2f7eafe0faadd94fe8ed88",
+  "stages": [],
+  "limitations": [
+    "Recorded photograph is not annotated 3D ground truth; emitted boxes are model predictions.",
+    "Default fixture is an official rectified KITTI outdoor image; explicit native image/YAML overrides are supported.",
+    "Zero predictions are valid observations and do not establish detection accuracy.",
+    "Candidate camera calibration and KITTI-to-this-camera domain accuracy remain unvalidated."
+  ],
+  "actual_child_subscriptions": [
+    [
+      "/camera_3d_software_check/image",
+      [
+        "sensor_msgs/msg/Image"
+      ]
+    ],
+    [
+      "/camera_3d_software_check/info",
+      [
+        "sensor_msgs/msg/CameraInfo"
+      ]
+    ],
+    [
+      "/parameter_events",
+      [
+        "rcl_interfaces/msg/ParameterEvent"
+      ]
+    ]
+  ],
+  "error": "AssertionError: Camera-only child must have no LiDAR inputs",
+  "failed_stage": "discovery",
+  "received_output_messages": {
+    "detections": 0,
+    "markers": 0,
+    "labeled": 0,
+    "diagnostics": 0,
+    "tf_static": 1
+  },
+  "child_returncode": 0,
+  "node_log_tail": "[INFO] [1791571793.093955964] [software_camera_3d_child]: Camera-only trained SMOKE 3D: 1280x384 center crop, 20.0 Hz cap; dimensions are predictions\n[INFO] [1791571793.095042944] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

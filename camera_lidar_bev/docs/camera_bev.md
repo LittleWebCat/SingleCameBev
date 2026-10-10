@@ -25,7 +25,7 @@ sudo sysctl -w net.core.rmem_max=16777216 net.core.rmem_default=4194304 \
   net.ipv4.ipfrag_time=3 net.ipv4.ipfrag_high_thresh=134217728
 ```
 
-The profile requires a 16 MiB receive buffer. The default Linux limit is too small and makes both the color node and RViz fail during ROS initialization. These settings reset on reboot. The camera and LiDAR processes also need to be started again after reboot; use [the native camera command](imported_calibration.md#native-resolution-camera-application) and [the LiDAR launcher](lidar_bringup.md#inspect-the-active-driver-first).
+The profile requires a 16 MiB receive buffer. The default Linux limit is too small and makes both the color node and RViz fail during ROS initialization. The command above resets on reboot; run `sudo bash tools/setup_dds_transport.sh` from the project directory once to install persistent settings instead. The camera and LiDAR processes also need to be started again after reboot; use [the native camera command](imported_calibration.md#native-resolution-camera-application) and [the LiDAR launcher](lidar_bringup.md#inspect-the-active-driver-first).
 
 ```bash
 cd /home/agxthor/SingleCameraBev/camera_lidar_bev

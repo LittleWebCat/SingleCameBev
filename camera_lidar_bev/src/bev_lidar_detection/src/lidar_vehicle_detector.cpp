@@ -252,6 +252,18 @@ class LidarVehicleDetector final : public rclcpp::Node {
     return true;
   }
   void process() {
+    const auto ros_time=now().nanoseconds();
+    // A looping bag restarts its source timestamps along with /clock. Only an
+    // observed simulation-clock rewind may reset the monotonic source gate.
+    if (get_parameter("use_sim_time").as_bool() && ros_time<last_ros_time_ &&
+        last_ros_time_-ros_time>50000000LL) {
+      last_ros_time_=ros_time;last_stamp_=0;
+      latest_.reset();receipt_=Clock::time_point{};version_=0;processed_=0;
+      last_age_=0;processing_ms_=0;last_masked_=0;++clock_rewinds_;
+      clear("Simulation clock rewound; waiting for new LiDAR scan");
+      return;
+    }
+    last_ros_time_=ros_time;
     if (tf_conflict_) {clear("Ouster driver TF conflicts with model coordinates");return;}
     if (!tf_valid_) {clear("Waiting for actual Ouster os_sensor <- os_lidar static TF");return;}
     if (!latest_ || !fresh(*latest_,receipt_)) {clear("LiDAR input stale or unavailable");return;}
@@ -290,6 +302,7 @@ class LidarVehicleDetector final : public rclcpp::Node {
     add("vehicle_class",enabled_classes_[0] && enabled_classes_[1] ? "Car_and_Pedestrian" : enabled_classes_[0] ? "Car_only" : "Pedestrian_only");
     add("intensity_field",intensity_field_);add("intensity_scale",std::to_string(intensity_scale_));
     add("received_scans",std::to_string(received_));add("processed_scans",std::to_string(processed_count_));
+    add("simulation_clock_rewinds",std::to_string(clock_rewinds_));
     add("cleared_outputs",std::to_string(clear_count_));add("vehicle_boxes",std::to_string(last_cars_));
     add("person_boxes",std::to_string(last_people_));add("object_boxes",std::to_string(last_cars_+last_people_));
     add("vehicle_points",std::to_string(last_point_count_));add("self_masked_points",std::to_string(last_masked_));
@@ -306,8 +319,8 @@ class LidarVehicleDetector final : public rclcpp::Node {
   std::array<bool,2> enabled_classes_{};
   bool mask_{},tf_valid_{false},tf_conflict_{false},cleared_{false};
   Cloud::ConstSharedPtr latest_;Clock::time_point receipt_{};
-  std::uint64_t version_{},processed_{},received_{},processed_count_{},clear_count_{};
-  std::int64_t last_stamp_{0};std::size_t last_masked_{},last_cars_{},last_people_{},last_point_count_{};
+  std::uint64_t version_{},processed_{},received_{},processed_count_{},clear_count_{},clock_rewinds_{};
+  std::int64_t last_stamp_{0},last_ros_time_{0};std::size_t last_masked_{},last_cars_{},last_people_{},last_point_count_{};
   rclcpp::Publisher<Detections>::SharedPtr detections_pub_;
   rclcpp::Publisher<Markers>::SharedPtr markers_pub_;
   rclcpp::Publisher<Cloud>::SharedPtr points_pub_;

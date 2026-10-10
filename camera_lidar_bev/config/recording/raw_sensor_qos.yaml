@@ -1,0 +1,12 @@
+# Preserve latched Ouster metadata and static driver transforms in a fresh bag.
+# Raw sensor topics retain automatic publisher-compatible ROS bag QoS.
+/metadata:
+  reliability: reliable
+  durability: transient_local
+  history: keep_last
+  depth: 1
+/tf_static:
+  reliability: reliable
+  durability: transient_local
+  history: keep_last
+  depth: 100

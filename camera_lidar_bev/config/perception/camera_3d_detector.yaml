@@ -1,0 +1,16 @@
+# Genuine monocular SMOKE predictions; metric accuracy on this camera is provisional.
+/**:
+  ros__parameters:
+    image_topic: /camera/front/image_raw
+    camera_info_topic: /camera/front/camera_info
+    detections_topic: /camera_lidar_bev/camera_detections_3d
+    labeled_image_topic: /camera_lidar_bev/camera_3d_labeled
+    markers_topic: /camera_lidar_bev/camera_3d_markers
+    camera_frame: camera_front_optical_frame
+    bev_frame: camera_front_bev
+    width: 1024
+    height: 768
+    max_publish_hz: 20.0
+    stale_after_s: 0.5
+    score_threshold: 0.25
+    classes: [car, person]

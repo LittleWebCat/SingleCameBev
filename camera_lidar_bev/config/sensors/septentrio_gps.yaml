@@ -1,0 +1,14 @@
+# Passive client for the receiver's existing SBF output. No receiver commands.
+septentrio_gps_bridge:
+  ros__parameters:
+    receiver_host: "192.168.3.1"
+    receiver_port: 28784
+    receiver_name: "Septentrio mosaic-X5"
+    frame_id: "gnss_antenna"
+    connect_timeout_s: 2.0
+    receive_timeout_s: 1.0
+    reconnect_initial_s: 0.5
+    reconnect_max_s: 5.0
+    stale_after_s: 1.0
+    covariance_wait_s: 0.05
+    queue_capacity: 1024

@@ -1,4 +1,5 @@
 #include "bev_visualization/yolo_detector.hpp"
+#include "bev_visualization/replay_source_clock.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -142,6 +143,19 @@ class CameraObjectDetector final : public rclcpp::Node {
   }
 
   void process() {
+    if (source_clock_.observe_clock(get_parameter("use_sim_time").as_bool(), now().nanoseconds())) {
+      // A bag loop must not reuse the previous loop's image or detections. The
+      // TensorRT engine remains loaded; only frame-local state is reset.
+      image_.reset();
+      receipt_ = Clock::time_point{};
+      version_ = 0;
+      processed_version_ = 0;
+      decode_ms_ = preprocess_ms_ = inference_ms_ = gpu_compute_ms_ = postprocess_ms_ = 0;
+      annotate_ms_ = processing_ms_ = publish_ms_ = 0;
+      source_age_at_start_s_ = source_age_at_publish_s_ = 0;
+      clear_outputs("Simulation clock rewound; waiting for new camera image");
+      return;
+    }
     if (!image_) { clear_outputs("Waiting for camera image"); return; }
     const auto image = image_;
     const auto receipt = receipt_;
@@ -160,8 +174,9 @@ class CameraObjectDetector final : public rclcpp::Node {
     if (source_version == processed_version_) return;
     processed_version_ = source_version;
     const auto source_stamp = stamp_ns(image->header);
-    if (source_stamp == last_processed_stamp_) { ++duplicate_frames_; return; }
-    if (source_stamp < last_processed_stamp_) {
+    const auto source_order = source_clock_.source_order(source_stamp);
+    if (source_order == ReplaySourceClock::SourceOrder::Duplicate) { ++duplicate_frames_; return; }
+    if (source_order == ReplaySourceClock::SourceOrder::Backwards) {
       ++rejected_frames_;
       clear_outputs("Camera image timestamps moved backwards", true); return;
     }
@@ -231,7 +246,7 @@ class CameraObjectDetector final : public rclcpp::Node {
       detections_pub_->publish(std::move(detections));
       image_pub_->publish(std::move(labeled_image));
       publish_ms_ = elapsed_ms(publish_started);
-      last_processed_stamp_ = source_stamp;
+      source_clock_.mark_processed(source_stamp);
       last_detection_count_ = inference.detections.size();
       ++processed_frames_;
       outputs_cleared_ = false;
@@ -262,9 +277,10 @@ class CameraObjectDetector final : public rclcpp::Node {
     field("inferred_frames", inferred_frames_); field("mailbox_dropped_frames", mailbox_dropped_frames_);
     field("stale_dropped_frames", stale_dropped_frames_); field("rejected_frames", rejected_frames_);
     field("duplicate_frames", duplicate_frames_); field("inference_errors", inference_errors_);
+    field("simulation_clock_rewinds", source_clock_.simulation_clock_rewinds());
     field("cleared_outputs", cleared_outputs_); field("outputs_cleared", outputs_cleared_);
     field("detections", last_detection_count_); field("max_publish_hz", max_publish_hz_);
-    field("source_stamp_ns", last_processed_stamp_); field("source_age_at_start_s", source_age_at_start_s_);
+    field("source_stamp_ns", source_clock_.last_processed_stamp_ns()); field("source_age_at_start_s", source_age_at_start_s_);
     field("source_age_at_publish_s", source_age_at_publish_s_);
     field("source_age_s", image_ ? static_cast<double>(now().nanoseconds()-stamp_ns(image_->header))/1e9 : -1.0);
     field("receipt_age_s", image_ ? std::chrono::duration<double>(Clock::now()-receipt_).count() : -1.0);
@@ -285,7 +301,7 @@ class CameraObjectDetector final : public rclcpp::Node {
   std::uint64_t version_{}, processed_version_{}, received_frames_{}, processed_frames_{}, inferred_frames_{};
   std::uint64_t mailbox_dropped_frames_{}, stale_dropped_frames_{}, rejected_frames_{}, duplicate_frames_{};
   std::uint64_t inference_errors_{}, cleared_outputs_{};
-  std::int64_t last_processed_stamp_{};
+  ReplaySourceClock source_clock_;
   std::size_t last_detection_count_{};
   bool outputs_cleared_{false}, error_is_invalid_{false};
   double decode_ms_{}, preprocess_ms_{}, inference_ms_{}, gpu_compute_ms_{}, postprocess_ms_{};

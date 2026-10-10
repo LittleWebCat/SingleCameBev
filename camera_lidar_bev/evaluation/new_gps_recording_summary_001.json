@@ -1,0 +1,37 @@
+{
+  "bag": "/home/agxthor/SingleCameraBev/camera_lidar_bev/bags/camera_lidar_20261010T221427_088256Z",
+  "fix_counts": {
+    "valid": 1889,
+    "status_1": 1879,
+    "status_0": 10
+  },
+  "status_mode_counts": {
+    "sbas": 2247,
+    "standalone": 12
+  },
+  "status_health": {},
+  "fix_header_rate_hz": 10.000011014243313,
+  "maximum_fix_interval_s": 0.1044318675994873,
+  "fix_gaps_over_150ms": 0,
+  "fix_time_reversals": 0,
+  "known_covariance_samples": 1883,
+  "reported_horizontal_axis_sigma_median_m": 1.8770694756146293,
+  "reported_horizontal_axis_sigma_max_m": 7.573699980622706,
+  "bridge_counter_maxima": {
+    "connection_attempts": 1,
+    "connection_failures": 0,
+    "crc_errors": 0,
+    "decode_errors": 0,
+    "discarded_bytes": 5,
+    "disconnects": 0,
+    "dropped_stale_pvt": 0,
+    "ignored_old_pvt": 0,
+    "length_errors": 0,
+    "published_fixes": 2087,
+    "queue_drops": 0,
+    "validated_blocks": 8766
+  },
+  "read_elapsed_s": 3.432776131998253,
+  "position_accuracy_independently_validated": false,
+  "coordinates_omitted": true
+}

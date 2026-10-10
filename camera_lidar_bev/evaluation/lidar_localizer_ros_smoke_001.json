@@ -1,0 +1,28 @@
+{
+  "backend": "bounded_robust_3d_icp",
+  "config": {
+    "map_voxel_m": 0.6,
+    "scan_voxel_m": 0.65,
+    "maximum_scan_points": 3500,
+    "maximum_target_points": 100000,
+    "map_crop_radius_m": 65.0,
+    "map_crop_rebuild_m": 10.0,
+    "minimum_range_m": 3.0,
+    "maximum_range_m": 55.0,
+    "maximum_iterations": 18,
+    "correspondence_m": 1.2,
+    "minimum_fitness": 0.45,
+    "maximum_rmse_m": 0.7,
+    "maximum_gps_offset_m": 15.0,
+    "maximum_speed_mps": 35.0,
+    "maximum_yaw_rate_rps": 1.0,
+    "maximum_tracking_gap_s": 2.0,
+    "initialization_yaw_step_degrees": 15.0,
+    "initialization_score_margin": 0.015,
+    "max_rate_hz": 5.0
+  },
+  "map_preparation_s": 0.9074010990007082,
+  "samples": [],
+  "saved_trajectory_used": false,
+  "accuracy_independently_validated": false
+}

@@ -11,7 +11,7 @@ cd /home/agxthor/SingleCameraBev/camera_lidar_bev
 bash tools/run_bev.sh
 ```
 
-The wrapper sources the ROS environments, checks the receive-buffer prerequisite, and reuses existing camera, Ouster, RGB and ground processes in the selected ROS domain. It refuses duplicate processors and conflicting domains. A missing receive-buffer setting produces the exact sysctl command to run after reboot; the launcher does not run sudo itself. Ctrl+C stops only the processes started by this invocation. Existing sensor processes stay owned by their original launchers.
+The wrapper sources the ROS environments, checks the receive-buffer prerequisite, and reuses existing camera, Ouster, RGB and ground processes in the selected ROS domain. It refuses duplicate processors and conflicting domains. A missing receive-buffer setting reports `sudo bash tools/setup_dds_transport.sh` for persistent setup, plus a temporary sysctl command; the launcher does not run sudo itself. Ctrl+C stops only the processes started by this invocation. Existing sensor processes stay owned by their original launchers.
 
 Use `--dry-run` to inspect startup without launching anything, `--no-rviz` to keep an existing RViz view, and `--no-occupancy-view` to skip the grid window. To open only the grid while its processor is running:
 
