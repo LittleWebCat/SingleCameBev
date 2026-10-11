@@ -6,6 +6,14 @@ The pipeline can process videos, image folders, single images, or a live camera.
 
 The separate [ROS 2 camera + LiDAR BEV project](camera_lidar_bev/README.md) provides the current Ouster/front-camera preview: native C++/TensorRT detection, a flat 60 m BEV, camera-matched learned boxes and a labeled camera pane. Its README contains the launch command, display behavior, measured 20 Hz updates and remaining calibration checks.
 
+## Camera + LiDAR results
+
+![Camera and LiDAR recording replay with a saved-map BEV](camera_lidar_bev/docs/media/camera_bev_replay.gif)
+
+Recorded camera/LiDAR replay with camera 2D labels, LiDAR 3D predictions and an 80 m flat BEV. The map overlay in this GIF uses the original recording's saved poses. These are prototype predictions.
+
+The [visual results gallery](camera_lidar_bev/docs/results.md) also shows independent live localization, the GPS/LiDAR drive comparison and measured processing times. See the [camera + LiDAR project](camera_lidar_bev/README.md) for launch commands.
+
 ## Current Thor Setup
 
 The main runtime config is `configs/thor_1080p.yaml`.

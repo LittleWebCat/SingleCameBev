@@ -994,7 +994,8 @@ def main():
                         self.points_key = points_key
                     points = self.points
                 lidar_stamp = header_stamp(lidar[0].header) if lidar else header_stamp(cloud[0].header) if cloud else 0
-                sample = {"sample_id": "live", "image_stamp_ns": header_stamp(image.header),
+                sample = {"sample_id": "replay" if self.get_parameter('use_sim_time').value else "live",
+                          "image_stamp_ns": header_stamp(image.header),
                           "lidar_stamp_ns": lidar_stamp,
                           "pair_delta_ms": (header_stamp(image.header)-lidar_stamp)/1e6 if lidar_stamp else None,
                           "input_points": self.point_count if points is not None else 0,

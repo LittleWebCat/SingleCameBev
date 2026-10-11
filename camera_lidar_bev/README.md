@@ -2,6 +2,18 @@
 
 A ROS 2 Jazzy/C++ project for one front camera and Ouster LiDAR on NVIDIA AGX Thor, based on the supplied [BEV_README.md](docs/BEV_README.md). It provides recording, camera/LiDAR object BEV, local mapping and experimental localization against a GPS-aligned saved map. The live localized display places the sensor and detected objects on that map; timing and absolute accuracy remain provisional.
 
+## Results
+
+![Live camera detections, projected LiDAR boxes, flat BEV and saved-map localization](docs/media/live_localized_bev.png)
+
+Live physical sensors: camera 2D labels and projected LiDAR 3D predictions beside an **80 m flat BEV**, with the independently estimated live position on a saved map. A subsequent optimized 20-second check maintained **10 FPS**, with the map ready in **200/200 frames**.
+
+![Short camera and LiDAR replay beside the saved-map BEV](docs/media/camera_bev_replay.gif)
+
+Short **1× recording replay** using the original recording's saved trajectory poses for the map overlay. This replay and the live localization snapshot are separate runs; object boxes are model predictions.
+
+See the [visual results gallery](docs/results.md) for the GPS/LiDAR drive comparison, measured processing times and each result's context.
+
 ## Record camera + LiDAR test data
 
 For a five-minute sensors-only session with several scenes, position the stationary rig and run:
@@ -188,7 +200,7 @@ The next practical step is to validate camera–LiDAR alignment using projected 
 4. **Camera semantics:** segmentation, preprocessing-aware projection, visibility checks, and confidence/age-aware fusion.
 5. **Objects and performance:** detection/tracking, expiration, sustained latency/freshness measurements, then held-out shadow-mode evaluation.
 
-Large bags, datasets, build outputs, TensorRT engines and captured evaluation images remain local and are excluded from source control. The repository includes source, configuration, documentation, model provenance and JSON validation reports; references to captured image evidence require the local artifacts. The supplied [source plan](docs/BEV_README.md) is retained verbatim as a requirements reference; its component suggestions are candidates awaiting compatibility and accuracy checks.
+Large bags, datasets, build outputs, TensorRT engines and full captured evaluation artifacts remain local and are excluded from source control. The repository includes source, configuration, documentation, model provenance, JSON validation reports and the selected [visual results](docs/results.md) under `docs/media/`. Other captured evidence requires the local artifacts. The supplied [source plan](docs/BEV_README.md) is retained verbatim as a requirements reference; its component suggestions are candidates awaiting compatibility and accuracy checks.
 
 ## Local LiDAR–IMU mapping
 
