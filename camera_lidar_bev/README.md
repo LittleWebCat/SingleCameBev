@@ -23,7 +23,7 @@ cd /home/agxthor/SingleCameraBev/camera_lidar_bev
 bash tools/collect_camera_lidar.sh --duration 300 --scene 'multi_scene_test'
 ```
 
-This records the calibrated native camera and original Ouster scans, without starting detectors or RViz. Calibration/configuration snapshots and bag validation stay with the local recording. Five minutes is approximately 60 GB uncompressed; MCAP uses lossless compression when available. With approximately 31 GiB free on this host at preparation, the full duration may not fit: the collector stops cleanly at a 2 GiB free-space floor. Use `--output` on a larger disk if needed. See [the recording guide](docs/camera_lidar_recording.md) for scene ideas, output paths, validation and unverified sensor timing. Preparing the code does not start a recording.
+This records the calibrated native camera and original Ouster scans, without starting detectors or RViz. Calibration/configuration snapshots and bag validation stay with the local recording. Five minutes is approximately 60 GB uncompressed; MCAP uses lossless compression when available. The collector checks available space at startup and stops cleanly at a 2 GiB free-space floor. Actual compressed size depends on the scene and measured rates. Use `--output` on a larger disk if needed. See [the recording guide](docs/camera_lidar_recording.md) for scene ideas, output paths, validation and unverified sensor timing. Preparing the code does not start a recording.
 
 For dense **10 Hz** scans, stop an existing LiDAR/BEV launcher with Ctrl+C, then run `bash tools/collect_camera_lidar.sh --lidar-mode 2048x10 --duration 300 --scene '10hz_test'`. This uses a separate recording profile and preserves the usual 20 Hz live default.
 
@@ -126,14 +126,18 @@ Building the packages does not generate the model engines. See [camera object de
 
 ## Current implementation
 
-The project provides live sensor inputs, camera-colored LiDAR, stationary ground/occupancy processing, camera object labels with LiDAR-supported observed extents, and a separate learned LiDAR car/person detector.
+The project provides live sensor inputs and recording, camera-colored LiDAR, stationary ground/occupancy processing, camera object labels, learned LiDAR car/person detection, LiDAR–IMU mapping and experimental localization against a GPS-aligned saved map.
 
 - `bev_core`: dependency-free C++ grid coordinates and a cell representation for occupancy, semantic labels, height, confidence, and observation timestamps. The future pipeline will derive observation age from those timestamps.
 - `bev_sensor_bridge`: a ROS 2 C++ front-camera bridge publishing paired images and camera information, plus an input probe for topic reception, message timestamps, frames, point-cloud fields, and sensor freshness.
-- `bev_bringup`: launch/configuration for the camera, input probe, RGB cloud, ground processor and RViz views.
+- `bev_bringup`: launch/configuration for the camera, input probe, RGB cloud, ground processor, detectors, passive GPS bridge, mapping and RViz views.
 - `bev_visualization`: C++ camera-to-LiDAR RGB association, native TensorRT camera object detection, visible-point association for observed object extents, and class-aware camera matching of learned LiDAR boxes.
 - `bev_geometry`: C++ supported-ground fitting, obstacle/unknown classification, a measured vehicle-body mask, and conservative observed occupancy, with ROS point-cloud, grid and image outputs.
 - `bev_lidar_detection`: native C++/TensorRT PointPillars car/person detection, predicting full dimensions and yaw for a flat BEV footprint display. KITTI-to-Ouster accuracy remains provisional; see [the LiDAR detector guide](docs/lidar_vehicle_detection.md).
+- `fast_lio`: the vendored C++ FAST-LIO2 backend estimates local motion and deskews scans using LiDAR and the Ouster IMU. Its GPL-2.0 license and upstream revision are retained; see [local mapping](docs/lidar_imu_mapping.md).
+- `bev_mapping`: a Python ROS adapter checks IMU initialization, coverage and original Ouster point timing, converts estimator poses to the sensor frame, and exports a point-cloud map and source-stamped trajectory.
+- [GPS recording](docs/camera_lidar_recording.md#record-10-hz-lidar-with-gps): a passive Septentrio SBF bridge publishes position, receiver status, covariance and raw blocks. [Offline alignment](docs/lidar_imu_mapping.md#gps-alignment-of-a-saved-map) anchors a saved map to ENU; GPS is not fused into FAST-LIO2.
+- [Saved-map localization](docs/lidar_imu_mapping.md#compare-live-gps-with-lidar-localization): an experimental NumPy/SciPy scan matcher estimates new poses against a frozen map, with coarse GPS aiding and rejection/freshness checks. Its live path uses no recorded trajectory poses. [The localized display](docs/combined_bev_display.md#live-vehicle-and-objects-on-the-saved-map) places fresh camera-matched LiDAR boxes in ENU.
 - Python checkerboard capture and offline intrinsic fitting, with held-out checks and rejection of folded radial lens models. The [second calibration review](evaluation/front_camera_002_review.md) records candidate intrinsics applied provisionally after the user's straight-edge check, verified live CameraInfo, and the remaining accuracy checks. A live viewer compares raw images with candidate undistortion.
 - [Stationary camera–LiDAR capture](docs/camera_lidar_capture.md) with raw point-cloud preservation and separate camera/range previews. The first step checks board visibility in both sensors; extrinsic fitting is pending.
 - [Imported calibration review](docs/imported_calibration.md): native 1024 × 768 camera intrinsics and a supplied LiDAR-to-camera transform. The user selected B (`os_sensor`) for the live diagnostic; independent extrinsic accuracy remains unconfirmed.
@@ -145,7 +149,7 @@ The project provides live sensor inputs, camera-colored LiDAR, stationary ground
 - [Combined image/BEV display](docs/combined_bev_display.md): camera 2D labels, projected LiDAR 3D boxes and image road/lane masks, with live and recorded-data entry points.
 - Documentation, an intentionally incomplete calibration example, and a first-recording checklist.
 
-Stationary ground classification, conservative observed occupancy, camera object association, trained LiDAR car/person detection and camera road/lane segmentation are implemented. Deskewing, vehicle-frame rolling maps, dense semantic fusion, Ouster-domain detector accuracy validation and object tracking remain subsequent milestones. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; geometry, camera-label and object-output rates are measured separately.
+Stationary ground classification, conservative observed occupancy, camera object association, trained LiDAR car/person detection, camera road/lane segmentation, FAST-LIO2 deskew/odometry and experimental saved-map localization are implemented. Mapping deskew does not automatically deskew the native detector or stationary occupancy inputs. Vehicle-frame rolling occupancy, dense semantic fusion, persistent object tracking, Ouster-domain detector accuracy validation, a dedicated BEV feature exporter and a trajectory planner remain outstanding. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; dense `2048x10` mapping/localization and combined-view timing are documented separately below.
 
 After building and sourcing the overlay, start the front camera with:
 
@@ -168,7 +172,7 @@ It publishes `/camera/front/image_raw` and `/camera/front/camera_info` using the
 | Empty evidence | Unknown occupancy and unknown semantic label |
 | Planned publication | 20 Hz, with observation age reported separately |
 
-This table describes the planned vehicle-frame contract; the current stationary output uses `os_sensor` until the sensor-to-vehicle transform is measured. The 40 m occupancy grid is separate from the approximately 60 m forward object view. Forward index increases away from the sensor, and lateral index increases from right to left. This storage order differs from ROS `nav_msgs/OccupancyGrid`; `bev_geometry` explicitly converts it to x-fastest rows. Its occupancy image shows forward upward and left leftward. A semantic label and geometric occupancy are separate fields. An unobserved cell must not be declared free.
+This table describes the planned vehicle-frame contract; the current stationary output uses `os_sensor` until the sensor-to-vehicle transform is measured. The 40 m occupancy grid is separate from the 60 m RViz object profiles and the 80 m combined display. Forward index increases away from the sensor, and lateral index increases from right to left. This storage order differs from ROS `nav_msgs/OccupancyGrid`; `bev_geometry` explicitly converts it to x-fastest rows. Its occupancy image shows forward upward and left leftward. A semantic label and geometric occupancy are separate fields. An unobserved cell must not be declared free.
 
 This convention differs from the parent camera pipeline's lateral/right and forward axes. Its class matrix and legacy tracker cannot be consumed without explicit conversion; the legacy matrix tracker also assumes a different map size and resolution.
 
@@ -176,7 +180,7 @@ This convention differs from the parent camera pipeline's lateral/right and forw
 
 Keep reproducible sensor recordings with documented rates, fields, frames, timestamp sources, and missing inputs. Follow [first_steps.md](docs/first_steps.md) and fill in [first_recording.md](evaluation/first_recording.md).
 
-The separate legacy Ouster configuration uses `xyzir`, omitting per-point timing. The project's explicit [LiDAR launcher](docs/lidar_bringup.md) uses `original`, with verified UINT32 `t` fields and ROS reception-derived timestamps. The user selected `1024x20` for faster refresh; [the current rate check](evaluation/lidar_20hz_001.json) measured approximately 20 Hz with 131,072 returns per scan. Earlier `2048x10` recording and replay remain a partial transport milestone; calibration, shared-clock alignment, and odometry remain pending. See the [earlier validation report](evaluation/lidar_bringup_validation.md).
+The separate legacy Ouster configuration uses `xyzir`, omitting per-point timing. The project's explicit [LiDAR launcher](docs/lidar_bringup.md) uses `original`, with verified UINT32 `t` fields and ROS reception-derived timestamps. The usual live profile is `1024x20`; [its rate check](evaluation/lidar_20hz_001.json) measured approximately 20 Hz with 131,072 returns per scan. Dense recording, mapping and the localized runner use `2048x10`, with 262,144 returns per scan. FAST-LIO2 now supplies local odometry and mapping deskew; physical shared-clock alignment, sensor-to-vehicle calibration and independent trajectory accuracy remain unverified. The [earlier transport validation report](evaluation/lidar_bringup_validation.md) is historical; see [the mapping guide](docs/lidar_imu_mapping.md) for current operation and evidence.
 
 A 10 Hz LiDAR can support a 20 Hz publication loop with motion updates between scans, but that does not produce 20 fresh complete scans per second. The desired freshness requirement remains an explicit hardware and performance decision.
 
@@ -184,21 +188,44 @@ The current parent camera configuration estimates roughly 65° horizontal FOV. T
 
 ## Development boundaries
 
-Keep frequent point-cloud processing, grid updates, fusion, tracking, and publication in C++. Use Python for calibration, model export, data inspection, and evaluation. Keep algorithms independently testable behind ROS adapters.
+The native sensor bridge, geometry, detectors and camera association use C++. The current mapping adapter, combined display and experimental scan matcher use Python. Keep future frequent point-cloud processing, grid updates, fusion, tracking and publication in C++ where practical; use Python/PyTorch for calibration, dataset export, training and evaluation. Keep algorithms independently testable behind ROS adapters.
 
 Use the installed JetPack-compatible CUDA and TensorRT versions when adding inference. Record exact software versions and model provenance; do not upgrade TensorRT independently as a bring-up step.
 
 The parent `bev_depth/`, `bef-tracking-kf-*`, and `/home/agxthor/sensors_ws` remain separate. Their parsers, tracker behavior, and tests are useful references. The explicit project startup command can launch the sensors with the saved project profile; it does not modify the parent configuration or launch vehicle actuation.
 
+## BEV features and planning-model training (planned)
+
+The next proposed milestone is an offline dataset exporter for BEV features and future-trajectory targets. There is currently no dedicated BEV training-sample exporter or trained trajectory/planning model. PointPillars already computes learned internal features for detection; the live viewer displays points and predicted boxes rather than exporting a planner's feature tensor.
+
+| Representation | Contents | Training needed |
+| --- | --- | --- |
+| Raw LiDAR points | Per-return XYZ, reflectivity, timing and ring fields | No; these are sensor measurements |
+| Numerical LiDAR BEV | Top-down channels for point density, height, intensity and observed/unknown evidence | No; deterministic grid construction |
+| Learned BEV features | Encoder-produced channels describing geometry and semantics | Use a pretrained encoder or train/fine-tune one |
+| Planning model | BEV/history, ego state and navigation intent mapped to a future trajectory | Train the trajectory model; optionally train the encoder jointly |
+
+BEV tensors typically have shape `[C, H, W]`: channels, forward cells and lateral cells under an explicit axis convention. Store metric bounds, cell size, frame, timestamps and masks with every sample. Training-grid dimensions must be chosen explicitly; the existing stationary occupancy grid and 80 m display do not define a training format. Empty point bins remain unknown unless geometric observation/free-space evidence supports a stronger label. A single front camera supplies semantics only within its visible coverage.
+
+Start with **raw LiDAR → numerical BEV grid → small trajectory model**. Grid generation needs no encoder training. Later, compare a pretrained or fine-tuned camera–LiDAR encoder against that baseline. Candidate tools are [NVIDIA TAO BEVFusion](https://docs.nvidia.com/tao/tao-toolkit/latest/text/cv_finetuning/pytorch/bevfusion.html), [MMDetection3D BEVFusion](https://github.com/open-mmlab/mmdetection3d/tree/main/projects/BEVFusion) and [NAVSIM/TransFuser's feature/target interface](https://github.com/autonomousvision/navsim/blob/main/docs/agents.md). TAO documents a one-view configuration with person detection as its default task; NAVSIM's standard TransFuser uses three front cameras. Dataset, camera coverage, classes and model configuration need adaptation to this rig.
+
+The proposed exporter should preserve paired raw images/scans, calibration, source timestamps and pairing offsets; use per-point timing and ego poses for deskew and causal history alignment; and provide BEV channels with observation and camera-visibility masks. Include valid raw LiDAR evidence beyond the camera-matched object subset. The recorded LiDAR–IMU poses can supply provisional future trajectories in the current ego frame, with validity masks; they are estimated supervision, not independent ground truth. Detector boxes are confidence-tagged pseudo-labels.
+
+The measured sensor-to-vehicle transform, useful ego velocity/acceleration and navigation intent still need a defined input contract. The current map-localizer `Odometry` publishes pose and leaves `twist` unset; its default zeros are not measured vehicle speed. Existing recordings contain no vehicle CAN/control or route-command supervision. Calibration snapshots and host timestamps also do not establish physical sensor synchronization.
+
+Use only current/past sensor observations as inputs and future poses as targets. Split datasets by independent drive, and keep a whole-recording accumulated map out of per-frame sensor features because it contains future observations. If map features are needed, use a separately acquired prior map. Retain raw samples: cached learned embeddings support a frozen encoder plus downstream-head training, while joint end-to-end training requires running and updating the encoders.
+
+Rule-based planning is also a proposed path. [Autoware's planning stack](https://docs.autoware.org/main/design/autoware-architecture-v1/components/planning/) is the preferred ROS 2 reference for lane following and obstacle stopping. A Lanelet2 driving corridor, vehicle-state adapters, tracking/prediction and conservative obstacle inputs would be needed first. Initial planner outputs should be inspected in saved-drive replay as a path, stopping point, target speed and decision reason over the flat BEV.
+
 ## Planned gates
 
-The next practical step is to validate camera–LiDAR alignment using projected returns and known objects, then check person detection and predicted vehicle dimensions on this Ouster rig. Shared timing, the sensor-to-vehicle transform and validated odometry are needed before moving-scene deskew, tracking and rolling BEV maps.
+The next implementation milestone is the offline BEV/training-sample exporter above. Calibration and timing checks remain necessary for trustworthy samples. FAST-LIO2 deskew and odometry are implemented with provisional accuracy; integrating motion compensation into detector/grid inputs, measured vehicle-frame rolling occupancy and planner inputs remains future work.
 
 1. **Inputs and replay:** measured sensor rates, timestamp conventions, data loss, and replay behavior.
 2. **Calibration:** independently checked camera intrinsics, camera–LiDAR and sensor–vehicle transforms, and time alignment.
-3. **LiDAR BEV:** self-filter, deskew, slope-aware ground, ray-traced free/occupied/unknown cells, rolling motion, and age decay.
-4. **Camera semantics:** segmentation, preprocessing-aware projection, visibility checks, and confidence/age-aware fusion.
-5. **Objects and performance:** detection/tracking, expiration, sustained latency/freshness measurements, then held-out shadow-mode evaluation.
+3. **Training samples:** paired raw inputs, numerical BEV channels, causal motion history, provisional future-trajectory targets and drive-level train/validation/test splits.
+4. **Moving BEV and semantics:** integrate deskew, ground and free/occupied/unknown evidence with rolling motion and age decay; add visibility-aware camera features.
+5. **Objects and planners:** validate detection geometry, add persistent tracking/prediction, then compare a small trajectory model, learned BEV fusion and rule-based planning in replay. Measure sustained latency/freshness and evaluate on held-out drives.
 
 Large bags, datasets, build outputs, TensorRT engines and full captured evaluation artifacts remain local and are excluded from source control. The repository includes source, configuration, documentation, model provenance, JSON validation reports and the selected [visual results](docs/results.md) under `docs/media/`. Other captured evidence requires the local artifacts. The supplied [source plan](docs/BEV_README.md) is retained verbatim as a requirements reference; its component suggestions are candidates awaiting compatibility and accuracy checks.
 
@@ -212,7 +239,7 @@ bash tools/run_mapping.sh \
   --max-map-voxels 8000000 --map-publish-period 600
 ```
 
-For the same map behind the existing image/BEV replay, add `--mapping` to `bash tools/replay_combined_bev.sh <bag>` and press `9` to toggle it. Mapping runs once and saves under `maps/local_<UTC timestamp>/`; it waits for a two-second low-motion initialization interval. This is local mapping with provisional timing/accuracy, without GNSS alignment, loop closure or HD-map lane annotations. The [guide](docs/lidar_imu_mapping.md) covers build dependencies, a later initialization attempt and live operation in domain 1.
+For the same map behind the existing image/BEV replay, add `--mapping` to `bash tools/replay_combined_bev.sh <bag>` and press `9` to toggle it. Mapping runs once and saves under `maps/local_<UTC timestamp>/`; it waits for a two-second low-motion initialization interval. The estimator produces a local map with provisional timing/accuracy; GPS alignment is a separate offline step and GPS is not fused into the estimator. Loop closure and HD-map lane annotations remain unimplemented. The [guide](docs/lidar_imu_mapping.md) covers build dependencies, a later initialization attempt and live operation in domain 1.
 
 To collect the next map dataset with GPS, run `ROS_DOMAIN_ID=1 bash tools/collect_camera_lidar.sh --lidar-mode 2048x10 --gps --duration 300 --scene '10hz_gps_mapping'`. Keep the rig still for about 10 seconds after recording starts, then collect the route. The [GPS recording guide](docs/camera_lidar_recording.md#record-10-hz-lidar-with-gps) covers the passive receiver stream, required fresh fix and saved covariance/status. Recorded GPS now supports a separate offline anchor of a saved map; the LiDAR–IMU estimator does not fuse it.
 
