@@ -10,6 +10,7 @@
   <exec_depend>bev_visualization</exec_depend>
   <exec_depend>bev_geometry</exec_depend>
   <exec_depend>bev_lidar_detection</exec_depend>
+  <exec_depend>bev_path_tracking</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>launch</exec_depend>

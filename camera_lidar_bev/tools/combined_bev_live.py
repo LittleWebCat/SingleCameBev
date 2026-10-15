@@ -342,6 +342,7 @@ def arguments():
     parser.add_argument("--localization-odometry-topic", default="/camera_lidar_bev/localization/odometry")
     parser.add_argument("--localization-status-topic", default="/camera_lidar_bev/localization/status")
     parser.add_argument("--world-detections-topic", default="/camera_lidar_bev/localization/detections_3d")
+    parser.add_argument("--path-tracking", type=lambda value: value.lower() == 'true', default=False)
     args, ros_args = parser.parse_known_args()
     for name in ("range_m", "lateral_m", "fps", "stale_after", "pair_delta"):
         if not math.isfinite(getattr(args, name)) or getattr(args, name) <= 0:
@@ -354,6 +355,8 @@ def arguments():
         parser.error("--saved-map requires --replay-bag to check source provenance")
     if args.gps_alignment and not (args.saved_map or args.localize_map):
         parser.error("--gps-alignment requires --saved-map or --localize-map")
+    if args.path_tracking and not (args.saved_map or args.localize_map):
+        parser.error("--path-tracking requires a GPS-aligned saved or localized map")
     return args, ros_args
 
 
@@ -372,11 +375,15 @@ def main():
     from combined_bev_display import CombinedBevRenderer, DEFAULT_LAYERS, associations_for_sample
     from saved_map_source import SavedMapSource, scan_end_nanoseconds
     from live_map_source import LiveMapSource, transform_boxes
+    from scipy.spatial.transform import Rotation
+    from path_tracking_overlay import paired_overlay, source_transform
 
     saved_map = (SavedMapSource(args.saved_map, args.replay_bag, args.gps_alignment)
                  if args.saved_map else None)
     live_map = (LiveMapSource(args.localize_map, args.gps_alignment, max_overview_points=50000)
                 if args.localize_map else None)
+    if args.path_tracking and saved_map is not None and saved_map.enu_from_map is None:
+        raise ValueError("path tracking requires the saved map GPS alignment")
 
     extrinsics = yaml.safe_load(args.extrinsics.read_text())
     camera_from_sensor = np.asarray(extrinsics["transforms"]["T_camera_from_os_sensor"]["matrix"], float).reshape(4, 4)
@@ -420,6 +427,8 @@ def main():
             self.saved_pose_reason = None
             self.saved_mapping_key = None
             self.saved_mapping = None
+            self.tracking_record = None
+            self.tracking_pose_key = None
             self.sensor_from_lidar = sensor_from_lidar.copy()
             self.transform_source = "saved driver TF"
             self.renderer = None
@@ -471,6 +480,11 @@ def main():
                 DiagnosticArray, "/camera_lidar_bev/mapping/diagnostics", self.receive_diagnostics, 5))
             self.publisher = self.create_publisher(Image, args.output_topic, 1)
             self.status_publisher = self.create_publisher(String, args.status_topic, 1)
+            self.tracking_pose_publisher = (self.create_publisher(
+                Odometry, "/camera_lidar_bev/path_tracking/source_pose", 10) if args.path_tracking else None)
+            if args.path_tracking:
+                self.viewer_subscriptions.append(self.create_subscription(
+                    String, "/camera_lidar_bev/path_tracking/status", self.receive_tracking, 10))
             self.world_publisher = (self.create_publisher(Detection3DArray, args.world_detections_topic, 1)
                                     if live_map is not None else None)
             self.timer = self.create_timer(1/args.fps, self.update)
@@ -501,6 +515,34 @@ def main():
                 self.latest_valid_pose_stamp_ns = header_stamp(message.header)
                 self.latest_valid_pose_received_wall = time.monotonic()
                 self.latest_pose_callback_ros_ns = self.get_clock().now().nanoseconds
+
+        def receive_tracking(self, message):
+            try:
+                fields = json.loads(message.data)
+                if not isinstance(fields, dict):
+                    raise ValueError('tracking status must be an object')
+                self.tracking_record = fields, time.monotonic()
+            except (ValueError, TypeError):
+                self.tracking_record = None
+
+        def tracking_for_source(self, mapping):
+            if self.tracking_pose_publisher is None:
+                return None, None
+            transform, stamp = source_transform(saved_map, live_map, self.saved_pose, self.live_pose)
+            if mapping is None:
+                transform, stamp = None, None
+            if transform is not None and stamp != self.tracking_pose_key:
+                pose = Odometry()
+                pose.header.frame_id, pose.child_frame_id = 'enu', 'os_sensor'
+                pose.header.stamp.sec, pose.header.stamp.nanosec = divmod(int(stamp), 10**9)
+                p, q = pose.pose.pose.position, pose.pose.pose.orientation
+                p.x, p.y, p.z = map(float, transform[:3, 3])
+                quaternion = Rotation.from_matrix(transform[:3, :3]).as_quat()
+                q.x, q.y, q.z, q.w = map(float, quaternion)
+                self.tracking_pose_publisher.publish(pose)
+                self.tracking_pose_key = stamp
+            return paired_overlay(self.tracking_record, transform, stamp,
+                                  self.get_clock().now().nanoseconds, time.monotonic())
 
         def receive_localizer_status(self, message):
             try:
@@ -944,6 +986,8 @@ def main():
                 self.map_path_stamps = np.empty(0, np.int64)
                 self.saved_pose_key = None
                 self.saved_mapping_key = None
+                self.tracking_pose_key = None
+                self.tracking_record = None
                 self.scan_end_cache.clear()
                 self.live_pose = None
                 if live_map is not None:
@@ -1061,8 +1105,12 @@ def main():
                     fields = diagnostic[0]
                     if "runtime_ms" in fields:
                         status["TwinLiteNet"] = f'{float(fields["runtime_ms"]):.1f} ms (latest diagnostic)'
+                tracking, tracking_summary = self.tracking_for_source(mapping)
+                if tracking_summary is not None:
+                    status['Pure Pursuit'] = tracking_summary
                 canvas = self.renderer.render(frame, sample, points=points, status=status, layers=self.layers,
-                                               segmentation=segmentation, mapping=mapping)
+                                               segmentation=segmentation, mapping=mapping, tracking=tracking,
+                                               source_now_ns=self.get_clock().now().nanoseconds)
                 metrics = {'map_ready': mapping is not None, 'mapping_readiness': status["mapping readiness"],
                            'cloud_stamp_ns': header_stamp(cloud[0].header) if cloud else None,
                            'camera_2d_stamp_ns': header_stamp(camera2d[0].header) if camera2d else None,
@@ -1076,6 +1124,9 @@ def main():
                            'display_map_point_count': len(mapping['points']) if mapping is not None else 0,
                            'recorded_path_pose_count': len(mapping['world_path']) if mapping is not None else 0}
                 metrics.update(world_metrics)
+                if args.path_tracking:
+                    metrics['path_tracking'] = tracking['fields'] if tracking is not None else None
+                    metrics['path_tracking_state'] = tracking_summary
                 if live_map is not None and mapping is not None and self.live_pose is not None:
                     pose = self.live_pose
                     metrics.update(scan_end_stamp_ns=pose['query_stamp_ns'],

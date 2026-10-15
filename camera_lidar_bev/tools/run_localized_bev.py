@@ -32,13 +32,16 @@ def parse_args(argv=None, root=None):
     parser.add_argument('--gps-alignment', type=Path, help='default MAP/gps_alignment')
     parser.add_argument('--metadata', type=Path, help='default factory metadata from the map capture')
     parser.add_argument('--domain', type=int, default=int(os.environ.get('ROS_DOMAIN_ID', '1')))
-    parser.add_argument('--max-rate', type=positive_float, default=10., help='localization update cap in Hz')
+    # Above the 10 Hz scan rate so the cap never delays or overwrites a scan (~70 ms compute).
+    parser.add_argument('--max-rate', type=positive_float, default=20., help='localization update cap in Hz')
     parser.add_argument('--range-m', type=positive_float, default=80.)
     parser.add_argument('--max-points', type=positive_int, default=30000,
                         help='current LiDAR point limit for drawing')
     parser.add_argument('--max-map-points', type=positive_int, default=100000,
                         help='local frozen-map crop limit for drawing')
     parser.add_argument('--road-lanes', action='store_true', help='also start image road/lane inference')
+    parser.add_argument('--pure-pursuit', action='store_true', help='show reference path and diagnostic tracking targets')
+    parser.add_argument('--tracking-config', type=Path, help='Pure Pursuit YAML; requires --pure-pursuit')
     parser.add_argument('--duration', type=positive_float, help='maximum wall seconds after the viewer starts')
     parser.add_argument('--output', type=Path, help='new session folder; default data/localized_bev_UTC')
     parser.add_argument('--dry-run', action='store_true', help='print commands without starting or writing anything')
@@ -47,6 +50,8 @@ def parse_args(argv=None, root=None):
         parser.error('--domain must be between 0 and 231')
     if args.range_m > 200.:
         parser.error('--range-m must be at most 200')
+    if args.tracking_config and not args.pure_pursuit:
+        parser.error('--tracking-config requires --pure-pursuit')
     return args
 
 
@@ -66,6 +71,12 @@ def prepare_inputs(args, root):
     inputs = comparison.parse_args(options, root)
     provenance = comparison.prepare_inputs(inputs, root)
     args.map, args.gps_alignment, args.metadata = inputs.map, inputs.alignment, inputs.metadata
+    if args.pure_pursuit:
+        from saved_map_source import read_trajectory
+        read_trajectory(args.gps_alignment/'trajectory_enu.csv')
+        args.tracking_config = (args.tracking_config or root/'config/tracking/pure_pursuit.yaml').expanduser().resolve()
+        if not args.tracking_config.is_file():
+            raise FileNotFoundError(f'missing tracking configuration: {args.tracking_config}')
     return provenance
 
 
@@ -80,6 +91,8 @@ def commands(args, root):
             '--max-map-points', str(args.max_map_points)]
     if not args.road_lanes:
         view.append('--no-road-lanes')
+    if args.pure_pursuit:
+        view += ['--pure-pursuit', '--tracking-config', str(args.tracking_config)]
     return {'localization': localize, 'combined_view': view}
 
 

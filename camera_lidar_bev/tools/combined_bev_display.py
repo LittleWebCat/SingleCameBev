@@ -8,6 +8,7 @@ import textwrap
 
 import cv2
 import numpy as np
+from tracking_history import TrackingHistory
 
 
 BACKGROUND = (24, 19, 14)
@@ -160,11 +161,93 @@ class CombinedBevRenderer:
         self.calibration = calibration
         self.k, self.d, self.transform = calibration_arrays(calibration)
         self.forward_m, self.lateral_m, self.max_points = forward_m, lateral_m, max_points
+        self.tracking_history = TrackingHistory(window_s=10.)
+
+    def tracking_panel(self, height, fields, summary):
+        width = 360
+        panel = np.full((height, width, 3), BACKGROUND, np.uint8)
+        text(panel, 'CURVATURE COMPARISON', (16, 27), TEXT, .56)
+        text(panel, 'Last 10 seconds | source clock', (16, 51), MUTED, .44)
+        if fields and fields.get('vehicle_transform_verified') is not True:
+            availability = 'Rear-axle transform unset'
+        elif not self.tracking_history.available:
+            availability = 'Targets unavailable / waiting'
+        else:
+            availability = 'Vehicle estimate from LiDAR poses'
+        text(panel, availability, (16, 76), MUTED, .43)
+        chart_height = max(100, min(225, (height-250)//2))
+        for column, title, unit, color in (
+                (1, 'Desired curvature', '1/m', (0, 215, 255)),
+                (2, 'Target speed', 'm/s', MATCHED)):
+            top = 97+(column-1)*(chart_height+50)
+            latest = self.tracking_history.latest[column-1]
+            value = '--' if latest is None else f'{latest:+.4f}' if column == 1 else f'{latest:.2f}'
+            text(panel, f'{title}: {value} {unit}', (16, top), color, .49)
+            if column == 1:
+                vehicle = self.tracking_history.latest_vehicle
+                estimate = '--' if vehicle is None else f'{vehicle:+.4f}'
+                text(panel, f'Vehicle (est.): {estimate} {unit}', (16, top+20), (255, 220, 0), .48)
+            left, right = 58, width-16
+            upper, lower = top+(43 if column == 1 else 22), top+chart_height
+            rows = list(self.tracking_history.samples)
+            values = [row[column] for row in rows if row[column] is not None]
+            if column == 1:
+                values += [value for _, value in self.tracking_history.vehicle_samples if value is not None]
+            bound = max([abs(value) for value in values], default=0.)*1.15
+            bound = max(.02 if column == 1 else 1., bound)
+            minimum, maximum = (-bound, bound) if column == 1 else (0., bound)
+            cv2.rectangle(panel, (left, upper), (right, lower), (61, 50, 40), 1)
+            for fraction in (0., .5, 1.):
+                y = round(lower-fraction*(lower-upper))
+                cv2.line(panel, (left, y), (right, y), (61, 50, 40), 1)
+                label = minimum+fraction*(maximum-minimum)
+                text(panel, f'{label:.3f}' if column == 1 else f'{label:.1f}',
+                     (3, y+4), MUTED, .35)
+            for seconds in (-10, -5, 0):
+                x = round(right+seconds/10*(right-left))
+                cv2.line(panel, (x, upper), (x, lower), (61, 50, 40), 1)
+                text(panel, f'{seconds}s', (x-10, lower+18), MUTED, .36)
+            series = [(color, [(row[0], row[column]) for row in rows])]
+            if column == 1:
+                series.append(((255, 220, 0), list(self.tracking_history.vehicle_samples)))
+            for line_color, samples in series:
+                previous = None
+                for stamp, value in samples:
+                    if value is None:
+                        previous = None
+                        continue
+                    age = (stamp-self.tracking_history.now_ns)/1e9
+                    x = round(right+age/10*(right-left))
+                    y = round(lower-(value-minimum)/(maximum-minimum)*(lower-upper))
+                    pixel = (max(left, min(right, x)), max(upper, min(lower, y)))
+                    if previous is not None and stamp-previous[0] <= 500_000_000:
+                        cv2.line(panel, previous[1], pixel, line_color, 2, cv2.LINE_AA)
+                    else:
+                        cv2.circle(panel, pixel, 2, line_color, -1)
+                    previous = stamp, pixel
+            if not values:
+                text(panel, 'No valid samples', (left+42, (upper+lower)//2), MUTED, .45)
+        bottom = min(height-50, 97+2*(chart_height+50))
+        vehicle = self.tracking_history.latest_vehicle
+        desired = self.tracking_history.latest[0]
+        difference = '--' if vehicle is None or desired is None else f'{vehicle-desired:+.4f}'
+        text(panel, f'Vehicle - desired: {difference} 1/m', (16, bottom), TEXT, .43)
+        motion_window = (fields or {}).get('motion_curvature_window_s', .5)
+        text(panel, f'Vehicle: trailing {motion_window:g} s pose estimate', (16, bottom+20), MUTED, .38)
+        bottom += 42
+        summary_lines = max(0, min(3, 1+(height-36-bottom)//19))
+        for i, line in enumerate(textwrap.wrap(str(summary or 'Enable Pure Pursuit for tracking'), width=43)[:summary_lines]):
+            text(panel, line, (16, bottom+i*19), MUTED, .39)
+        text(panel, 'Gaps: stopped / warming up / invalid', (16, height-15), MUTED, .37)
+        return panel
 
     def render(self, image_bgr, sample, points=None, status=None, layers=None, segmentation=None,
-               mapping=None):
+               mapping=None, tracking=None, source_now_ns=None):
         layers = {**DEFAULT_LAYERS, **(layers or {})}
         display_status = dict(status or sample.get('live_status', {}))
+        fields = tracking.get('fields') if tracking is not None else None
+        now_ns = source_now_ns if source_now_ns is not None else sample.get('image_stamp_ns', 0)
+        self.tracking_history.update(now_ns, fields)
         image = image_bgr.copy()
         bev_size = image.shape[0]
         bev = np.full((bev_size, bev_size, 3), BACKGROUND, dtype=np.uint8)
@@ -264,7 +347,6 @@ class CombinedBevRenderer:
         matched = {a['lidar_index']: a for a in associations if a['camera_index'] >= 0 and
                    sample.get('lidar_boxes', [])[a['lidar_index']].get('camera_matched', True)}
         camera_matches = {a['camera_index']: a for a in matched.values()}
-        records = []
 
         def footprint(corners, center, ident, cls, score, dims, color, yaw):
             if not (0 <= center[0] <= self.forward_m and abs(center[1]) <= self.lateral_m):
@@ -286,8 +368,6 @@ class CombinedBevRenderer:
             production_match = box.get('camera_matched', i in matched)
             color = MATCHED if production_match else LIDAR_3D
             ident = f'L{i}'
-            note = (f'C{matched[i]["camera_index"]} IoU {matched[i]["iou"]:.2f}' if i in matched else
-                    'production camera match' if production_match else 'no 2D match')
             if layers['lidar3d']:
                 footprint(corners, center, ident, box['class'], box['score'], dims, color, yaw)
                 pixels, valid = project_camera(corners@self.transform[:3, :3].T+self.transform[:3, 3], self.calibration)
@@ -295,7 +375,6 @@ class CombinedBevRenderer:
                 if valid.any() and layers['labels']:
                     position = np.nanmin(pixels[valid], axis=0)
                     text(image, f'{ident} LiDAR {box["class"]} {box["score"]:.2f}', position-[0, 8], color, .42, True)
-            records.append((ident, box['class'], box['score'], center, dims, math.degrees(yaw), note, color))
         for i, box in enumerate(sample.get('camera_2d_boxes', [])):
             roi = np.asarray(box['native_xyxy_px'])
             ident = f'C{i}'
@@ -310,14 +389,6 @@ class CombinedBevRenderer:
                         cv2.circle(bev, tuple(p), 6, CAMERA_2D, 2)
                         if layers['labels']:
                             text(bev, ident+' YOLO match', p+[5, 25], CAMERA_2D, .4, True)
-            if i in camera_matches:
-                lidar_index = camera_matches[i]['lidar_index']
-                center = sample['lidar_boxes'][lidar_index]['os_sensor_xyz_m']
-                note = f'BEV via L{lidar_index}; pixels '+','.join(f'{n:.0f}' for n in roi)
-            else:
-                center = None
-                note = 'image only; pixels '+','.join(f'{n:.0f}' for n in roi)
-            records.append((ident, box['class'], box['score'], center, None, None, note, CAMERA_2D))
 
         if layers['mapping'] and mapping is not None:
             # Draw trajectory last so raw returns and detector footprints do
@@ -396,6 +467,27 @@ class CombinedBevRenderer:
             coordinates = 'ENU east/north' if mapping.get('georeferenced') else 'local map XY'
             text(bev, f'{coordinates} | span {span_m:.0f} m', (left+7, upper+inset_size-7), MUTED, .31)
 
+        if tracking is not None:
+            tracking_color = (0, 215, 255)
+            clip = (round(grid_left), round(grid_top), max(1, round(metric_width)), max(1, round(metric_height)))
+            path = np.asarray(tracking['path'], float).reshape(-1, 3)
+            pixels = np.clip(np.rint(bev_pixels(path[:, :2])), -100000, 100000).astype(int)
+            for a, b in zip(pixels[:-1], pixels[1:]):
+                visible, a, b = cv2.clipLine(clip, tuple(a), tuple(b))
+                if visible:
+                    cv2.line(bev, a, b, tracking_color, 3, cv2.LINE_AA)
+            for key, color, label in (('target', tracking_color, 'lookahead'),
+                                      ('projection', (255, 255, 0), 'reference')):
+                point = np.asarray(tracking[key], float)
+                if 0 <= point[0] <= self.forward_m and abs(point[1]) <= self.lateral_m:
+                    pixel = np.rint(bev_pixels(point[:2])).astype(int)
+                    cv2.circle(bev, tuple(pixel), 6, color, 2, cv2.LINE_AA)
+                    text(bev, label, pixel+[8, -8], color, .38, True)
+            a, b = np.rint(bev_pixels(np.stack((tracking['ego'][:2], tracking['target'][:2])))).astype(int)
+            visible, a, b = cv2.clipLine(clip, tuple(a), tuple(b))
+            if visible:
+                cv2.line(bev, a, b, tracking_color, 1, cv2.LINE_AA)
+
         map_state = 'ON' if layers['mapping'] else 'OFF'
         readiness = display_status.get('mapping readiness',
                                        'ready' if mapping is not None else 'no mapping data | start --mapping')
@@ -412,12 +504,11 @@ class CombinedBevRenderer:
                 break
             text(bev, line, (badge_x, badge_y+18*(i+1)), badge_color, .36, True)
 
-        status_items = [f'{key}: {value}' for key, value in display_status.items()]
-        status_lines = textwrap.wrap(' | '.join(status_items) or 'Saved predictions | CPU display only', width=230)
         top, margin, gap = 168, 22, 26
-        width = image.shape[1]+bev_size+2*margin+gap
-        table_top = top+image.shape[0]+55
-        height = table_top+max(1, len(records))*24+len(status_lines)*23+63
+        panel = self.tracking_panel(bev_size, fields, display_status.get('Pure Pursuit'))
+        panel_left = margin+image.shape[1]+gap+bev_size+gap
+        width = panel_left+panel.shape[1]+margin
+        height = top+image.shape[0]+58
         canvas = np.full((height, width, 3), BACKGROUND, np.uint8)
         text(canvas, 'CAMERA IMAGE + LiDAR PROJECTION   |   FLAT BEV WITH LiDAR BOXES + CAMERA LABELS', (margin, 30), TEXT, .7)
         text(canvas, 'Yellow: YOLO 2D   Orange: LiDAR 3D   Green: LiDAR + YOLO match   Gray: LiDAR returns', (margin, 55), TEXT, .49)
@@ -429,27 +520,16 @@ class CombinedBevRenderer:
         text(canvas, sample_info, (margin, 78), MUTED, .45)
         text(canvas, f'Source header ns | camera {sample.get("image_stamp_ns", 0)} | LiDAR {sample.get("lidar_stamp_ns", 0)}', (margin, 101), MUTED, .43)
         text(canvas, 'Camera image only: green predicted road mask | magenta predicted lane mask | blue semantic road-mask edges', (margin, 124), TEXT, .44)
-        text(canvas, road_info, (margin, 146), MUTED, .44)
+        text(canvas, display_status.get('Pure Pursuit', road_info), (margin, 146),
+             (0, 215, 255) if 'Pure Pursuit' in display_status else MUTED, .44)
         canvas[top:top+image.shape[0], margin:margin+image.shape[1]] = image
         canvas[top:top+bev_size, margin+image.shape[1]+gap:margin+image.shape[1]+gap+bev_size] = bev
-        columns = (margin, 100, 230, 315, 620, 880, 1040)
-        for name, x in zip(('ID/source', 'Class', 'Confidence', 'Center X,Y,Z in os_sensor (m)', 'L x W x H (m)', 'Yaw (deg)', 'Association / image pixels'), columns):
-            text(canvas, name, (x, table_top-10), MUTED, .42)
-        for row, (ident, cls, score, center, dims, yaw, note, color) in enumerate(records):
-            values = (ident, cls, f'{score:.3f}', ', '.join(f'{n:+.2f}' for n in center) if center is not None else '--',
-                      ' x '.join(f'{n:.2f}' for n in dims) if dims is not None else '--',
-                      f'{yaw:+.1f}' if yaw is not None else '--', note)
-            y = table_top+row*24+13
-            if row % 2 == 0:
-                cv2.rectangle(canvas, (margin-5, y-17), (width-margin, y+6), (35, 29, 23), -1)
-            for value, x in zip(values, columns):
-                text(canvas, value, (x, y), color, .43)
-        tail = table_top+max(1, len(records))*24
-        for i, line in enumerate(status_lines):
-            text(canvas, line, (margin, tail+20+i*23), MUTED, .42)
-        tail += len(status_lines)*23
-        text(canvas, 'Frame-local IDs; LiDAR box dimensions are predictions. Camera 2D boxes gain BEV position only through an accepted LiDAR match.', (margin, tail+20), MUTED, .40)
-        text(canvas, f'Layers: 1 points  2 projection  3 camera 2D  4 LiDAR boxes  5 labels  6 road mask  7 lane mask  8 image edges  9 MAP {map_state} | arrows: samples | q: close', (margin, tail+41), MUTED, .40)
+        canvas[top:top+bev_size, panel_left:panel_left+panel.shape[1]] = panel
+        tail = top+image.shape[0]
+        text(canvas, 'Gold: reference path and lookahead | tracking targets are diagnostic previews',
+             (margin, tail+22), MUTED, .42)
+        text(canvas, f'Layers: 1 points  2 projection  3 camera 2D  4 LiDAR boxes  5 labels  6 road  7 lanes  8 edges  9 MAP {map_state} | arrows: samples | q: close',
+             (margin, tail+43), MUTED, .40)
         return canvas
 
 

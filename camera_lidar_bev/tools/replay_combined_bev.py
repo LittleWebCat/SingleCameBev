@@ -73,6 +73,8 @@ def main():
                         help='play once and stop the viewer when playback ends')
     parser.add_argument('--no-road-lanes', action='store_true',
                         help='replay object boxes without starting the road/lane segmentation model')
+    parser.add_argument('--pure-pursuit', action='store_true', help='show diagnostic route tracking; requires GPS-aligned saved map')
+    parser.add_argument('--tracking-config', type=Path, help='tracking YAML; requires --pure-pursuit')
     parser.add_argument('--max-points', type=positive_int, default=30000,
                         help='display point limit (default 30000); use 300000 to retain a dense 10 Hz scan')
     parser.add_argument('--range-m', type=positive_float, default=80.0,
@@ -100,6 +102,10 @@ def main():
         parser.error('--mapping-output requires --mapping')
     if args.gps_alignment and not args.saved_map:
         parser.error('--gps-alignment requires --saved-map')
+    if args.pure_pursuit and not args.saved_map:
+        parser.error('--pure-pursuit requires --saved-map')
+    if args.tracking_config and not args.pure_pursuit:
+        parser.error('--tracking-config requires --pure-pursuit')
     if args.mapping:
         args.no_loop = True
     if args.saved_map:
@@ -123,6 +129,14 @@ def main():
         bag = (args.bag or root/'bags/camera_lidar_20261009T192214_724569Z').expanduser().resolve()
     if not bag.exists():
         parser.error(f'recording does not exist: {bag}')
+    if args.pure_pursuit:
+        from saved_map_source import read_trajectory
+        if not args.gps_alignment:
+            parser.error('--pure-pursuit requires the saved map GPS alignment')
+        read_trajectory(args.gps_alignment/'trajectory_enu.csv')
+        args.tracking_config = (args.tracking_config or root/'config/tracking/pure_pursuit.yaml').resolve()
+        if not args.tracking_config.is_file() or not (root/'install/bev_path_tracking/lib/bev_path_tracking/path_tracker').is_file():
+            parser.error('Build bev_path_tracking and provide its tracking YAML first')
     try:
         receive_limit = int(Path('/proc/sys/net/core/rmem_max').read_text().strip())
     except (OSError, ValueError) as exc:
@@ -159,6 +173,9 @@ def main():
             launch.append(f'gps_alignment:={args.gps_alignment}')
     if args.no_road_lanes:
         launch.append('road_lanes:=false')
+    if args.pure_pursuit:
+        launch += ['path_tracking:=true', f'tracking_config:={args.tracking_config}',
+                   f'reference_trajectory:={args.gps_alignment/"trajectory_enu.csv"}']
     captured = Path(str(bag)+'.capture')
     for key, filename in [('intrinsics_file', 'front_camera_1024x768.candidate.yaml'),
                           ('extrinsics_file', 'T_B_os_sensor.candidate.yaml')]:

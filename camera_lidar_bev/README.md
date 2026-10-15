@@ -1,6 +1,8 @@
 # Camera + LiDAR BEV
 
-A ROS 2 Jazzy/C++ project for one front camera and Ouster LiDAR on NVIDIA AGX Thor, based on the supplied [BEV_README.md](docs/BEV_README.md). It provides recording, camera/LiDAR object BEV, local mapping and experimental localization against a GPS-aligned saved map. The live localized display places the sensor and detected objects on that map; timing and absolute accuracy remain provisional.
+A ROS 2 Jazzy/C++ project for one front camera and Ouster LiDAR on NVIDIA AGX Thor, based on the supplied [BEV_README.md](docs/BEV_README.md). It provides recording, camera/LiDAR object BEV, local mapping, experimental localization against a GPS-aligned saved map and Pure Pursuit diagnostic targets. The live localized display places the sensor and detected objects on that map; timing and absolute accuracy remain provisional. An optional sibling DBW bridge consumes live tracking targets through an explicitly engaged hardware interface.
+
+The [previous issues and solutions](docs/issues_and_solutions.md) document covers sensor/DDS startup failures, calibration, distant LiDAR visibility, missing matches, recording loss, mapping/localization, controller signals and DBW engagement behavior. It distinguishes implemented fixes from archived experiments and unverified physical results.
 
 ## Results
 
@@ -52,7 +54,7 @@ The local runtime needs `models/camera_objects_001/yolo11n_fp16_raw.engine` and 
 
 The combined image/BEV view also includes [camera road/lane segmentation](docs/road_lane_detection.md) and semantic road-mask edges on the camera image. Road-to-BEV geometry and curb processing have been removed. Run `bash tools/replay_combined_bev.sh` to view the saved outdoor recording. Keys `6`–`8` toggle image road masks, lane masks and edges.
 
-For the camera image with LiDAR projections, YOLO 2D boxes and projected LiDAR 3D boxes beside a flat 80 m BEV with object details:
+For the camera image with LiDAR projections, YOLO 2D boxes and projected LiDAR 3D boxes beside a flat 80 m BEV and tracking-target side panel:
 
 ```bash
 bash tools/run_bev.sh --combined-view
@@ -67,7 +69,7 @@ Run `bash tools/run_bev.sh` with one of these display modes:
 | Flag | View |
 | --- | --- |
 | `--camera-lidar-boxes` | Labeled camera, native car/person points and camera-matched learned boxes; current combined view |
-| `--combined-view` | Camera 2D labels, LiDAR 3D boxes, road/lane masks, projected LiDAR returns, flat BEV and object details |
+| `--combined-view` | Camera 2D labels, LiDAR 3D boxes, road/lane masks, projected LiDAR returns, flat BEV and tracking-target side panel |
 | `--lidar-3d-boxes` | LiDAR-only car/person predictions, flat footprints and predicted dimensions |
 | `--camera-labels` | Camera labels and boxes around associated visible LiDAR returns |
 | `--bev-only` | Ground/obstacle points and camera-associated observed boxes in one flat BEV |
@@ -97,7 +99,7 @@ Then rerun the launcher. The helper applies only `/etc/sysctl.d/90-camera-lidar-
 
 ## Measured performance and validation
 
-The [latest 10-second live observation](evaluation/camera_lidar_boxes_live_002.json) measured approximately **20 Hz** for raw LiDAR scans, both detectors, the labeled camera image and combined output updates. The Ouster runs in `1024x20` mode with 131,072 returns per scan; the camera captures native 1024 × 768 images at a requested 30 FPS.
+The [earlier 10-second object-view observation](evaluation/camera_lidar_boxes_live_002.json) measured approximately **20 Hz** for raw LiDAR scans, both detectors, the labeled camera image and combined output updates. That run used `1024x20` mode with 131,072 returns per scan and native 1024 × 768 camera images at a requested 30 FPS. Dense recording/localization instead uses `2048x10`; the coupled localized view later observed **10 FPS**, as described below. These measurements come from different modes and runs.
 
 | Stage | Median processing time | Median inference time |
 | --- | --- | --- |
@@ -136,6 +138,7 @@ The project provides live sensor inputs and recording, camera-colored LiDAR, sta
 - `bev_lidar_detection`: native C++/TensorRT PointPillars car/person detection, predicting full dimensions and yaw for a flat BEV footprint display. KITTI-to-Ouster accuracy remains provisional; see [the LiDAR detector guide](docs/lidar_vehicle_detection.md).
 - `fast_lio`: the vendored C++ FAST-LIO2 backend estimates local motion and deskews scans using LiDAR and the Ouster IMU. Its GPL-2.0 license and upstream revision are retained; see [local mapping](docs/lidar_imu_mapping.md).
 - `bev_mapping`: a Python ROS adapter checks IMU initialization, coverage and original Ouster point timing, converts estimator poses to the sensor frame, and exports a point-cloud map and source-stamped trajectory.
+- `bev_path_tracking`: a C++ recorded-route monitor and Pure Pursuit diagnostic target calculator with a source-paired overlay in the flat BEV. A 10-second chart compares desired curvature with vehicle curvature estimated from localized rear-axle motion; the Nissan LEAF mounting measurements enable diagnostic targets. See [path tracking](docs/path_tracking.md).
 - [GPS recording](docs/camera_lidar_recording.md#record-10-hz-lidar-with-gps): a passive Septentrio SBF bridge publishes position, receiver status, covariance and raw blocks. [Offline alignment](docs/lidar_imu_mapping.md#gps-alignment-of-a-saved-map) anchors a saved map to ENU; GPS is not fused into FAST-LIO2.
 - [Saved-map localization](docs/lidar_imu_mapping.md#compare-live-gps-with-lidar-localization): an experimental NumPy/SciPy scan matcher estimates new poses against a frozen map, with coarse GPS aiding and rejection/freshness checks. Its live path uses no recorded trajectory poses. [The localized display](docs/combined_bev_display.md#live-vehicle-and-objects-on-the-saved-map) places fresh camera-matched LiDAR boxes in ENU.
 - Python checkerboard capture and offline intrinsic fitting, with held-out checks and rejection of folded radial lens models. The [second calibration review](evaluation/front_camera_002_review.md) records candidate intrinsics applied provisionally after the user's straight-edge check, verified live CameraInfo, and the remaining accuracy checks. A live viewer compares raw images with candidate undistortion.
@@ -192,9 +195,11 @@ The native sensor bridge, geometry, detectors and camera association use C++. Th
 
 Use the installed JetPack-compatible CUDA and TensorRT versions when adding inference. Record exact software versions and model provenance; do not upgrade TensorRT independently as a bring-up step.
 
-The parent `bev_depth/`, `bef-tracking-kf-*`, and `/home/agxthor/sensors_ws` remain separate. Their parsers, tracker behavior, and tests are useful references. The explicit project startup command can launch the sensors with the saved project profile; it does not modify the parent configuration or launch vehicle actuation.
+The parent `bev_depth/`, `bef-tracking-kf-*`, and `/home/agxthor/sensors_ws` remain separate. Their parsers, tracker behavior, and tests are useful references. The BEV display startup commands can launch sensors with the saved project profile; they do not modify the parent configuration or launch vehicle actuation. The optional sibling DBW bridge has its own explicit hardware mode and engagement procedure.
 
 ## BEV features and planning-model training (planned)
+
+Recorded-route monitoring and diagnostic Pure Pursuit targets are now implemented separately; see [path tracking](docs/path_tracking.md). This does not train a model or generate an obstacle-aware route.
 
 The next proposed milestone is an offline dataset exporter for BEV features and future-trajectory targets. There is currently no dedicated BEV training-sample exporter or trained trajectory/planning model. PointPillars already computes learned internal features for detection; the live viewer displays points and predicted boxes rather than exporting a planner's feature tensor.
 
@@ -211,7 +216,7 @@ Start with **raw LiDAR → numerical BEV grid → small trajectory model**. Grid
 
 The proposed exporter should preserve paired raw images/scans, calibration, source timestamps and pairing offsets; use per-point timing and ego poses for deskew and causal history alignment; and provide BEV channels with observation and camera-visibility masks. Include valid raw LiDAR evidence beyond the camera-matched object subset. The recorded LiDAR–IMU poses can supply provisional future trajectories in the current ego frame, with validity masks; they are estimated supervision, not independent ground truth. Detector boxes are confidence-tagged pseudo-labels.
 
-The measured sensor-to-vehicle transform, useful ego velocity/acceleration and navigation intent still need a defined input contract. The current map-localizer `Odometry` publishes pose and leaves `twist` unset; its default zeros are not measured vehicle speed. Existing recordings contain no vehicle CAN/control or route-command supervision. Calibration snapshots and host timestamps also do not establish physical sensor synchronization.
+A nominal planar sensor-to-rear-axle transform is configured for Pure Pursuit using the user's Nissan LEAF mounting measurements; a surveyed sensor-to-vehicle transform, useful ego velocity/acceleration and navigation intent still need a training input contract. The current map-localizer `Odometry` publishes pose and leaves `twist` unset; its default zeros are not measured vehicle speed. Existing recordings contain no vehicle CAN/control or route-command supervision. Calibration snapshots and host timestamps also do not establish physical sensor synchronization.
 
 Use only current/past sensor observations as inputs and future poses as targets. Split datasets by independent drive, and keep a whole-recording accumulated map out of per-frame sensor features because it contains future observations. If map features are needed, use a separately acquired prior map. Retain raw samples: cached learned embeddings support a frozen encoder plus downstream-head training, while joint end-to-end training requires running and updating the encoders.
 
@@ -267,3 +272,24 @@ bash tools/run_localized_bev.sh --map maps/local_gps_recording_002
 ```
 
 This runs dense `2048x10` LiDAR localization and the existing camera/LiDAR detectors together. The north-up inset shows the live trajectory and object footprints; camera-matched LiDAR boxes are also published in ENU. It starts no recording, keeps the map unchanged and omits road/lane inference by default. See [the live map display](docs/combined_bev_display.md#live-vehicle-and-objects-on-the-saved-map). The new-drive localization session sustained 9.96 Hz with median processing of 77.1 ms and no tracking failures after startup; absolute position accuracy remains unmeasured.
+
+## Route tracking and optional DBW bridge
+
+Add Pure Pursuit to the live localized display:
+
+```bash
+bash tools/run_localized_bev.sh --map maps/local_gps_recording_002 --pure-pursuit
+```
+
+The side panel shows 10 seconds of desired curvature, vehicle curvature estimated from localized rear-axle motion, and target speed. The nominal LEAF transform uses the user's measured 1.25 m forward LiDAR offset, inferred 0.01 m left offset and nominal zero mounting yaw. The current tracker ceiling is **4.4704 m/s = 10 mph ≈ 16.09 km/h**; curvature and endpoint limits can lower it. The separate DBW bridge defaults to a lower **6 mph** command cap. The tracker publishes diagnostics, not vehicle commands. See [path tracking](docs/path_tracking.md) and [PID integration signals](docs/pid_integration_summary.md).
+
+To supervise the localized view and optional bridge without opening the DBW serial port, run from the repository root:
+
+```bash
+cd /home/agxthor/SingleCameraBev
+bash bev_bridge/run_all.sh --dry-run --max-speed-mph 6
+```
+
+The launcher and standalone bridge default to 6 mph; current validation permits values up to 10 mph. The command above explicitly retains 6 mph. Hardware mode requires an explicit configuration and manual release/engagement; the launcher never publishes engagement. Stale inputs, missed heartbeats or disengagement after commands latch a stop that requires a restart. The [bridge README](../bev_bridge/README.md) documents configuration, startup, logs and the operator-managed external-safety profile. Host command transmission, dry-run checks and replay checks do not independently verify vehicle braking or closed-loop control. The [issue history](docs/issues_and_solutions.md#6-dbw-bridge-review-fixes-and-engagement-behavior) explains the corrected bridge faults, the stale maximum in CLI help text and why the two-second heartbeat test stopped.
+
+The current external hardware profile has a startup blocker: it requests +/-300 steering-wheel degrees while its validation mode permits +/-90. The 2026-10-15 focused bridge check passed 31 of 32 tests, with that configuration error. The dry-run command above uses no hardware profile; hardware startup needs the mismatch resolved first.

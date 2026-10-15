@@ -158,11 +158,17 @@ def main(argv=None):
     parser.add_argument('--range-m', type=float, default=80.)
     parser.add_argument('--max-points', type=int, default=30000)
     parser.add_argument('--max-map-points', type=int, default=100000)
+    parser.add_argument('--pure-pursuit', action='store_true')
+    parser.add_argument('--tracking-config', type=Path)
     args = parser.parse_args(argv)
     if (args.localize_map or args.gps_alignment or args.no_road_lanes) and not args.combined_view:
         parser.error('--localize-map, --gps-alignment and --no-road-lanes require --combined-view')
     if args.gps_alignment and not args.localize_map:
         parser.error('--gps-alignment requires --localize-map')
+    if args.pure_pursuit and not (args.combined_view and args.localize_map):
+        parser.error('--pure-pursuit requires --combined-view and --localize-map')
+    if args.tracking_config and not args.pure_pursuit:
+        parser.error('--tracking-config requires --pure-pursuit')
     if not 0 < args.range_m <= 200 or args.max_points < 1 or args.max_map_points < 1:
         parser.error('--range-m must be within (0, 200]; point limits must be positive')
     if args.combined_view and (args.camera_lidar_boxes or args.lidar_3d_boxes or
@@ -211,6 +217,20 @@ def main(argv=None):
                 ('camera_lidar_box_fusion', ['ros2', 'launch', 'bev_bringup',
                                            'camera_lidar_boxes.launch.py', 'rviz:=false']),
             ]
+        if args.pure_pursuit:
+            from saved_map_source import read_trajectory
+            trajectory = (args.gps_alignment or args.localize_map/'gps_alignment')/'trajectory_enu.csv'
+            read_trajectory(trajectory)
+            tracking_config = (args.tracking_config or root/'config/tracking/pure_pursuit.yaml').resolve()
+            if not tracking_config.is_file() or not (root/'install/bev_path_tracking/lib/bev_path_tracking/path_tracker').is_file():
+                raise RuntimeError('Build bev_path_tracking and provide its tracking YAML first.')
+            commands += [('path_tracker', ['ros2', 'run', 'bev_path_tracking', 'path_tracker',
+                         '--ros-args', '--params-file', str(tracking_config),
+                         '-p', f'reference_trajectory:={trajectory.resolve()}',
+                         '-p', 'source_mode:=live_localization',
+                         # Take accepted localizer poses directly; the viewer relay
+                         # republished the same pose up to one render period later.
+                         '-r', '/camera_lidar_bev/path_tracking/source_pose:=/camera_lidar_bev/localization/odometry'])]
         if args.combined_view:
             if not args.no_road_lanes:
                 commands += [('road_lane_detector.py', [str(root.parent / '.venv/bin/python'),
@@ -222,6 +242,7 @@ def main(argv=None):
                                          str(root / 'config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml'),
                                          '--range-m', str(args.range_m), '--max-points', str(args.max_points),
                                          '--max-map-points', str(args.max_map_points)] +
+                                         (['--path-tracking', 'true'] if args.pure_pursuit else []) +
                                          (['--localize-map', str(args.localize_map.resolve()),
                                            '--gps-alignment', str((args.gps_alignment or
                                                                    args.localize_map/'gps_alignment').resolve())]
@@ -242,6 +263,8 @@ def main(argv=None):
             if executable == 'os_driver':
                 existing = existing or matching_processes('start_lidar.py', domain)
             if existing:
+                if executable == 'path_tracker':
+                    raise RuntimeError('The path tracker already runs; close its controller before selecting a route.')
                 if executable == 'combined_bev_live.py' and args.localize_map:
                     raise RuntimeError('The combined viewer already runs; close it before opening live localization.')
                 print(f'Reuse {executable} PID {existing[0]} in ROS domain {domain}.', flush=True)
@@ -270,7 +293,7 @@ def main(argv=None):
             print(f'{"Would start" if args.dry_run else "Start"} {name}: {command}', flush=True)
         if args.dry_run:
             return 0
-    except RuntimeError as error:
+    except (RuntimeError, OSError, ValueError) as error:
         print(f'BEV startup stopped: {error}', flush=True)
         return 2
 

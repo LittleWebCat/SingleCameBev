@@ -54,7 +54,7 @@ class RunnerTests(unittest.TestCase):
         self.assertIn('--localize-map', plan['combined_view'])
         self.assertIn('--no-road-lanes', plan['combined_view'])
         self.assertFalse(provenance['saved_trajectory_used_for_localization'])
-        self.assertEqual(args.max_rate, 10.)
+        self.assertEqual(args.max_rate, 20.)
         self.assertEqual(args.range_m, 80.)
         self.assertFalse(self.output.exists())
 
@@ -68,6 +68,22 @@ class RunnerTests(unittest.TestCase):
         matches.assert_not_called()
         preflight.assert_not_called()
         self.assertFalse(self.output.exists())
+
+    def test_pure_pursuit_passes_reference_configuration_without_starting_anything(self):
+        (self.map/'gps_alignment/trajectory_enu.csv').write_text(
+            'stamp_sec,x_m,y_m,z_m,qx,qy,qz,qw\n1,0,0,0,0,0,0,1\n1.1,1,0,0,0,0,0,1\n')
+        args = runner.parse_args(self.options('--pure-pursuit', '--dry-run'), ROOT)
+        runner.prepare_inputs(args, ROOT)
+        plan = runner.commands(args, ROOT)
+        self.assertIn('--pure-pursuit', plan['combined_view'])
+        self.assertEqual(plan['combined_view'][plan['combined_view'].index('--tracking-config')+1],
+                         str(ROOT/'config/tracking/pure_pursuit.yaml'))
+        self.assertFalse(self.output.exists())
+
+    def test_pure_pursuit_requires_exported_enu_reference(self):
+        args = runner.parse_args(self.options('--pure-pursuit', '--dry-run'), ROOT)
+        with self.assertRaises(FileNotFoundError):
+            runner.prepare_inputs(args, ROOT)
 
     def test_existing_session_is_never_overwritten(self):
         self.output.mkdir()

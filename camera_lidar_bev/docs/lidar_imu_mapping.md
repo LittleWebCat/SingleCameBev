@@ -149,6 +149,23 @@ Native scan-end timestamps join detector source clouds to live poses, with bound
 
 The [coupled live check](../evaluation/localized_bev_live_001.json) with camera and detectors running maintained 10 FPS and a ready map in all 200 checked frames over 20 seconds after initialization. Localization processing was 78.9 ms median, 90.9 ms p95; median pose source age after registration was 0.250 s. Display-only point sampling and bounded scan buffering keep visualization current without reducing detector or localizer input scans. These results establish runtime behavior, not absolute accuracy.
 
+## Track the saved route with Pure Pursuit
+
+For reference-path and lookahead overlays on the original recording:
+
+```bash
+bash tools/replay_combined_bev.sh --saved-map maps/local_gps_recording_002 \
+  --pure-pursuit --no-road-lanes
+```
+
+For tracking errors against independent localization during a new, manually driven route:
+
+```bash
+bash tools/run_localized_bev.sh --map maps/local_gps_recording_002 --pure-pursuit
+```
+
+The C++ tracker publishes diagnostic targets only. The default Nissan LEAF configuration uses the user's measured 1.25 m forward LiDAR offset, a 0.01 m left offset inferred from the earlier body-side measurements, and nominal 0 rad mounting yaw. It shows rear-axle path errors, lookahead geometry and preview target speed, plus a 10-second chart comparing desired curvature with vehicle curvature estimated from localized motion. Vehicle curvature requires a moving, valid 0.5-second pose window; no CAN steering feedback is available. The saved-source replay compares recorded poses with their own reference path; it is not a physical tracking-accuracy test. See [the Pure Pursuit guide](path_tracking.md#live-curvature-comparison) for the live command, measurements, input expiry and tests.
+
 ## Build a map beside the camera/BEV replay
 
 The combined replay can run mapping together with camera 2D detection and LiDAR 3D detection:

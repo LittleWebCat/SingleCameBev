@@ -1,0 +1,34 @@
+path_tracker:
+  ros__parameters:
+    # Diagnostic preview only; no vehicle command publisher.
+    wheelbase_m: 2.70
+    # Earlier measurements: body L=4.481 m, W=1.791 m;
+    # LiDAR to front=2.35 m, left=0.885 m, right=0.905 m.
+    # User measured LiDAR 1.25 m ahead of rear axle (2025 Nissan LEAF).
+    # Lateral offset inferred from symmetric body sides: (0.905-0.885)/2.
+    # Configured for diagnostic targets; not a surveyed extrinsic calibration.
+    vehicle_transform_verified: true
+    lidar_forward_from_rear_axle_m: 1.25
+    lidar_left_from_rear_axle_m: 0.01
+    # User reports connector at rear: os_sensor +X points forward when upright.
+    # Nominal mounting yaw is 0 rad; exact alignment has not been measured.
+    sensor_yaw_in_vehicle_rad: 0.0
+    min_lookahead_m: 3.0
+    max_lookahead_m: 12.0
+    lookahead_time_s: 1.5
+    max_path_distance_m: 5.0
+    max_heading_error_rad: 1.0471975512
+    max_reference_gap_s: 0.5
+    maximum_pose_age_s: 0.5
+    # Observed rear-axle curvature from localized poses; no CAN feedback.
+    motion_curvature_window_s: 0.5
+    motion_curvature_min_speed_mps: 0.5
+    motion_curvature_min_distance_m: 0.25
+    # Example preview limits; vehicle actuation limits have not been measured.
+    max_steering_rad: 0.5
+    max_steering_rate_rad_s: 0.3
+    # 10 mph = 4.4704 m/s; curvature and endpoint limits can reduce this target.
+    preview_speed_mps: 4.4704
+    preview_deceleration_mps2: 1.0
+    preview_lateral_acceleration_mps2: 1.0
+    stop_margin_m: 0.5

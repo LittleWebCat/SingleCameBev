@@ -14,7 +14,7 @@ from launch.events import Shutdown
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
-from launch_ros.actions import SetParameter
+from launch_ros.actions import SetParameter, Node
 from launch_ros.parameter_descriptions import ParameterValue
 
 
@@ -69,6 +69,10 @@ def generate_launch_description():
         DeclareLaunchArgument('road_engine_file', default_value=os.path.join(
             models, 'road_lanes_001', 'twinlitenet_fp16.engine')),
         DeclareLaunchArgument('road_fps', default_value='10'),
+        DeclareLaunchArgument('path_tracking', default_value='false'),
+        DeclareLaunchArgument('tracking_config', default_value=os.path.join(share, 'config/tracking/pure_pursuit.yaml')),
+        DeclareLaunchArgument('reference_trajectory', default_value='',
+                              description='ENU sensor trajectory CSV for diagnostic tracking'),
     ]
 
     viewer = ExecuteProcess(
@@ -91,9 +95,21 @@ def generate_launch_description():
             '--world-detections-topic', LaunchConfiguration('world_detections_topic'),
             '--replay-bag', LaunchConfiguration('replay_bag'),
             '--gps-alignment', LaunchConfiguration('gps_alignment'),
+            '--path-tracking', LaunchConfiguration('path_tracking'),
             '--ros-args', '-p', ['use_sim_time:=', LaunchConfiguration('use_sim_time')],
         ], output='screen')
+    tracker = Node(
+        condition=IfCondition(LaunchConfiguration('path_tracking')),
+        package='bev_path_tracking', executable='path_tracker', name='path_tracker', output='screen',
+        parameters=[LaunchConfiguration('tracking_config'), {
+            'reference_trajectory': LaunchConfiguration('reference_trajectory'),
+            'use_sim_time': ParameterValue(LaunchConfiguration('use_sim_time'), value_type=bool),
+            'source_mode': 'saved_recording_pose',
+        }])
     return LaunchDescription(declarations + [
+        tracker,
+        RegisterEventHandler(OnProcessExit(
+            target_action=tracker, on_exit=[EmitEvent(event=Shutdown(reason='Path tracker exited'))])),
         detector_launch('lidar_vehicle_detector.launch.py', {
             'rviz': 'false', 'engine_file': LaunchConfiguration('lidar_engine_file'),
             'max_forward_m': PythonExpression(['min(', LaunchConfiguration('range_m'), ', 69.12)'])}),
