@@ -1,0 +1,11 @@
+{
+  "checked_at_utc": "2026-10-08T19:52:26.079217+00:00",
+  "marker_updates": 57,
+  "vehicle_rectangles": 115,
+  "physical_accuracy_validated": false,
+  "labels": [
+    "car 0.75",
+    "car 0.36"
+  ],
+  "passed": true
+}

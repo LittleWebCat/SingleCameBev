@@ -96,6 +96,9 @@ class DetectorBackend(Protocol):
     def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
         ...
 
+    def infer_batch(self, frames_bgr: list[np.ndarray]) -> list[list[Detection]]:
+        ...
+
 
 class SyntheticDetectorBackend:
     def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
@@ -107,6 +110,37 @@ class SyntheticDetectorBackend:
                 bbox_xyxy=(0.42 * w, 0.45 * h, 0.58 * w, 0.78 * h),
             )
         ]
+
+    def infer_batch(self, frames_bgr: list[np.ndarray]) -> list[list[Detection]]:
+        return [self.infer(frame) for frame in frames_bgr]
+
+
+class CompositeDetectorBackend:
+    def __init__(self, backends: tuple[DetectorBackend, ...]) -> None:
+        self.backends = backends
+
+    def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
+        detections: list[Detection] = []
+        for backend in self.backends:
+            detections.extend(backend.infer(frame_bgr))
+        return detections
+
+    def infer_batch(self, frames_bgr: list[np.ndarray]) -> list[list[Detection]]:
+        combined = [[] for _ in frames_bgr]
+        for backend in self.backends:
+            batch_method = getattr(backend, "infer_batch", None)
+            batch = (
+                batch_method(frames_bgr)
+                if callable(batch_method)
+                else [backend.infer(frame) for frame in frames_bgr]
+            )
+            if len(batch) != len(frames_bgr):
+                raise RuntimeError(
+                    f"Detector returned {len(batch)} batch items for {len(frames_bgr)} frames"
+                )
+            for output, detections in zip(combined, batch):
+                output.extend(detections)
+        return combined
 
 
 class UltralyticsDetectorBackend:
@@ -124,21 +158,11 @@ class UltralyticsDetectorBackend:
                 "Ultralytics detector backend requires `pip install ultralytics`. "
                 "Use a .engine model path on Thor for TensorRT inference."
             ) from exc
-        self.model = YOLO(config.path)
+        self.model = YOLO(config.path, task="detect")
         self.config = config
         self.allowed = set(config.classes)
 
-    def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
-        results = self.model.predict(
-            source=frame_bgr,
-            imgsz=self.config.input_size,
-            conf=self.config.confidence,
-            iou=self.config.iou,
-            verbose=False,
-        )
-        if not results:
-            return []
-        result = results[0]
+    def _convert_result(self, result) -> list[Detection]:
         names = result.names
         detections: list[Detection] = []
         for box in result.boxes:
@@ -158,11 +182,39 @@ class UltralyticsDetectorBackend:
             )
         return detections
 
+    def infer_batch(self, frames_bgr: list[np.ndarray]) -> list[list[Detection]]:
+        if not frames_bgr:
+            return []
+        results = self.model.predict(
+            source=frames_bgr,
+            imgsz=self.config.input_size,
+            conf=self.config.confidence,
+            iou=self.config.iou,
+            verbose=False,
+        )
+        if len(results) != len(frames_bgr):
+            raise RuntimeError(
+                f"Detector returned {len(results)} batch items for {len(frames_bgr)} frames"
+            )
+        return [self._convert_result(result) for result in results]
 
-def create_detector(config: DetectorConfig) -> DetectorBackend:
+    def infer(self, frame_bgr: np.ndarray) -> list[Detection]:
+        return self.infer_batch([frame_bgr])[0]
+
+
+def _create_single_detector(config: DetectorConfig) -> DetectorBackend:
     backend = config.backend.lower()
     if backend == "synthetic":
         return SyntheticDetectorBackend()
     if backend == "ultralytics":
         return UltralyticsDetectorBackend(config)
     raise ValueError(f"Unsupported detector backend: {config.backend}")
+
+
+def create_detector(
+    config: DetectorConfig, traffic_config: DetectorConfig | None = None
+) -> DetectorBackend:
+    primary = _create_single_detector(config)
+    if traffic_config is None:
+        return primary
+    return CompositeDetectorBackend((primary, _create_single_detector(traffic_config)))

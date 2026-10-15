@@ -1,0 +1,375 @@
+{
+  "created_at_utc": "2026-10-09T18:50:41.394511+00:00",
+  "passed": true,
+  "domain_id": 88,
+  "software_only": true,
+  "actual_trained_engine": true,
+  "physical_accuracy_validated": false,
+  "learned_detection_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "lidar_inputs_used": false,
+  "source_image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/camera_3d_demo_001/kitti_000008.png",
+  "source_image_sha256": "5b988d2a04d51850610b38ce50a66fd4027f3f5e645e5f2198d0522f4cf9a640",
+  "engine": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_3d_001/smoke_fp16_raw.engine",
+  "engine_sha256": "4c63e3519cb15b95026ca77446a00288e48cde1b0d843a53e705145b93568a0b",
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_3d_detector",
+  "executable_sha256": "5929912bb0a2100c3c74a44d5498c4b263df21007eb6989f26457b94a7ed3948",
+  "calibration": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/camera_3d_demo_001/kitti_000008.calib.txt",
+  "native_size": [
+    1242,
+    375
+  ],
+  "require_predictions": true,
+  "intrinsics_sha256": "1a10efe4117db774b63d73480b71728639b778a3ac2f7eafe0faadd94fe8ed88",
+  "stages": [
+    {
+      "name": "valid",
+      "passed": true,
+      "source_stamp_ns": 1791571842010147787,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "payload",
+      "passed": true,
+      "clear_stamp_ns": 1791571842279691152,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_payload",
+      "passed": true,
+      "source_stamp_ns": 1791571842274577965,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "image_frame",
+      "passed": true,
+      "clear_stamp_ns": 1791571842429573672,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_image_frame",
+      "passed": true,
+      "source_stamp_ns": 1791571842424541357,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "info_stamp",
+      "passed": true,
+      "clear_stamp_ns": 1791571842579506928,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_info_stamp",
+      "passed": true,
+      "source_stamp_ns": 1791571842573811923,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "info_K",
+      "passed": true,
+      "clear_stamp_ns": 1791571842729577038,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_info_K",
+      "passed": true,
+      "source_stamp_ns": 1791571842723582119,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "info_size",
+      "passed": true,
+      "clear_stamp_ns": 1791571842879551914,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_info_size",
+      "passed": true,
+      "source_stamp_ns": 1791571842873705619,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "info_roi",
+      "passed": true,
+      "clear_stamp_ns": 1791571843029646732,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_info_roi",
+      "passed": true,
+      "source_stamp_ns": 1791571843023924912,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "info_nonfinite_R",
+      "passed": true,
+      "clear_stamp_ns": 1791571843179547784,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_info_nonfinite_R",
+      "passed": true,
+      "source_stamp_ns": 1791571843173733554,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "future",
+      "passed": true,
+      "clear_stamp_ns": 1791571843329500794,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_future",
+      "passed": true,
+      "source_stamp_ns": 1791571843323572543,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "duplicate",
+      "passed": true,
+      "clear_stamp_ns": 1791571843479500267,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "recovery_after_duplicate",
+      "passed": true,
+      "source_stamp_ns": 1791571843473539016,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    },
+    {
+      "name": "stale",
+      "passed": true,
+      "clear_stamp_ns": 1791571843979567685,
+      "empty_3d": true,
+      "explicit_markers_delete_all": true,
+      "blank_status_image": true,
+      "three_source_stamps_matched": true
+    },
+    {
+      "name": "rgb_valid_recovery",
+      "passed": true,
+      "source_stamp_ns": 1791571844204431845,
+      "learned_boxes_observed": 8,
+      "classes_observed": [
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car",
+        "car"
+      ],
+      "all_geometry_validated_if_emitted": true,
+      "native_rectified_image_preserved_fraction": 0.929760601180891,
+      "optical_3d_and_camera_bev_headers_verified": true
+    }
+  ],
+  "limitations": [
+    "Recorded photograph is not annotated 3D ground truth; emitted boxes are model predictions.",
+    "Default fixture is an official rectified KITTI outdoor image; explicit native image/YAML overrides are supported.",
+    "Zero predictions are valid observations and do not establish detection accuracy.",
+    "Candidate camera calibration and KITTI-to-this-camera domain accuracy remain unvalidated."
+  ],
+  "actual_child_subscriptions": [
+    [
+      "/camera_3d_software_check/image",
+      [
+        "sensor_msgs/msg/Image"
+      ]
+    ],
+    [
+      "/camera_3d_software_check/info",
+      [
+        "sensor_msgs/msg/CameraInfo"
+      ]
+    ],
+    [
+      "/parameter_events",
+      [
+        "rcl_interfaces/msg/ParameterEvent"
+      ]
+    ]
+  ],
+  "last_diagnostics": {
+    "model": "SMOKE_DLA34_GN_DCN_KITTI",
+    "camera_only": "true",
+    "trained_3d_detector": "true",
+    "physical_accuracy_validated": "false",
+    "lidar_used": "false",
+    "tracking_enabled": "false",
+    "camera_frame": "camera_front_optical_frame",
+    "bev_frame": "camera_front_bev",
+    "publishing_fresh_output": "false",
+    "received_frames": "20",
+    "processed_frames": "11",
+    "mailbox_dropped_frames": "2",
+    "rejected_frames": "6",
+    "cleared_outputs": "10",
+    "boxes": "0",
+    "inference_ms": "25.389536",
+    "processing_ms": "37.322682",
+    "source_age_s": "0.093282",
+    "publication_cap_hz": "20.000000"
+  },
+  "coordinate_only_tf_verified": true,
+  "child_returncode": 0,
+  "node_log_tail": "[INFO] [1791571842.029442513] [software_camera_3d_child]: Camera-only trained SMOKE 3D: 1280x384 center crop, 20.0 Hz cap; dimensions are predictions\n[INFO] [1791571844.334751660] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

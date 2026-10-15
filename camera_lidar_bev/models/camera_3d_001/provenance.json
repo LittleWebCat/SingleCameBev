@@ -1,0 +1,353 @@
+{
+  "created_at_utc": "2026-10-09T18:48:20.057070+00:00",
+  "model_name": "SMOKE",
+  "source_repository": "https://github.com/lzccccc/SMOKE",
+  "source_commit": "bc5d2bba66e2d66fa56b7b599d55457cb1a05b33",
+  "checkpoint_source_url": "https://drive.google.com/file/d/11VK8_HfR7t0wm-6dCNP5KS3Vh-Qm686-/view",
+  "source_license": "MIT",
+  "weights_sha256": "e2cb8a1643b37b275907867716fce1f682f113dc6dd2dda141ffa007023f9546",
+  "engine_file": "smoke_fp16_raw.engine",
+  "engine_sha256": "4c63e3519cb15b95026ca77446a00288e48cde1b0d843a53e705145b93568a0b",
+  "onnx_file": "smoke_raw.onnx",
+  "onnx_sha256": "a65089cc1702f2d2ccd60bc30fa2e83000e578e3ebda31d93e1283a8caceb472",
+  "classes": [
+    "Car",
+    "Cyclist",
+    "Pedestrian"
+  ],
+  "bindings": [
+    {
+      "name": "image",
+      "mode": "TensorIOMode.INPUT",
+      "shape": [
+        1,
+        3,
+        384,
+        1280
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "heatmap",
+      "mode": "TensorIOMode.OUTPUT",
+      "shape": [
+        1,
+        3,
+        96,
+        320
+      ],
+      "dtype": "FLOAT"
+    },
+    {
+      "name": "regression",
+      "mode": "TensorIOMode.OUTPUT",
+      "shape": [
+        1,
+        8,
+        96,
+        320
+      ],
+      "dtype": "FLOAT"
+    }
+  ],
+  "torch_version": "2.13.0+cu130",
+  "tensorrt_version": "10.13.3.9",
+  "export": {
+    "opset": 17,
+    "internal_fp16": true,
+    "batch": 1,
+    "deform_plugin": "ModulatedDeformConv2d",
+    "deform_plugin_version": "2"
+  },
+  "preprocessing": {
+    "input": "undistorted native BGR",
+    "pixel_scale": 0.00392156862745098,
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "uniform_scale": "1280/native_width",
+    "centered_vertical_crop": true,
+    "network_width": 1280,
+    "network_height": 384,
+    "reference_affine": [
+      [
+        1.25,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.25,
+        -288.0
+      ]
+    ]
+  },
+  "numeric_validation": {
+    "heatmap": {
+      "max_abs": 0.010259166359901428,
+      "mean_abs": 1.914898894028738e-05,
+      "p99_abs": 0.00023633623495697978
+    },
+    "regression": {
+      "max_abs": 1.097480297088623,
+      "mean_abs": 0.003085710806772113,
+      "p99_abs": 0.0430668115615845
+    },
+    "decoded_reference_peaks": {
+      "count": 0,
+      "max_position_error_m": 0.0,
+      "max_dimension_error_m": 0.0,
+      "max_yaw_error_rad": 0.0,
+      "reference_classes": []
+    },
+    "limits": {
+      "heatmap_max_abs": 0.035,
+      "position_m": 0.75,
+      "dimension_m": 0.05,
+      "yaw_rad": 0.15
+    },
+    "passed": true
+  },
+  "reference_image_sha256": "c8449e4c1337457b8966d311b9194bcf0344b98dc33e745c36e9730433dd2562",
+  "reference_image_dimensions": [
+    1024,
+    768
+  ],
+  "benchmark": {
+    "warmup": 5,
+    "iterations": 30,
+    "inference_median_ms": 25.502528190612793,
+    "inference_p95_ms": 27.64997844696045,
+    "inference_max_ms": 27.71891212463379,
+    "scope": "engine only; excludes capture, preprocessing, decoder, ROS and display"
+  },
+  "engine_build_and_validation_seconds": 536.990719441,
+  "accuracy_on_live_camera_validated": false,
+  "speed_on_live_camera_measured": false,
+  "additional_numeric_validation_kitti_000008": {
+    "heatmap": {
+      "max_abs": 0.017962366342544556,
+      "mean_abs": 1.2453470844775438e-05,
+      "p99_abs": 0.00012029992532916371
+    },
+    "regression": {
+      "max_abs": 1.0169471502304077,
+      "mean_abs": 0.0014923404669389129,
+      "p99_abs": 0.02084857016801839
+    },
+    "decoded_reference_peaks": {
+      "count": 7,
+      "max_position_error_m": 0.05550490894073576,
+      "max_dimension_error_m": 0.003548605763258106,
+      "max_yaw_error_rad": 0.0020130692659270366,
+      "reference_classes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "limits": {
+      "heatmap_max_abs": 0.035,
+      "position_m": 0.75,
+      "dimension_m": 0.05,
+      "yaw_rad": 0.15
+    },
+    "passed": true,
+    "reference_image_sha256": "5b988d2a04d51850610b38ce50a66fd4027f3f5e645e5f2198d0522f4cf9a640",
+    "reference_image_source": "https://raw.githubusercontent.com/open-mmlab/mmdetection3d/main/demo/data/kitti/000008.png",
+    "camera_intrinsic": [
+      [
+        721.5377,
+        0.0,
+        609.5593
+      ],
+      [
+        0.0,
+        721.5377,
+        172.854
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "affine": [
+      [
+        1.0305957794189453,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0305957794189453,
+        -1.2367149591445923
+      ]
+    ],
+    "max_projected_corner_error_px": 0.2389205116981024,
+    "engine_detections": [
+      {
+        "class_id": 0,
+        "index": [
+          63,
+          129
+        ],
+        "score": 0.81201171875,
+        "xyz": [
+          -1.1670992219457617,
+          0.816539633352386,
+          7.865000000000002
+        ],
+        "lhw": [
+          3.9257362122102064,
+          1.5470252928488286,
+          1.6310640270024255
+        ],
+        "yaw": 1.8287883933239755
+      },
+      {
+        "class_id": 0,
+        "index": [
+          73,
+          273
+        ],
+        "score": 0.6748046875,
+        "xyz": [
+          3.988502466507731,
+          1.00357172658526,
+          6.366875
+        ],
+        "lhw": [
+          3.6342598263379924,
+          1.43987539316388,
+          1.585519742226796
+        ],
+        "yaw": -1.2965342548068035
+      },
+      {
+        "class_id": 0,
+        "index": [
+          54,
+          170
+        ],
+        "score": 0.654296875,
+        "xyz": [
+          1.0436653790915815,
+          0.8013657123754244,
+          14.383437500000001
+        ],
+        "lhw": [
+          3.682489654143224,
+          1.4564925562499795,
+          1.616002060894906
+        ],
+        "yaw": -1.2692579499319008
+      },
+      {
+        "class_id": 0,
+        "index": [
+          47,
+          197
+        ],
+        "score": 0.5478515625,
+        "xyz": [
+          7.217101261017205,
+          0.6337655761957638,
+          33.313203125
+        ],
+        "lhw": [
+          4.14033440978385,
+          1.7224639521779603,
+          1.6811969612430258
+        ],
+        "yaw": 1.9420654034909584
+      },
+      {
+        "class_id": 0,
+        "index": [
+          52,
+          236
+        ],
+        "score": 0.53466796875,
+        "xyz": [
+          8.83755706616913,
+          0.9305285863440256,
+          20.67078125
+        ],
+        "lhw": [
+          3.5492056770604496,
+          1.4743809664595509,
+          1.6097018659239481
+        ],
+        "yaw": -1.2515200885002442
+      },
+      {
+        "class_id": 0,
+        "index": [
+          47,
+          225
+        ],
+        "score": 0.42822265625,
+        "xyz": [
+          18.498025097816537,
+          0.8274113512972675,
+          50.4340625
+        ],
+        "lhw": [
+          3.8526263151364857,
+          1.4328618883447732,
+          1.6042093472252383
+        ],
+        "yaw": 1.8609242441120877
+      },
+      {
+        "class_id": 0,
+        "index": [
+          47,
+          201
+        ],
+        "score": 0.261962890625,
+        "xyz": [
+          9.713711976057748,
+          0.7495208431630616,
+          40.505
+        ],
+        "lhw": [
+          3.989505087090428,
+          1.5379871961805625,
+          1.6026435012322695
+        ],
+        "yaw": -1.2832729994251901
+      }
+    ],
+    "benchmark_nondefault_stream": {
+      "iterations": 30,
+      "median_ms": 25.27291202545166,
+      "p95_ms": 26.82217111587524,
+      "max_ms": 27.463808059692383
+    }
+  },
+  "torchvision_version": "0.28.0+cu130",
+  "torch_cuda_version": "13.0",
+  "gpu_name": "NVIDIA Thor",
+  "gpu_compute_capability": [
+    11,
+    0
+  ],
+  "opencv_version": "5.0.0",
+  "upstream_predictor_parity_max_abs": [
+    0.0,
+    0.0
+  ]
+}

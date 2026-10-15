@@ -1,0 +1,15 @@
+# Local YOLO11n COCO detection, native image coordinates after 640-square letterbox.
+/**:
+  ros__parameters:
+    camera_frame: camera_front_optical_frame
+    image_width: 1024
+    image_height: 768
+    image_topic: /camera/front/image_raw
+    detections_topic: /camera_lidar_bev/detections_2d
+    labeled_image_topic: /camera_lidar_bev/camera_labeled
+    max_publish_hz: 20.0
+    stale_after_s: 0.75
+    confidence: 0.35
+    nms_iou: 0.5
+    max_detections: 100
+    classes: [person, car, motorcycle, bus, truck]

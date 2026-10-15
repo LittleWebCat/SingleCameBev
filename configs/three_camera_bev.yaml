@@ -1,0 +1,94 @@
+# Three-camera fused object/depth BEV.
+#
+# Camera order and Linux nodes were verified on this vehicle:
+#   left=/dev/video0, middle=/dev/video4, right=/dev/video2
+# Intrinsics, mounting offsets, and yaw angles are initial estimates. Replace
+# them with measured calibration before using BEV distances as ground truth.
+
+input:
+  width: 640
+  height: 480
+  fps: 20
+  fourcc: YUYV
+  camera_index_backend: v4l2
+
+models:
+  detector:
+    backend: ultralytics
+    path: models/yolo_vehicle_fp16.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [person, bicycle, car, motorcycle, bus, truck, stop sign]
+
+  # This model is invoked only for a camera with traffic_color: true.
+  traffic_detector:
+    backend: ultralytics
+    path: untested_model/best.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [red, yellow, green]
+
+  depth:
+    backend: tensorrt
+    path: models/depth_anything_v2_small_fp16.engine
+    input_size: 518
+    cadence: 2
+    metric_scale: 1.0
+    metric_bias: 0.0
+    inverse_depth: false
+
+camera:
+  intrinsics:
+    # Approximate 90-degree horizontal field of view at 640x480.
+    fx: 320.0
+    fy: 320.0
+    cx: 320.0
+    cy: 240.0
+    calibration_width: 640
+    calibration_height: 480
+  extrinsics:
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+    lateral_offset_m: 0.0
+    forward_offset_m: 0.0
+
+cameras:
+  - name: left
+    source: 0
+    traffic_color: false
+    extrinsics:
+      yaw_deg: -90.0
+      lateral_offset_m: -0.65
+      forward_offset_m: 0.0
+
+  - name: middle
+    source: 4
+    traffic_color: true
+    extrinsics:
+      yaw_deg: 0.0
+      lateral_offset_m: 0.0
+      forward_offset_m: 0.15
+
+  - name: right
+    source: 2
+    traffic_color: false
+    extrinsics:
+      yaw_deg: 90.0
+      lateral_offset_m: 0.65
+      forward_offset_m: 0.0
+
+bev:
+  forward_range_m: 80.0
+  rear_range_m: 40.0
+  lateral_range_m: 80.0
+  pixels_per_meter: 5
+
+runtime:
+  target_fps: 20
+  save_images: true
+  save_matrices: true
+  max_frames: 0

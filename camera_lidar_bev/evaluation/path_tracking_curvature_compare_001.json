@@ -1,0 +1,13 @@
+{
+  "software_checks_passed": 163,
+  "reference_pose_count": 1855,
+  "sampled_recorded_poses": 30,
+  "geometry_self_reference": true,
+  "physical_sensors_started": false,
+  "vehicle_commands_published": false,
+  "calibration_for_synthetic_case_only": false,
+  "accuracy_independently_validated": false,
+  "configured_vehicle_pose_count": 10,
+  "core_processing_ms_median": 0.13682450000000002,
+  "core_processing_ms_p95": 0.16167689999999998
+}

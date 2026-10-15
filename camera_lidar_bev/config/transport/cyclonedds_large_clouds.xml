@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Requests a larger DDS receive buffer for large original scans.
+     Discovery uses multicast; image/cloud payloads use unicast so local readers
+     do not send bulk data through the physical LiDAR Ethernet interface.
+     Requires host net.core.rmem_max >= 16777216. Applies only to processes
+     started with this file as CYCLONEDDS_URI; no sensor/driver changes. -->
+<CycloneDDS>
+  <Domain Id="any">
+    <General>
+      <AllowMulticast>spdp</AllowMulticast>
+    </General>
+    <Internal>
+      <SocketReceiveBufferSize min="16 MiB" max="16 MiB"/>
+    </Internal>
+  </Domain>
+</CycloneDDS>

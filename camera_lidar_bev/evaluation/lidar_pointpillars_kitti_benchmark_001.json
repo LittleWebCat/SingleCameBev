@@ -1,0 +1,1 @@
+{"input_points":20285,"accepted_points":20237,"input_pillars":3384,"accepted_pillars":3384,"truncated_pillars":0,"warmup":5,"runs":30,"median_ms":4.257338,"p95_ms":5.583125,"max_ms":5.791147,"boxes":[{"class_id":1,"score":0.88661689,"center":[8.6972609,-1.8215981,-0.66842288],"size":[1.2071152,0.62766349,1.8402834],"yaw":-1.5215745}]}

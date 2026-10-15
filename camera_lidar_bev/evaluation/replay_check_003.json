@@ -1,0 +1,216 @@
+{
+  "bag_path": "/home/agxthor/SingleCameraBev/camera_lidar_bev/bags/lidar_camera_check_003",
+  "started_utc": "2026-10-06T18:11:50.344+00:00",
+  "ros_domain_id": 42,
+  "discovery_range": "LOCALHOST",
+  "probe_command": [
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_sensor_bridge/lib/bev_sensor_bridge/sensor_probe",
+    "--ros-args",
+    "-r",
+    "__ns:=/bev_replay_check",
+    "-p",
+    "use_sim_time:=true",
+    "-p",
+    "imu_topic:=/imu",
+    "-p",
+    "lidar_reliability:=reliable"
+  ],
+  "replay_command": [
+    "ros2",
+    "bag",
+    "play",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/bags/lidar_camera_check_003",
+    "--clock",
+    "--exclude-topics",
+    "/camera_lidar_bev/diagnostics"
+  ],
+  "logs": "/tmp/bev-replay-check-td6jvy24",
+  "probe_messages_received": {
+    "lidar": 46,
+    "front_camera": 140,
+    "camera_info": 140,
+    "imu": 466,
+    "odometry": 0
+  },
+  "observed_stream_statuses": {
+    "lidar": {
+      "name": "camera_lidar_bev/lidar",
+      "level": 0,
+      "message": "Receiving messages; arrival/header checks do not establish synchronization",
+      "values": {
+        "topic": "/points",
+        "messages_received": "46",
+        "frame_id": "os_lidar",
+        "receipt_age_s": "0.644985",
+        "mean_receipt_hz": "10.450340",
+        "header_age_s_assuming_common_clock": "0.264733",
+        "point_fields": "x,y,z,intensity,t,reflectivity,ring,ambient,range",
+        "declared_point_count": "262144",
+        "payload_layout_valid": "true",
+        "point_time_field_present": "true",
+        "point_time_units_and_origin": "unverified; field presence alone is insufficient for deskew"
+      }
+    },
+    "front_camera": {
+      "name": "camera_lidar_bev/front_camera",
+      "level": 0,
+      "message": "Receiving messages; arrival/header checks do not establish synchronization",
+      "values": {
+        "topic": "/camera/front/image_raw",
+        "messages_received": "140",
+        "frame_id": "camera_front_optical_frame",
+        "receipt_age_s": "0.622026",
+        "mean_receipt_hz": "29.997289",
+        "header_age_s_assuming_common_clock": "-0.004016"
+      }
+    },
+    "camera_info": {
+      "name": "camera_lidar_bev/camera_info",
+      "level": 1,
+      "message": "Camera intrinsics missing/invalid",
+      "values": {
+        "topic": "/camera/front/camera_info",
+        "messages_received": "140",
+        "frame_id": "camera_front_optical_frame",
+        "receipt_age_s": "0.621997",
+        "mean_receipt_hz": "29.997492",
+        "header_age_s_assuming_common_clock": "-0.004016",
+        "positive_focal_lengths_present": "false"
+      }
+    },
+    "imu": {
+      "name": "camera_lidar_bev/imu",
+      "level": 0,
+      "message": "Receiving messages; arrival/header checks do not establish synchronization",
+      "values": {
+        "topic": "/imu",
+        "messages_received": "466",
+        "frame_id": "os_imu",
+        "receipt_age_s": "0.620645",
+        "mean_receipt_hz": "99.996801",
+        "header_age_s_assuming_common_clock": "-0.008617"
+      }
+    },
+    "odometry": {
+      "name": "camera_lidar_bev/odometry",
+      "level": 1,
+      "message": "Waiting for input; verify topic name, publisher and QoS",
+      "values": {
+        "topic": "/lio_sam/mapping/odometry",
+        "messages_received": "0",
+        "frame_id": ""
+      }
+    },
+    "calibration_and_fusion": {
+      "name": "camera_lidar_bev/calibration_and_fusion",
+      "level": 1,
+      "message": "Calibration, motion validation and BEV perception are pending",
+      "values": {
+        "sensor_clock_alignment": "unverified",
+        "extrinsic_calibration": "unverified",
+        "occupancy_pipeline": "not implemented in this milestone"
+      }
+    }
+  },
+  "latest_statuses": {
+    "lidar": {
+      "name": "camera_lidar_bev/lidar",
+      "level": 2,
+      "message": "Input stopped or became stale",
+      "values": {
+        "topic": "/points",
+        "messages_received": "46",
+        "frame_id": "os_lidar",
+        "receipt_age_s": "1.644983",
+        "mean_receipt_hz": "10.450340",
+        "header_age_s_assuming_common_clock": "0.264733",
+        "point_fields": "x,y,z,intensity,t,reflectivity,ring,ambient,range",
+        "declared_point_count": "262144",
+        "payload_layout_valid": "true",
+        "point_time_field_present": "true",
+        "point_time_units_and_origin": "unverified; field presence alone is insufficient for deskew"
+      }
+    },
+    "front_camera": {
+      "name": "camera_lidar_bev/front_camera",
+      "level": 2,
+      "message": "Input stopped or became stale",
+      "values": {
+        "topic": "/camera/front/image_raw",
+        "messages_received": "140",
+        "frame_id": "camera_front_optical_frame",
+        "receipt_age_s": "1.622024",
+        "mean_receipt_hz": "29.997289",
+        "header_age_s_assuming_common_clock": "-0.004016"
+      }
+    },
+    "camera_info": {
+      "name": "camera_lidar_bev/camera_info",
+      "level": 2,
+      "message": "Input stopped or became stale",
+      "values": {
+        "topic": "/camera/front/camera_info",
+        "messages_received": "140",
+        "frame_id": "camera_front_optical_frame",
+        "receipt_age_s": "1.621995",
+        "mean_receipt_hz": "29.997492",
+        "header_age_s_assuming_common_clock": "-0.004016",
+        "positive_focal_lengths_present": "false"
+      }
+    },
+    "imu": {
+      "name": "camera_lidar_bev/imu",
+      "level": 2,
+      "message": "Input stopped or became stale",
+      "values": {
+        "topic": "/imu",
+        "messages_received": "466",
+        "frame_id": "os_imu",
+        "receipt_age_s": "1.620643",
+        "mean_receipt_hz": "99.996801",
+        "header_age_s_assuming_common_clock": "-0.008617"
+      }
+    },
+    "odometry": {
+      "name": "camera_lidar_bev/odometry",
+      "level": 1,
+      "message": "Waiting for input; verify topic name, publisher and QoS",
+      "values": {
+        "topic": "/lio_sam/mapping/odometry",
+        "messages_received": "0",
+        "frame_id": ""
+      }
+    },
+    "calibration_and_fusion": {
+      "name": "camera_lidar_bev/calibration_and_fusion",
+      "level": 1,
+      "message": "Calibration, motion validation and BEV perception are pending",
+      "values": {
+        "sensor_clock_alignment": "unverified",
+        "extrinsic_calibration": "unverified",
+        "occupancy_pipeline": "not implemented in this milestone"
+      }
+    }
+  },
+  "sensor_clock_alignment": "unverified; replay receipt does not validate acquisition timing",
+  "point_time_units_and_origin": "unverified",
+  "calibration_status": "pending",
+  "motion_trajectory_status": "missing odometry expected for this stationary session",
+  "full_sensor_gate": "partial",
+  "result": "passed_partial_recording_replay",
+  "replay_returncode": 0,
+  "checks": {
+    "lidar_received": true,
+    "front_camera_received": true,
+    "camera_info_received": true,
+    "imu_received": true,
+    "timing_field_t_present": true,
+    "cloud_payload_layout_valid": true,
+    "calibration_pending_warn": true,
+    "missing_odometry_warn": true
+  },
+  "diagnostic_arrays_received": 10,
+  "ended_utc": "2026-10-06T18:12:02.999+00:00",
+  "elapsed_seconds": 12.655,
+  "probe_returncode_after_cleanup": 0
+}

@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/bev_coreTargets.cmake")
+check_required_components(bev_core)

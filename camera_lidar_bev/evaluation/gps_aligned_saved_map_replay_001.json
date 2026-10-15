@@ -1,0 +1,42 @@
+{
+  "source_bag_name": "camera_lidar_20261010T221427_088256Z",
+  "map_directory": "maps/local_gps_recording_002",
+  "alignment_directory": "maps/local_gps_recording_002/gps_alignment",
+  "status_frames": 414,
+  "map_ready_frames": 410,
+  "gps_aligned_ready_frames": 410,
+  "ready_with_camera_and_lidar_boxes": 126,
+  "map_on_frames": 315,
+  "map_off_frames": 95,
+  "map_toggle_colored_pixels": {
+    "on": 37022,
+    "off": 0
+  },
+  "maximum_pose_delta_ms": 0.150138,
+  "maximum_cloud_camera_pair_delta_ms": 126.448568,
+  "maximum_exact_camera_detection_image_delta_ns": 0,
+  "maximum_enu_transform_error_m": 0.0,
+  "replay_loop_recovery": {
+    "camera_object_detector": {
+      "observed_simulation_clock_rewinds": 2,
+      "diagnostic_samples_after_rewind": 55,
+      "positive_detections_after_rewind": 20,
+      "last_message": "COCO road-user 2D camera detections; native TensorRT"
+    },
+    "lidar_vehicle_detector": {
+      "observed_simulation_clock_rewinds": 2,
+      "diagnostic_samples_after_rewind": 55,
+      "positive_detections_after_rewind": 55,
+      "last_message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+      "positive_vehicle_boxes_after_rewind": 53
+    }
+  },
+  "images": {
+    "map_on_with_detections.png": "data/gps_aligned_saved_map_replay_001/map_on_with_detections.png",
+    "map_off.png": "data/gps_aligned_saved_map_replay_001/map_off.png"
+  },
+  "diagnostic_note": "Initial probe association_count was total association rows; fixed to accepted matches for final replay. Image source stamps may select older still-fresh frames; actual loop evidence is detector simulation_clock_rewinds counters.",
+  "source_trajectory_replay_only": true,
+  "gps_fused_in_lio_estimator": false,
+  "independent_accuracy_validation": false
+}

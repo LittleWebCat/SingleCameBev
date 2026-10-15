@@ -1,0 +1,17 @@
+{
+  "device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0",
+  "protocol": "steer_deg speed_mph pedal mode",
+  "baud": null,
+  "steer_sign": -1,
+  "steer_ratio": 17.0,
+  "max_steering_wheel_deg": null,
+  "max_steering_wheel_rate_deg_s": null,
+  "firmware_heartbeat_timeout_s": null,
+  "protocol_verified": false,
+  "steering_calibration_verified": false,
+  "speed_feedback_verified": false,
+  "zero_speed_braking_verified": false,
+  "timeout_braking_verified": false,
+  "hardware_estop_verified": false,
+  "verification_notes": "Template only. Sign/ratio are copied from the supplied bridge, not measured by Codex. Fill limits and record actual hardware/firmware evidence; do not mark unknown checks as verified."
+}

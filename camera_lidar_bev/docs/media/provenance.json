@@ -1,0 +1,42 @@
+{
+  "description": "Selected actual sensor/result visuals for public GitHub README",
+  "assets": {
+    "live_localized_bev.png": {
+      "source": "localized_bev_live_004/check/combined_view.png",
+      "mode": "live independent scan-to-map localization",
+      "synthetic": false,
+      "sha256": "162f9b1c64422b5776ba155bfdcad9557f228a57fe362cec37886234574aa525",
+      "bytes": 1600968
+    },
+    "gps_vs_lidar_route.png": {
+      "source": "localization_compare_live_002/latest.png",
+      "mode": "live new drive, GPS and independent LiDAR localization",
+      "synthetic": false,
+      "sha256": "a20e5fa7a384587003ac011334ba9c9954ed6adbaa6b30dec8d1580aea51cc96",
+      "bytes": 218294
+    },
+    "localization_performance.png": {
+      "source": "evaluation/localization_live_performance_001.png",
+      "mode": "separate stationary live performance test",
+      "synthetic": false,
+      "sha256": "60666fe29c775220dd905494015b9a7074e75f0a822537d674b7ed4ba5560508",
+      "bytes": 131185
+    },
+    "camera_bev_replay.gif": {
+      "source": "original camera_lidar_20261010T221427_088256Z recording replay at1x",
+      "mode": "recorded original trajectory poses for map placement",
+      "synthetic": false,
+      "frames": 40,
+      "encoding_fps": 5,
+      "duration_s": 8,
+      "source_span_s": 7.90019956,
+      "width_px": 960,
+      "height_px": 486,
+      "view": "camera and BEV panels, object table omitted from animation",
+      "sha256": "b8bea3c378fff260dfbf4b420d4aaf08da8adf8bc4e4c8f983be2a48cce08028",
+      "bytes": 6620414
+    }
+  },
+  "accuracy_independently_validated": false,
+  "raw_recordings_maps_and_weights_published": false
+}

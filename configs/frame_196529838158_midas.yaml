@@ -10,7 +10,7 @@ models:
     input_size: 640
     confidence: 0.25
     iou: 0.5
-    classes: [person, bicycle, car, motorcycle, bus, truck]
+    classes: [person, bicycle, car, motorcycle, bus, truck, traffic light, stop sign]
   depth:
     backend: midas
     path: MiDaS_small

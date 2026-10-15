@@ -1,0 +1,21 @@
+{
+  "receiver": "Septentrio mosaic-X5",
+  "receiver_endpoint": "192.168.3.1:28784",
+  "transport": "passive TCP SBF; no receiver configuration commands",
+  "ros_domain_id": 1,
+  "observation_seconds": 5,
+  "fix_samples": 50,
+  "raw_sbf_blocks": 209,
+  "fresh_valid_fix": true,
+  "last_fix_age_seconds": 0.108169632,
+  "frame_id": "gnss_antenna",
+  "receiver_mode": "sbas",
+  "navsat_status": 1,
+  "position_covariance_type": 3,
+  "crc_errors": 0,
+  "decode_errors": 0,
+  "queue_drops": 0,
+  "clock_alignment_validated": false,
+  "antenna_lever_arm_measured": false,
+  "full_camera_lidar_recording_started": false
+}

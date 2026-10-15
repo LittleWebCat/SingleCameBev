@@ -1,0 +1,1017 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-07T19:40:25.472655+00:00",
+  "opencv_version": "4.6.0",
+  "result": "rejected_camera_model",
+  "calibration_status": "rejected_camera_model",
+  "validation_passed": false,
+  "model_rejection_reasons": [
+    "Radial mapping derivative becomes nonpositive inside the nominal image domain."
+  ],
+  "candidate_yaml_permitted": false,
+  "fusion_ready": false,
+  "board": {
+    "pattern": "checkerboard",
+    "inner_corners_columns": 5,
+    "inner_corners_rows": 4,
+    "squares_columns": 6,
+    "squares_rows": 5,
+    "square_size_mm": 65.0
+  },
+  "board_geometry_assumption": "The target must be flat and rigid, with accurately equal square spacing; image residuals cannot independently verify the physical board geometry.",
+  "image_width": 640,
+  "image_height": 480,
+  "split": {
+    "training_images": [
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png"
+    ],
+    "held_out_images": [
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0003.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0008.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0013.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0018.png",
+      "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0023.png"
+    ],
+    "training_count": 20,
+    "held_out_count": 5,
+    "held_out_used_for_intrinsic_fit": false,
+    "method": "lexicographic filenames; evenly distributed deterministic held-out indices before fitting"
+  },
+  "camera_matrix": [
+    [
+      896.6337480136361,
+      0.0,
+      337.70295277622284
+    ],
+    [
+      0.0,
+      880.50844964431,
+      279.94881447523113
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_model": "plumb_bob",
+  "distortion_coefficients": [
+    -1.5277161651034283,
+    18.30415797409388,
+    0.007986012082836419,
+    0.02619331869652155,
+    -102.62756234427357
+  ],
+  "fit": {
+    "rms_px": 0.28050316741843795,
+    "flags": 0,
+    "per_view": [
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+        "rms_px": 0.6658760852204274
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+        "rms_px": 0.3265207738784692
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+        "rms_px": 0.28781030615705755
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+        "rms_px": 0.5084458754756062
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+        "rms_px": 0.24698386298963873
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+        "rms_px": 0.19034628219936092
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+        "rms_px": 0.1655003787227383
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+        "rms_px": 0.1396804454171711
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+        "rms_px": 0.15832089857032777
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+        "rms_px": 0.17663043456817232
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+        "rms_px": 0.19935313071455474
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+        "rms_px": 0.27165006125138585
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+        "rms_px": 0.22544414299674054
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+        "rms_px": 0.22897913249995816
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+        "rms_px": 0.21450753944848797
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+        "rms_px": 0.18423294090466028
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+        "rms_px": 0.2855577778382703
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+        "rms_px": 0.20949245903057995
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+        "rms_px": 0.17291051119423273
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png",
+        "rms_px": 0.17265182922481045
+      }
+    ],
+    "intrinsic_standard_deviation": {
+      "fx": 26.042777782698863,
+      "fy": 28.58381689189136,
+      "cx": 13.502346431882515,
+      "cy": 17.480501462007453,
+      "k1": 0.4140637186081997,
+      "k2": 11.0408695070042,
+      "p1": 0.017056788426773137,
+      "p2": 0.013218399731560767,
+      "k3": 95.52361125214716,
+      "k4": 0.0,
+      "k5": 0.0,
+      "k6": 0.0,
+      "s1": 0.0,
+      "s2": 0.0,
+      "s3": 0.0,
+      "s4": 0.0,
+      "tau_x": 0.0,
+      "tau_y": 0.0
+    },
+    "extrinsic_standard_deviation": [
+      0.021667719871171377,
+      0.029876805862232316,
+      0.014749877898257156,
+      0.014510969437991924,
+      0.019059665777311236,
+      0.029166113880454723,
+      0.07499964689393464,
+      0.09035800790523071,
+      0.005415975008108462,
+      0.04982758273197861,
+      0.06549237110711471,
+      0.09686627308136463,
+      0.028661204881279784,
+      0.04500999202622332,
+      0.012603515237837443,
+      0.04037924500968391,
+      0.05320831778360636,
+      0.07493797974200189,
+      0.028942829191131735,
+      0.03260664740835684,
+      0.012320670763279492,
+      0.038259011283099095,
+      0.05024062362454821,
+      0.0856348254752965,
+      0.13458859066800757,
+      0.10888651729720769,
+      0.007690751718345862,
+      0.06186263609616035,
+      0.08157257186863687,
+      0.13728664327016368,
+      0.0582606893799926,
+      0.07919919169011205,
+      0.007879792277951294,
+      0.06358897387068065,
+      0.08369604446961086,
+      0.12338511339701218,
+      0.16548534776563795,
+      0.13409963974453615,
+      0.009641121481989999,
+      0.07791172589772558,
+      0.10255071686309518,
+      0.1729367117197535,
+      0.12342062058361583,
+      0.09077720015730541,
+      0.01077059157665438,
+      0.09479460544328323,
+      0.12478610034043801,
+      0.2007025763639574,
+      0.09166626790629055,
+      0.12974496049637912,
+      0.02096286040963014,
+      0.09651553193238538,
+      0.122023171570119,
+      0.17995486533414062,
+      0.07868398169002108,
+      0.13250056635723606,
+      0.01021116331429436,
+      0.09963456225201896,
+      0.12096829028085614,
+      0.1927870937340121,
+      0.09402751056536274,
+      0.16969425655273324,
+      0.03204103211766072,
+      0.11085626804082561,
+      0.1228249090348992,
+      0.23073739458546627,
+      0.0930145468960639,
+      0.14176456231069115,
+      0.029703826180148933,
+      0.1288431875972081,
+      0.14381802128712448,
+      0.271173705637197,
+      0.03853615449017347,
+      0.04329605449031142,
+      0.013671011191867557,
+      0.11650646235021107,
+      0.14947826119298838,
+      0.23050089738225954,
+      0.05101664618647518,
+      0.05027044076948005,
+      0.013005177857296765,
+      0.11768196685061362,
+      0.15502611446382694,
+      0.24535224795286809,
+      0.12211464494658467,
+      0.13866298238559188,
+      0.027800299720169928,
+      0.11876716391773687,
+      0.15503319971419022,
+      0.22397996259306882,
+      0.11351695869534145,
+      0.12754237785421102,
+      0.0255033460334913,
+      0.1189343536008751,
+      0.15569417084757234,
+      0.21416582674238918,
+      0.10166053117249206,
+      0.11524673245351585,
+      0.022710257455143292,
+      0.11039298120408204,
+      0.1436774453479984,
+      0.20799582450156243,
+      0.09749540315317998,
+      0.11087808217939513,
+      0.02214738458905298,
+      0.10620267460689875,
+      0.13770727609195266,
+      0.19930170807977932,
+      0.11260387443023138,
+      0.10134954172107222,
+      0.004010642481316691,
+      0.07907889175257418,
+      0.10304214077982322,
+      0.15267966524267326,
+      0.09085714090971649,
+      0.17273234407638446,
+      0.03470223135116714,
+      0.08579561379184417,
+      0.09216862840940705,
+      0.18952231989331694
+    ],
+    "extrinsic_standard_deviation_note": "Six uncertainty values per training board pose, in training-image order; these are board poses, not measured sensor extrinsics.",
+    "uncertainty_note": "OpenCV local fit uncertainty, not a guarantee of accuracy; unfitted parameter standard deviations are zero."
+  },
+  "held_out": {
+    "rms_px": 0.2888183840512211,
+    "max_view_rms_px": 0.537532998830061,
+    "views": [
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0003.png",
+        "rms_px": 0.537532998830061,
+        "max_corner_error_px": 1.2236151735841325,
+        "board_pose_rvec": [
+          0.05469936119607955,
+          0.17708624013262741,
+          -3.1049982693081453
+        ],
+        "board_pose_translation_m": [
+          0.08074824023714161,
+          0.21571577327447614,
+          2.703117220681867
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0008.png",
+        "rms_px": 0.21326836359412465,
+        "max_corner_error_px": 0.4275586211330117,
+        "board_pose_rvec": [
+          0.2003868334018888,
+          0.05898593224654349,
+          -3.1000802824337854
+        ],
+        "board_pose_translation_m": [
+          0.17830933726678233,
+          0.08293056072591966,
+          4.4683544313447054
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0013.png",
+        "rms_px": 0.15371875250785422,
+        "max_corner_error_px": 0.26415203490967687,
+        "board_pose_rvec": [
+          0.4300328182289653,
+          -0.27756632428504185,
+          -3.0427285405431257
+        ],
+        "board_pose_translation_m": [
+          -0.878040032842333,
+          -0.22858807395052747,
+          5.959097850569128
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0018.png",
+        "rms_px": 0.18894564259361082,
+        "max_corner_error_px": 0.3019492801906334,
+        "board_pose_rvec": [
+          0.2717880932843009,
+          0.12285042415150546,
+          -3.051325943428771
+        ],
+        "board_pose_translation_m": [
+          0.36403085271216723,
+          -0.4575225216436155,
+          7.589911793245348
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0023.png",
+        "rms_px": 0.15272610896881936,
+        "max_corner_error_px": 0.299051657764667,
+        "board_pose_rvec": [
+          -0.4941009393152743,
+          -0.046377394575627104,
+          -3.0622701354289554
+        ],
+        "board_pose_translation_m": [
+          1.0146999032101798,
+          0.08663458720598034,
+          5.6792964739078995
+        ]
+      }
+    ],
+    "method": "Each held-out board pose is fitted independently; intrinsics/distortion stay fixed.",
+    "limitation": "Pose fitting can absorb intrinsic errors. This is a consistency check, not independent camera accuracy validation.",
+    "evaluation_status": "evaluated",
+    "explicit_rms_limit_px": null,
+    "residual_screen_passed": null
+  },
+  "training_coverage": {
+    "views": [
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+        "inner_corner_hull_area_fraction": 0.06610376729678667,
+        "median_adjacent_corner_spacing_px": 50.17070290690511,
+        "centroid_normalized": [
+          0.642707076072693,
+          0.5306104326248169
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+        "inner_corner_hull_area_fraction": 0.01198774549357798,
+        "median_adjacent_corner_spacing_px": 17.444087425650277,
+        "centroid_normalized": [
+          0.5342197299003602,
+          0.6013438256581624
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+        "inner_corner_hull_area_fraction": 0.016087166247727207,
+        "median_adjacent_corner_spacing_px": 21.027128853683955,
+        "centroid_normalized": [
+          0.5168862009048463,
+          0.6377762508392333
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+        "inner_corner_hull_area_fraction": 0.014003957608091089,
+        "median_adjacent_corner_spacing_px": 18.104535173448134,
+        "centroid_normalized": [
+          0.539817590713501,
+          0.6333602428436279
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+        "inner_corner_hull_area_fraction": 0.007583657359833372,
+        "median_adjacent_corner_spacing_px": 13.970747095543073,
+        "centroid_normalized": [
+          0.5106809830665588,
+          0.5574609804153441
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+        "inner_corner_hull_area_fraction": 0.007093894859178059,
+        "median_adjacent_corner_spacing_px": 13.47285420899885,
+        "centroid_normalized": [
+          0.5355785369873047,
+          0.5505197874704997
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+        "inner_corner_hull_area_fraction": 0.004806332752044303,
+        "median_adjacent_corner_spacing_px": 11.008087358501882,
+        "centroid_normalized": [
+          0.5183592557907104,
+          0.5301741822560628
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+        "inner_corner_hull_area_fraction": 0.0032385487023808917,
+        "median_adjacent_corner_spacing_px": 9.105401409556091,
+        "centroid_normalized": [
+          0.5089974665641785,
+          0.5045455964406331
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+        "inner_corner_hull_area_fraction": 0.0031965589063194483,
+        "median_adjacent_corner_spacing_px": 9.04878189170872,
+        "centroid_normalized": [
+          0.3558045411109924,
+          0.4912642860412598
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+        "inner_corner_hull_area_fraction": 0.0031981881034281894,
+        "median_adjacent_corner_spacing_px": 9.018951689778328,
+        "centroid_normalized": [
+          0.33396241188049314,
+          0.48582911014556884
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+        "inner_corner_hull_area_fraction": 0.0030929808523641592,
+        "median_adjacent_corner_spacing_px": 8.798603531832077,
+        "centroid_normalized": [
+          0.2798681247234344,
+          0.4818043581644694
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+        "inner_corner_hull_area_fraction": 0.0022774592131812217,
+        "median_adjacent_corner_spacing_px": 7.559530986314128,
+        "centroid_normalized": [
+          0.2911032104492188,
+          0.4628449392318726
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+        "inner_corner_hull_area_fraction": 0.0016081775868269687,
+        "median_adjacent_corner_spacing_px": 5.882261206659957,
+        "centroid_normalized": [
+          0.30799194455146794,
+          0.44799116134643563
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+        "inner_corner_hull_area_fraction": 0.0019107214135290936,
+        "median_adjacent_corner_spacing_px": 6.994328990601249,
+        "centroid_normalized": [
+          0.5366393256187438,
+          0.47009613196055094
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+        "inner_corner_hull_area_fraction": 0.0020167526711331145,
+        "median_adjacent_corner_spacing_px": 7.100227406534589,
+        "centroid_normalized": [
+          0.7900540280342103,
+          0.4541944233576457
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+        "inner_corner_hull_area_fraction": 0.002007261613167278,
+        "median_adjacent_corner_spacing_px": 7.082112019471366,
+        "centroid_normalized": [
+          0.7679608702659608,
+          0.4530449803670247
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+        "inner_corner_hull_area_fraction": 0.0023871781688406674,
+        "median_adjacent_corner_spacing_px": 7.6295154139135635,
+        "centroid_normalized": [
+          0.7577716612815858,
+          0.4785375912984211
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+        "inner_corner_hull_area_fraction": 0.0025227522794724184,
+        "median_adjacent_corner_spacing_px": 8.020786009107107,
+        "centroid_normalized": [
+          0.7666926741600036,
+          0.4974731969833375
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+        "inner_corner_hull_area_fraction": 0.00460255850405171,
+        "median_adjacent_corner_spacing_px": 10.759211375339616,
+        "centroid_normalized": [
+          0.7414362525939941,
+          0.5378625329335531
+        ]
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png",
+        "inner_corner_hull_area_fraction": 0.005367270566855116,
+        "median_adjacent_corner_spacing_px": 11.688494203957605,
+        "centroid_normalized": [
+          0.2410061776638031,
+          0.5484404198328654
+        ]
+      }
+    ],
+    "inner_corner_hull_area_fraction": {
+      "minimum": 0.0016081775868269687,
+      "median": 0.0032183684029045406,
+      "maximum": 0.06610376729678667
+    },
+    "median_adjacent_corner_spacing_px": 9.077091650632404,
+    "centroid_span_normalized": [
+      0.5490478503704073,
+      0.18978508949279765
+    ],
+    "all_corner_hull_area_fraction": 0.14654626282826566,
+    "occupied_corner_bins_4_by_3": 6,
+    "corner_bin_coverage_fraction": 0.5,
+    "note": "Coverage summarizes inner corners, not full printed board size or ground-truth accuracy."
+  },
+  "training_pose_diversity": {
+    "normal_angle_span_deg": 82.3863957662288,
+    "median_tilt_deg": 18.642995276746134,
+    "maximum_tilt_deg": 53.12357477492524,
+    "note": "Pose diversity uses the candidate model and is not an independent measurement."
+  },
+  "homography_conditioning": {
+    "singular_values": [
+      4.245284025586837,
+      3.8682812824385078,
+      1.968031877638436,
+      1.5827207333197286,
+      0.7425526556969795,
+      0.29055915829527157
+    ],
+    "fifth_to_first_singular_value_ratio": 0.17491236186354678,
+    "note": "Conditioning diagnostic from planar homographies; distorted/noisy corners affect this metric."
+  },
+  "training_subset_stability": {
+    "subsets": [
+      {
+        "excluded_index_modulo_3": 0,
+        "training_images": [
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png"
+        ],
+        "result": "fitted",
+        "rms_px": 0.23182524084165226,
+        "camera_matrix": [
+          [
+            1450.1555271517052,
+            0.0,
+            317.21457137269596
+          ],
+          [
+            0.0,
+            1496.3540742590435,
+            275.8728866479047
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "distortion": [
+          -7.162205524582731,
+          327.3963372989275,
+          -0.01355405827137191,
+          0.09306007623128859,
+          -5541.969523460134
+        ],
+        "focal_relative_change": [
+          0.6173331980469365,
+          0.6994204596940671
+        ],
+        "principal_point_change_px": [
+          -20.488381403526887,
+          -4.0759278273264385
+        ]
+      },
+      {
+        "excluded_index_modulo_3": 1,
+        "training_images": [
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png"
+        ],
+        "result": "fitted",
+        "rms_px": 0.2982679805994316,
+        "camera_matrix": [
+          [
+            889.6957782506872,
+            0.0,
+            323.6813530481939
+          ],
+          [
+            0.0,
+            843.1868140959065,
+            270.1371840696531
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "distortion": [
+          -2.2155616175142616,
+          37.95643527194939,
+          0.018536322599049308,
+          0.04723326625282942,
+          -316.7019752139324
+        ],
+        "focal_relative_change": [
+          -0.00773779681873339,
+          -0.0423864592821113
+        ],
+        "principal_point_change_px": [
+          -14.021599728028946,
+          -9.811630405578057
+        ]
+      },
+      {
+        "excluded_index_modulo_3": 2,
+        "training_images": [
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+          "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png"
+        ],
+        "result": "fitted",
+        "rms_px": 0.30087810911249147,
+        "camera_matrix": [
+          [
+            893.7483994058205,
+            0.0,
+            313.5268912594396
+          ],
+          [
+            0.0,
+            878.1801967416251,
+            260.19222451783827
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "distortion": [
+          -1.9864746547574084,
+          38.965920250364285,
+          0.02210026419167991,
+          0.03403184769267303,
+          -347.4815024332616
+        ],
+        "focal_relative_change": [
+          -0.0032179790401685743,
+          -0.002644214151068512
+        ],
+        "principal_point_change_px": [
+          -24.17606151678325,
+          -19.756589957392862
+        ]
+      }
+    ],
+    "successful_subsets": 3,
+    "maximum_absolute_focal_relative_change": 0.6994204596940671,
+    "maximum_absolute_principal_point_change_px": 24.17606151678325,
+    "largest_board_view_removed": {
+      "excluded_image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+      "excluded_inner_corner_hull_area_fraction": 0.06610376729678667,
+      "training_images": [
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+        "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png"
+      ],
+      "result": "fitted",
+      "rms_px": 0.24100028364436527,
+      "camera_matrix": [
+        [
+          791.3706116580063,
+          0.0,
+          314.1885366810547
+        ],
+        [
+          0.0,
+          782.7377758573149,
+          233.44096422650244
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        -0.6814765561408649,
+        19.376778737141766,
+        -0.011785884468670776,
+        0.014217769512077467,
+        -165.09124073726412
+      ],
+      "focal_relative_change": [
+        -0.1173981423171114,
+        -0.11103888193973664
+      ],
+      "principal_point_change_px": [
+        -23.514416095168144,
+        -46.50785024872869
+      ]
+    },
+    "note": "Sensitivity diagnostic using training data only; held-out images are never included in any refit."
+  },
+  "radial_domain_diagnostic": {
+    "radial_mapping_valid_in_nominal_domain": false,
+    "nominal_domain_maximum_radius": 0.4928885769958853,
+    "radial_scale": {
+      "minimum": 0.23767156022325875,
+      "minimum_at_radius": 0.4928885769958853,
+      "zero_radii_within_domain": []
+    },
+    "radial_mapping_derivative": {
+      "minimum": -5.012332766870079,
+      "minimum_at_radius": 0.4928885769958853,
+      "zero_radii_within_domain": [
+        0.38457519395608997
+      ]
+    },
+    "rejection_reasons": [
+      "Radial mapping derivative becomes nonpositive inside the nominal image domain."
+    ],
+    "domain_note": "Maximum corner radius from K-normalized image pixels; conservative radial disk enclosing the operating image rectangle.",
+    "method": "Analytic extrema of scale 1+k1*r^2+k2*r^4+k3*r^6 and derivative 1+3*k1*r^2+5*k2*r^4+7*k3*r^6.",
+    "limitation": "A passing radial check does not establish intrinsic accuracy or certify tangential distortion invertibility."
+  },
+  "capture_quality_warnings": [
+    "Most boards occupy little image area; capture closer views with clearly resolved corners.",
+    "Typical adjacent corners are less than 15 pixels apart; fine corner errors strongly affect this fit.",
+    "Inner corners do not cover most image regions; include large boards near image edges.",
+    "Training subsets substantially change intrinsics; collect stronger pose/scale coverage.",
+    "Removing the largest board view destabilizes the fit; collect more close and tilted observations."
+  ],
+  "quality_policy_note": "Coverage, tilt, spacing and stability warning limits are heuristics, not universal acceptance thresholds.",
+  "rectification_note": "Identity R and P=[K|0] describe an unrectified monocular camera; they are not measured sensor extrinsics.",
+  "remaining_validation": [
+    "Independent camera accuracy/undistortion validation and operating-resolution/lens-setting checks.",
+    "Camera-LiDAR and vehicle extrinsics are unmeasured.",
+    "Exposure timing and cross-sensor clock alignment are unvalidated."
+  ],
+  "application_status": "not_applied_to_camera_bridge",
+  "input_dataset": {
+    "source": "data/calibration/front_camera_001",
+    "source_image_count": 25,
+    "detected_view_count": 25,
+    "rejected_images": [],
+    "detected_images": [
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0001.png",
+        "sha256": "92ac85994b8e8833cd79f2c8fc8f8cc31b87ab22276a3f039e2e934a5e52e75a",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0002.png",
+        "sha256": "84c1b2db198943d1d5a7b7466210c01c298e43c0ecbb3725cbe8c60aa0bbcb0b",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0003.png",
+        "sha256": "ccd9a955ca6c378fe3f481d7577b2c3cbe2205c5495f4b52e3b494a473ae025d",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0004.png",
+        "sha256": "1ddf854b10f9f0f46c6b8b7c16532340c9e83557592895719e6b3adc57898c1b",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0005.png",
+        "sha256": "d996a535dd54a2f0e0ed18a5fe748f49daa35af28200c52a3cfd775daf617839",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0006.png",
+        "sha256": "687b369243840aa531deabe0d80b7ead74782ab2af6f513be75ea36da27bd2e1",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0007.png",
+        "sha256": "6b7fc568660e5bd4712ac3fc1cc8c1bd93e3973390f6b93b7eb840815edcdc65",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0008.png",
+        "sha256": "f3998d2a955864f0f95d251ffec0cb1875f5effe4551a701dfa231b938d0834a",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0009.png",
+        "sha256": "f60fa72ae6f2d61d4cdcf930fe8fefbf618e8fb4f4cec38714f12b02355496e8",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0010.png",
+        "sha256": "7ea72d89d2d37d2494c81ba63eca3c2b3d039e2e65577f946c3be2542811bf5f",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0011.png",
+        "sha256": "1ae3ba8ba7c67bfa602a44516ca3c969c3c2f138c4ff6fcbf8c2852aa8569162",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0012.png",
+        "sha256": "aa19a9f0b16442cfc5c615943aaf55af2a9cd1b1735ef45980b2ef216e58d5cf",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0013.png",
+        "sha256": "917abd1b832a29a24e38e0567b4bc91c629e1793c608101f0599c743ba65a65b",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0014.png",
+        "sha256": "e04718f1daf931e62845bedae52b7a6b6b4fd73bb0b8fc15fc8cfdba46df982c",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0015.png",
+        "sha256": "c206e2d2b2063b924f41714d4d5921736c95a26fb7fcc599c2718aab5dfc6af0",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0016.png",
+        "sha256": "96fc115359965683bbe12c941b00cd0eb9882876b0fd6ddf9b055b8acee0759f",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0017.png",
+        "sha256": "ce98a49c5ac5f11bf0d104b56a366a60cfcec8b2d7431d04462af19ec0f2c658",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0018.png",
+        "sha256": "5d7656a041d1f57aae3c5155e635831f43d8e6271d4fdea5b2b0c1cbdfce513f",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0019.png",
+        "sha256": "735bde3a6a6796961514125110513a52f0504cf3d1111b7f6e04c08765765a6b",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0020.png",
+        "sha256": "3a0e4683761b2b94994cf146bd987d3228a492711d8610c148e6c8f09f64a9e1",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0021.png",
+        "sha256": "e389cc626581643d3737ee553cae0558662d99c6c0ba04424773b4c84f0fec17",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0022.png",
+        "sha256": "122cdba6d8e1046b667dbc92ce96c20941b8075b7e95177c4ca2ffe8d00313e0",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0023.png",
+        "sha256": "1bfb3b2b071b20bfb1eeb0520b17d376b839b5a00b4bae2a6a353f5db52301c6",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0024.png",
+        "sha256": "4fa6623eeb972e46e3a42b53547ee65610a2613035be0458723912389f6bb4cd",
+        "detector": "findChessboardCornersSB"
+      },
+      {
+        "image": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/images/frame_0025.png",
+        "sha256": "fb958e366b8cfd5022bd5dc01647d99d9b34ed085d76a3107537bf8b0deef10f",
+        "detector": "findChessboardCornersSB"
+      }
+    ],
+    "corners_source": "re-detected from saved raw image pixels; saved manifest corners not used",
+    "capture_manifest": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/front_camera_001/session.json",
+    "source_topic": "/camera/front/image_raw",
+    "frame_id": "camera_front_optical_frame"
+  },
+  "candidate_yaml": null,
+  "requested_candidate_yaml": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/front_camera_640x480.candidate.yaml",
+  "report_json": "/home/agxthor/SingleCameraBev/camera_lidar_bev/evaluation/front_camera_001_fit.json"
+}

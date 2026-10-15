@@ -1,0 +1,57 @@
+image_width: 1024
+image_height: 768
+camera_name: front_camera
+distortion_model: plumb_bob
+camera_matrix:
+  rows: 3
+  cols: 3
+  data:
+  - 1411.1610848577463
+  - 0.0
+  - 548.0799104532791
+  - 0.0
+  - 1401.833643127103
+  - 378.1495280199014
+  - 0.0
+  - 0.0
+  - 1.0
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data:
+  - -0.4430230293674048
+  - 0.7644587241471862
+  - 0.003543153617926078
+  - -0.00020622865673565534
+  - -1.7672146488596931
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data:
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+projection_matrix:
+  rows: 3
+  cols: 4
+  data:
+  - 1411.1610848577463
+  - 0.0
+  - 548.0799104532791
+  - 0.0
+  - 0.0
+  - 1401.833643127103
+  - 378.1495280199014
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0
+calibrated: false
+calibration_status: external_candidate_unvalidated

@@ -1,0 +1,19 @@
+{
+  "safety_mode": "operator_managed_external",
+  "external_safety_report": "User states the hardware checks were tested and the whole safety check is handled outside this bridge (2026-10-14). This bridge has not independently verified the external system.",
+  "device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0",
+  "protocol": "steer_deg speed_mph pedal mode",
+  "baud": 115200,
+  "steer_sign": -1,
+  "steer_ratio": 17.0,
+  "max_steering_wheel_deg": 300.0,
+  "max_steering_wheel_rate_deg_s": 80.0,
+  "firmware_heartbeat_timeout_s": null,
+  "protocol_verified": false,
+  "steering_calibration_verified": false,
+  "speed_feedback_verified": false,
+  "zero_speed_braking_verified": false,
+  "timeout_braking_verified": false,
+  "hardware_estop_verified": false,
+  "verification_notes": "Mapping copied from the supplied bridge and operator-reported prior tests; host angle/rate values are conservative software caps, not measured vehicle limits. CP2102 adapter observed at 115200 baud reporting ADAPTER STALE steer=+0.0 mph=+0.00. Firmware source not located and timeout/braking semantics not independently verified. External safety remains the operator's responsibility. No automatic engagement."
+}

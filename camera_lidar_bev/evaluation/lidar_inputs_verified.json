@@ -1,0 +1,352 @@
+{
+  "clock_caveat": "Header ages assume a common epoch and synchronized clock; receipt time is not exposure/scan time.",
+  "clock_end": {
+    "ros_time_ns": 1791309549392256566,
+    "system_time_ns": 1791309549392250566
+  },
+  "clock_start": {
+    "ros_time_ns": 1791309542307519308,
+    "system_time_ns": 1791309542307508716
+  },
+  "discovered_sensor_topics": {
+    "/camera/front/camera_info": [
+      "sensor_msgs/msg/CameraInfo"
+    ],
+    "/camera/front/image_raw": [
+      "sensor_msgs/msg/Image"
+    ],
+    "/imu": [
+      "sensor_msgs/msg/Imu"
+    ],
+    "/points": [
+      "sensor_msgs/msg/PointCloud2"
+    ]
+  },
+  "discovery_duration_s": 2.0,
+  "environment": {
+    "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp",
+    "ROS_AUTOMATIC_DISCOVERY_RANGE": "SUBNET",
+    "ROS_DOMAIN_ID": "1",
+    "ROS_LOCALHOST_ONLY": null
+  },
+  "expected_topics": {
+    "/camera/front/camera_info": {
+      "expected_type": "sensor_msgs/msg/CameraInfo",
+      "status": "observed"
+    },
+    "/camera/front/image_raw": {
+      "expected_type": "sensor_msgs/msg/Image",
+      "status": "observed"
+    },
+    "/imu": {
+      "expected_type": "sensor_msgs/msg/Imu",
+      "status": "observed"
+    },
+    "/lio_sam/mapping/odometry": {
+      "expected_type": "nav_msgs/msg/Odometry",
+      "reason": "topic_not_discovered_with_supported_sensor_type",
+      "status": "missing"
+    },
+    "/points": {
+      "expected_type": "sensor_msgs/msg/PointCloud2",
+      "status": "observed"
+    },
+    "/sensing/imu/imu_data": {
+      "expected_type": "sensor_msgs/msg/Imu",
+      "reason": "topic_not_discovered_with_supported_sensor_type",
+      "status": "missing"
+    }
+  },
+  "finished_utc": "2026-10-06T17:59:09.392+00:00",
+  "motion_caveat": "Ouster IMU or other raw IMU is not equivalent to an odometry trajectory.",
+  "observation_duration_s": 5.084072,
+  "observed_topics": [
+    "/camera/front/camera_info",
+    "/camera/front/image_raw",
+    "/imu",
+    "/points"
+  ],
+  "point_cloud_reliability_requested": "auto",
+  "ros_domain_id": 1,
+  "schema_version": 1,
+  "stale_after_s": 2.0,
+  "started_utc": "2026-10-06T17:59:02.307+00:00",
+  "topics": {
+    "/camera/front/camera_info": {
+      "count": 150,
+      "frames": [
+        "camera_front_optical_frame"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "camera_front_optical_frame",
+      "last_header_age_at_end_s_assuming_common_clock": 0.027069,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.002968,
+      "last_header_time_ns": 1791309549365187249,
+      "latest_message": {
+        "distortion_model": "",
+        "height": 480,
+        "intrinsics_present": false,
+        "intrinsics_validation": "K[0] presence only; calibration accuracy unverified",
+        "width": 640
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.009866413,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.002205401,
+      "publishers_at_subscription": [
+        {
+          "node_name": "front_camera_bridge",
+          "node_namespace": "/camera_lidar_bev",
+          "qos": {
+            "depth": 1,
+            "durability": "VOLATILE",
+            "history": "KEEP_LAST",
+            "reliability": "BEST_EFFORT"
+          },
+          "topic_type": "sensor_msgs/msg/CameraInfo"
+        }
+      ],
+      "receipt_rate_hz": 30.019,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.0241,
+      "status": "observed",
+      "subscription_qos": {
+        "depth": 5,
+        "durability": "VOLATILE",
+        "history": "KEEP_LAST",
+        "reliability": "BEST_EFFORT"
+      },
+      "types": [
+        "sensor_msgs/msg/CameraInfo"
+      ]
+    },
+    "/camera/front/image_raw": {
+      "count": 150,
+      "frames": [
+        "camera_front_optical_frame"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "camera_front_optical_frame",
+      "last_header_age_at_end_s_assuming_common_clock": 0.027069,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.002413,
+      "last_header_time_ns": 1791309549365187249,
+      "latest_message": {
+        "encoding": "bgr8",
+        "height": 480,
+        "payload_bytes": 921600,
+        "step": 1920,
+        "width": 640
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.010298006,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.002161716,
+      "publishers_at_subscription": [
+        {
+          "node_name": "front_camera_bridge",
+          "node_namespace": "/camera_lidar_bev",
+          "qos": {
+            "depth": 1,
+            "durability": "VOLATILE",
+            "history": "KEEP_LAST",
+            "reliability": "BEST_EFFORT"
+          },
+          "topic_type": "sensor_msgs/msg/Image"
+        }
+      ],
+      "receipt_rate_hz": 30.015,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.02466,
+      "status": "observed",
+      "subscription_qos": {
+        "depth": 5,
+        "durability": "VOLATILE",
+        "history": "KEEP_LAST",
+        "reliability": "BEST_EFFORT"
+      },
+      "types": [
+        "sensor_msgs/msg/Image"
+      ]
+    },
+    "/imu": {
+      "count": 500,
+      "frames": [
+        "os_imu"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "os_imu",
+      "last_header_age_at_end_s_assuming_common_clock": 0.008945,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.000337,
+      "last_header_time_ns": 1791309549383311192,
+      "latest_message": {
+        "angular_velocity_marked_available": true,
+        "linear_acceleration_marked_available": true,
+        "orientation_marked_available": false,
+        "trajectory_note": "IMU measurements alone are not an odometry trajectory for deskewing"
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.018025164,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.000186537,
+      "publishers_at_subscription": [
+        {
+          "node_name": "os_driver",
+          "node_namespace": "/",
+          "qos": {
+            "depth": 1,
+            "durability": "VOLATILE",
+            "history": "KEEP_LAST",
+            "reliability": "RELIABLE"
+          },
+          "topic_type": "sensor_msgs/msg/Imu"
+        }
+      ],
+      "receipt_rate_hz": 100.023,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.008608,
+      "status": "observed",
+      "subscription_qos": {
+        "depth": 5,
+        "durability": "VOLATILE",
+        "history": "KEEP_LAST",
+        "reliability": "BEST_EFFORT"
+      },
+      "types": [
+        "sensor_msgs/msg/Imu"
+      ]
+    },
+    "/points": {
+      "count": 50,
+      "frames": [
+        "os_lidar"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "os_lidar",
+      "last_header_age_at_end_s_assuming_common_clock": 0.296291,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.22667,
+      "last_header_time_ns": 1791309549095965450,
+      "latest_message": {
+        "fields": [
+          {
+            "count": 1,
+            "datatype": 7,
+            "name": "x",
+            "offset": 0
+          },
+          {
+            "count": 1,
+            "datatype": 7,
+            "name": "y",
+            "offset": 4
+          },
+          {
+            "count": 1,
+            "datatype": 7,
+            "name": "z",
+            "offset": 8
+          },
+          {
+            "count": 1,
+            "datatype": 7,
+            "name": "intensity",
+            "offset": 16
+          },
+          {
+            "count": 1,
+            "datatype": 6,
+            "name": "t",
+            "offset": 20
+          },
+          {
+            "count": 1,
+            "datatype": 4,
+            "name": "reflectivity",
+            "offset": 24
+          },
+          {
+            "count": 1,
+            "datatype": 4,
+            "name": "ring",
+            "offset": 26
+          },
+          {
+            "count": 1,
+            "datatype": 4,
+            "name": "ambient",
+            "offset": 28
+          },
+          {
+            "count": 1,
+            "datatype": 6,
+            "name": "range",
+            "offset": 32
+          }
+        ],
+        "height": 128,
+        "is_bigendian": false,
+        "layout_errors": [],
+        "layout_valid": true,
+        "payload_bytes": 12582912,
+        "point_count": 262144,
+        "point_step": 48,
+        "point_time": {
+          "candidate_fields": [
+            {
+              "count": 1,
+              "datatype": 6,
+              "name": "t",
+              "offset": 20
+            }
+          ],
+          "deskew_ready": false,
+          "expected_ouster_original_t_datatype": "UINT32 (6)",
+          "field_present": true,
+          "sample_count": 4096,
+          "sample_limit": 4096,
+          "sample_max_raw": 99841184,
+          "sample_min_raw": 0,
+          "sample_span_raw": 99841184,
+          "sample_zero_count": 2,
+          "sampling": "evenly spaced point indices; first/last included when sample count permits",
+          "t_present": true,
+          "t_uint32_layout_valid": true,
+          "units_and_reference": "unverified; confirm nanoseconds and relative reference from driver profile"
+        },
+        "row_step": 98304,
+        "width": 2048
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.239275992,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.222881844,
+      "point_cloud_reliability_requested": "auto",
+      "publishers_at_subscription": [
+        {
+          "node_name": "os_driver",
+          "node_namespace": "/",
+          "qos": {
+            "depth": 1,
+            "durability": "VOLATILE",
+            "history": "KEEP_LAST",
+            "reliability": "RELIABLE"
+          },
+          "topic_type": "sensor_msgs/msg/PointCloud2"
+        }
+      ],
+      "receipt_rate_hz": 10.026,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.069633,
+      "status": "observed",
+      "subscription_qos": {
+        "depth": 1,
+        "durability": "VOLATILE",
+        "history": "KEEP_LAST",
+        "reliability": "RELIABLE"
+      },
+      "types": [
+        "sensor_msgs/msg/PointCloud2"
+      ]
+    }
+  },
+  "use_sim_time": false
+}

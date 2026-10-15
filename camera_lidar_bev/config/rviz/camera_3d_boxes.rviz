@@ -1,0 +1,86 @@
+# Camera-only learned 3D predictions in a flat camera-relative BEV, with labeled image.
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+  Help Height: 78
+  Property Tree Widget:
+    Expanded:
+    - /Global Options1
+    - /Camera-only 3D footprints and dimensions1
+    - /Front Camera1
+    Splitter Ratio: 0.5
+  Tree Height: 500
+- Class: rviz_common/Views
+  Name: Views
+  Expanded:
+  - /Current View1
+  Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Class: rviz_default_plugins/Image
+    Enabled: true
+    Max Value: 1
+    Median window: 5
+    Min Value: 0
+    Name: Front Camera
+    Normalize Range: false
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /camera_lidar_bev/camera_3d_labeled
+    Value: true
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Camera-only 3D footprints and dimensions
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/camera_3d_markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  Enabled: true
+  Global Options:
+    Background Color: 0; 0; 0
+    Fixed Frame: camera_front_bev
+    Frame Rate: 30
+  Name: root
+  Tools:
+  - Class: rviz_default_plugins/Interact
+    Hide Inactive Objects: true
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/FocusCamera
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Angle: -1.5707963267948966
+      Scale: 14.0
+      X: 30.0
+      Y: 0.0
+      Name: 'Camera-only 3D footprints: approximately 0–60 m ahead'
+      Near Clip Distance: 0.01
+      Target Frame: <Fixed Frame>
+      Value: TopDownOrtho (rviz)
+    Saved: null
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 950
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Views:
+    collapsed: false
+  Width: 1440
+  X: 40
+  Y: 40
+  Front Camera:
+    collapsed: false

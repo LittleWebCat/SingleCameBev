@@ -1,0 +1,23 @@
+{
+  "lidar_camera_check_001": {
+    "point_cloud_count": 67,
+    "header_gap_median_s": 0.100074959,
+    "header_gap_max_s": 0.200299168,
+    "header_gaps_above_0_15s": 27,
+    "header_regressions": 0
+  },
+  "lidar_camera_check_002": {
+    "point_cloud_count": 32,
+    "header_gap_median_s": 0.100068451,
+    "header_gap_max_s": 0.200226735,
+    "header_gaps_above_0_15s": 12,
+    "header_regressions": 0
+  },
+  "lidar_camera_check_003": {
+    "point_cloud_count": 46,
+    "header_gap_median_s": 0.099989811,
+    "header_gap_max_s": 0.100562525,
+    "header_gaps_above_0_15s": 0,
+    "header_regressions": 0
+  }
+}

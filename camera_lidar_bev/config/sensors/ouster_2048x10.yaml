@@ -1,0 +1,15 @@
+# Dense 10 Hz recording profile; tools/collect_camera_lidar.py selects this
+# with --lidar-mode 2048x10. The default live profile remains ouster_baseline.yaml.
+# Original points preserve t (relative ns); ROS stamps do not establish sync.
+os_driver:
+  ros__parameters:
+    auto_start: false
+    sensor_hostname: "169.254.213.23"
+    lidar_mode: "2048x10"
+    use_system_default_qos: true
+    proc_mask: "PCL|IMU"
+    timestamp_mode: "TIME_FROM_ROS_TIME"
+    point_type: "original"
+    sensor_frame: "os_sensor"
+    lidar_frame: "os_lidar"
+    imu_frame: "os_imu"

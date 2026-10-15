@@ -1,0 +1,33 @@
+{
+  "created_at_utc": "2026-10-08T17:50:35.348861+00:00",
+  "passed": false,
+  "domain_id": 75,
+  "software_only": true,
+  "physical_accuracy_validated": false,
+  "learned_detector_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "calibration_status": "external_candidate_unvalidated",
+  "stages": [
+    {
+      "name": "positive",
+      "passed": true,
+      "cloud_stamp_ns": 1791481835608384697,
+      "semantic_points": 205,
+      "observed_center_m": [
+        6.150000095367432,
+        0.0,
+        -0.7999999895691872
+      ],
+      "observed_size_m": [
+        0.3000001907348633,
+        0.4000000059604645,
+        1.1999999731779099
+      ]
+    }
+  ],
+  "synthetic_points": 225,
+  "input_source_indices_nonsequential": true,
+  "error": "AssertionError: Cached alignment should choose near-zero delta",
+  "child_returncode": 0,
+  "node_log_tail": "[WARN] [1791481835.531686122] [camera_object_bev]: Camera labels + observed LiDAR extents use provisional B calibration. No complete 3D box, heading, tracking or TF is inferred.\n[INFO] [1791481836.533672844] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

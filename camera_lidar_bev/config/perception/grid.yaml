@@ -1,0 +1,16 @@
+# Design contract for bev_core; not a ROS parameter file yet.
+frame_id: base_link
+axes: {x: forward, y: left, z: up}
+x_min_m: 0.0
+x_max_m: 40.0
+y_min_m: -15.0
+y_max_m: 15.0
+resolution_m: 0.20
+forward_cells: 200
+lateral_cells: 150
+index_order: forward_then_lateral
+index_formula: "forward_index * lateral_cells + lateral_index"
+boundary_policy: half_open
+initial_occupancy: unknown
+target_publication_hz: 20.0
+# A 10 Hz LiDAR provides 10 complete scans/s. Publication rate is separate.

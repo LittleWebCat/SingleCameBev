@@ -1,0 +1,189 @@
+{
+  "counts": {
+    "image": 7,
+    "info": 7,
+    "cloud": 3
+  },
+  "calibration_status": "camera_candidate_applied_extrinsics_unmeasured",
+  "image": {
+    "header": {
+      "frame_id": "camera_front_optical_frame",
+      "stamp_sec": 1791403833,
+      "stamp_nanosec": 415102081
+    },
+    "width": 640,
+    "height": 480,
+    "encoding": "bgr8"
+  },
+  "info": {
+    "header": {
+      "frame_id": "camera_front_optical_frame",
+      "stamp_sec": 1791403833,
+      "stamp_nanosec": 415102081
+    },
+    "width": 640,
+    "height": 480,
+    "k": [
+      904.886360419207,
+      0.0,
+      348.9028141306046,
+      0.0,
+      894.1895195899784,
+      239.2980665473161,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "d": [
+      -0.4079651180025769,
+      0.8080521177596051,
+      0.004596374114669609,
+      0.0009649587157795288,
+      -2.5422425595588662
+    ]
+  },
+  "cloud": {
+    "header": {
+      "frame_id": "os_lidar",
+      "stamp_sec": 1791403833,
+      "stamp_nanosec": 211978565
+    },
+    "width": 1024,
+    "height": 128,
+    "point_step": 48,
+    "row_step": 49152,
+    "is_bigendian": false,
+    "is_dense": false,
+    "fields": [
+      {
+        "name": "x",
+        "offset": 0,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "y",
+        "offset": 4,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "z",
+        "offset": 8,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "intensity",
+        "offset": 16,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "t",
+        "offset": 20,
+        "datatype": 6,
+        "count": 1
+      },
+      {
+        "name": "reflectivity",
+        "offset": 24,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "ring",
+        "offset": 26,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "ambient",
+        "offset": 28,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "range",
+        "offset": 32,
+        "datatype": 6,
+        "count": 1
+      }
+    ],
+    "payload_bytes": 6291456,
+    "finite_nonzero_points": 129655,
+    "range_min_max_m": [
+      0.6078886985778809,
+      89.07488250732422
+    ]
+  },
+  "elapsed_s": 0.2561669789993175,
+  "stream_presence_passed": true,
+  "lidar_metadata_sensor_info": {
+    "build_date": "2024-04-26T02:34:31Z",
+    "build_rev": "v3.1.0",
+    "image_rev": "ousteros-image-prod-bootes-v3.1.0+20240426041747",
+    "initialization_id": 390073,
+    "prod_line": "OS-1-128",
+    "prod_pn": "OS1-071-128U-AX",
+    "prod_sn": "122610007682",
+    "status": "RUNNING"
+  },
+  "lidar_active_config": {
+    "accel_fsr": "NORMAL",
+    "azimuth_window": [
+      0,
+      360000
+    ],
+    "columns_per_packet": 16,
+    "gyro_fsr": "NORMAL",
+    "lidar_mode": "1024x10",
+    "min_range_threshold_cm": 50,
+    "multipurpose_io_mode": "OFF",
+    "nmea_baud_rate": "BAUD_9600",
+    "nmea_ignore_valid_char": 0,
+    "nmea_in_polarity": "ACTIVE_HIGH",
+    "nmea_leap_seconds": 0,
+    "operating_mode": "NORMAL",
+    "phase_lock_enable": false,
+    "phase_lock_offset": 0,
+    "return_order": "STRONGEST_TO_WEAKEST",
+    "signal_multiplier": 1,
+    "sync_pulse_in_polarity": "ACTIVE_HIGH",
+    "sync_pulse_out_angle": 360,
+    "sync_pulse_out_frequency": 1,
+    "sync_pulse_out_polarity": "ACTIVE_HIGH",
+    "sync_pulse_out_pulse_width": 10,
+    "timestamp_mode": "TIME_FROM_INTERNAL_OSC",
+    "udp_dest": "169.254.1.100",
+    "udp_port_imu": 7503,
+    "udp_port_lidar": 7502,
+    "udp_profile_imu": "LEGACY",
+    "udp_profile_lidar": "RNG19_RFL8_SIG16_NIR16"
+  },
+  "requested_driver_scan_mode": "2048x10",
+  "active_scan_mode": "1024x10",
+  "scan_mode_note": "Current sensor metadata and 1024-column clouds disagree with the requested driver parameter. Current active mode is recorded; calibration capture accepts the actual cloud layout.",
+  "scan_rate_observation": {
+    "count": 20,
+    "header_rate_hz": 9.99953938963822,
+    "minimum_header_interval_s": 0.099979369,
+    "maximum_header_interval_s": 0.100039627
+  },
+  "driver_recovery": {
+    "initial_lifecycle_state": "unconfigured",
+    "final_lifecycle_state": "active",
+    "transitions": [
+      "configure",
+      "activate"
+    ],
+    "network_sensor_reachable": true
+  },
+  "extrinsic_transform_estimated": false,
+  "capture_stage": "first stationary common-visibility pair; subsequent varied poses are needed",
+  "physical_setup_user_confirmation": {
+    "camera_and_lidar_fixed_in_operating_positions": true,
+    "checkerboard_flat_on_rigid_backing": true,
+    "source": "conversation answers before capture"
+  }
+}

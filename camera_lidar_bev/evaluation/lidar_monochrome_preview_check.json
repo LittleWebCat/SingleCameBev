@@ -1,0 +1,166 @@
+{
+  "counts": {
+    "image": 9,
+    "info": 9,
+    "cloud": 3
+  },
+  "calibration_status": "camera_candidate_applied_extrinsics_unmeasured",
+  "image": {
+    "header": {
+      "frame_id": "camera_front_optical_frame",
+      "stamp_sec": 1791405407,
+      "stamp_nanosec": 915878984
+    },
+    "width": 640,
+    "height": 480,
+    "encoding": "bgr8"
+  },
+  "info": {
+    "header": {
+      "frame_id": "camera_front_optical_frame",
+      "stamp_sec": 1791405407,
+      "stamp_nanosec": 915878984
+    },
+    "width": 640,
+    "height": 480,
+    "k": [
+      904.886360419207,
+      0.0,
+      348.9028141306046,
+      0.0,
+      894.1895195899784,
+      239.2980665473161,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "d": [
+      -0.4079651180025769,
+      0.8080521177596051,
+      0.004596374114669609,
+      0.0009649587157795288,
+      -2.5422425595588662
+    ]
+  },
+  "cloud": {
+    "header": {
+      "frame_id": "os_lidar",
+      "stamp_sec": 1791405407,
+      "stamp_nanosec": 714270318
+    },
+    "width": 1024,
+    "height": 128,
+    "point_step": 48,
+    "row_step": 49152,
+    "is_bigendian": false,
+    "is_dense": false,
+    "fields": [
+      {
+        "name": "x",
+        "offset": 0,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "y",
+        "offset": 4,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "z",
+        "offset": 8,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "intensity",
+        "offset": 16,
+        "datatype": 7,
+        "count": 1
+      },
+      {
+        "name": "t",
+        "offset": 20,
+        "datatype": 6,
+        "count": 1
+      },
+      {
+        "name": "reflectivity",
+        "offset": 24,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "ring",
+        "offset": 26,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "ambient",
+        "offset": 28,
+        "datatype": 4,
+        "count": 1
+      },
+      {
+        "name": "range",
+        "offset": 32,
+        "datatype": 6,
+        "count": 1
+      }
+    ],
+    "payload_bytes": 6291456,
+    "finite_nonzero_points": 130441,
+    "range_min_max_m": [
+      0.7029455900192261,
+      53.793949127197266
+    ]
+  },
+  "elapsed_s": 0.32499137700142455,
+  "stream_presence_passed": true,
+  "display_update": {
+    "lidar_points": "white",
+    "background": "black",
+    "elevation_extent": "all valid returns with padding",
+    "new_session": "camera_lidar_visibility_002",
+    "source_data_modified": false
+  },
+  "preview_tests_passed": 16,
+  "live_capture_window_reopened": true,
+  "display_vertical_extent_observed_deg": [
+    -24.85,
+    24.51
+  ],
+  "validation_scope": "Current full cloud reception, tested original-point index selection, black/white rendering, and running GUI; board plane has not been identified or captured.",
+  "capture_windows_closed_with_zero_pairs": [
+    "camera_lidar_visibility_001",
+    "camera_lidar_visibility_002"
+  ],
+  "current_viewer": {
+    "application": "RViz 2",
+    "point_style": "Points",
+    "point_size_pixels": 1,
+    "color_transformer": "FlatColor",
+    "point_color": "white",
+    "background": "black",
+    "fixed_frame": "os_lidar",
+    "cloud_topic": "/points",
+    "camera_display": "Image /camera/front/image_raw",
+    "rviz_global_and_cloud_status_observed": "OK"
+  },
+  "point_cloud_audit": {
+    "total_points": 131072,
+    "finite_points": 130445,
+    "rings_present": 128,
+    "horizontal_coverage_deg": 360,
+    "elevation_min_max_deg": [
+      -21.448965729774883,
+      21.105489485488835
+    ],
+    "raw_range_xyz_maximum_difference_m": 0.00121,
+    "scope": "No obvious layout, unit, missing-ring, or reception fault; this does not independently qualify sensor accuracy."
+  },
+  "board_status": "Board not identified in LiDAR; independent camera image appears to place the board against a door/wall. Physical common visibility and separation need checking.",
+  "camera_lidar_transform_estimated": false
+}

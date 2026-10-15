@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T15:59:58.540299+00:00",
+  "requested_lidar_mode": "1024x20",
+  "requested_color_publication_cap_hz": 20.0,
+  "purpose": "Bounded live throughput and field check, not sustained performance or calibration qualification.",
+  "calibration_status": "external_candidate_unvalidated",
+  "errors": [],
+  "first_cloud": {
+    "valid_point_count": 130052,
+    "colored_point_count": 9111,
+    "frame_id": "os_sensor",
+    "source_indices_in_new_scan_bounds": true,
+    "white_fallback_verified": true
+  },
+  "colored_cloud_messages": 99,
+  "color_header_rate_hz": 19.999689592572814,
+  "color_receipt_rate_hz": 20.009760957360328,
+  "maximum_color_header_gap_s": 0.050337459,
+  "colorizer_input_receive_rate_hz": 20.000141481000835,
+  "colorizer_publish_rate_hz": 20.000141481000835,
+  "last_diagnostic": {
+    "header_ns": 1791475202904021074,
+    "message": "Camera RGB preview active; B geometry and sensor synchronization are provisional",
+    "values": {
+      "calibration_status": "external_candidate_unvalidated",
+      "source_frame_selection": "user_visual_B_os_sensor",
+      "accuracy_validated": "false",
+      "synchronization_validated": "false",
+      "tf_published": "false",
+      "output_frame": "os_sensor",
+      "driver_tf_observed": "true",
+      "publishing_fresh_cloud": "true",
+      "published_clouds": "1657",
+      "received_clouds": "1659",
+      "publication_cap_hz": "20.000000",
+      "stale_outputs_cleared": "0",
+      "input_points": "131072",
+      "valid_points": "130073",
+      "colored_points": "9113",
+      "radial_domain_excluded_points": "43981",
+      "header_delta_s": "0.006038",
+      "image_header_ns": "1791475202692521862",
+      "cloud_header_ns": "1791475202698560300",
+      "last_output_receipt_age_s": "0.009721"
+    }
+  },
+  "checks_passed": true
+}

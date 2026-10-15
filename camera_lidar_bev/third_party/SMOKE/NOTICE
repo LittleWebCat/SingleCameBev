@@ -1,0 +1,5 @@
+SMOKE: Single-Stage Monocular 3D Object Detection via Keypoint Estimation
+Copyright (c) 2020 lzccccc. MIT license.
+Source: https://github.com/lzccccc/SMOKE
+Pinned commit: bc5d2bba66e2d66fa56b7b599d55457cb1a05b33
+The DLA backbone and predictor in ../../tools/smoke_model.py are adapted from this source.

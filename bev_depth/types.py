@@ -18,3 +18,4 @@ class ProjectedDetection:
     z_m_forward: float | None
     bev_xy: tuple[int, int] | None
     depth_source: str
+    camera_name: str | None = None
