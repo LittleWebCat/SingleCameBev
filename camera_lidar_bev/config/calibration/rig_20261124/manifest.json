@@ -1,0 +1,128 @@
+{
+  "source_files": {
+    "all_cameras_intrinsics.json": "6e24ff52abce5ca5ab8f5be6c2b07e8df90d39096c7b137dfb1a56c0d86ae360",
+    "all_cameras_extrinsics.json": "054bbe927d8961293e57d642c1bc30af818e769ea4723fb21453c0e3858472d2"
+  },
+  "lidar_frame_interpretation": "os_sensor (x forward, y left, z up); extrinsics file: Ouster sensor frame as stored in cloud.pcd (x forward, y left, z up), metres",
+  "cameras": {
+    "front_wide": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.1:1.0-video-index0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "frame": "camera_front_wide_optical_frame",
+      "intrinsics": "front_wide_1920x1080.yaml",
+      "extrinsics": "front_wide_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.3963,
+        0.0492,
+        -0.1391
+      ],
+      "optical_axis_yaw_deg": 0.3,
+      "hfov_deg": 116.84
+    },
+    "front_narrow": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.3.2:1.0-video-index0",
+      "resolution": [
+        1024,
+        768
+      ],
+      "frame": "camera_front_narrow_optical_frame",
+      "intrinsics": "front_narrow_1024x768.yaml",
+      "extrinsics": "front_narrow_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.5673,
+        0.0751,
+        -0.2137
+      ],
+      "optical_axis_yaw_deg": -0.8,
+      "hfov_deg": 41.39
+    },
+    "front_left": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.4:1.0-video-index0",
+      "resolution": [
+        1600,
+        1200
+      ],
+      "frame": "camera_front_left_optical_frame",
+      "intrinsics": "front_left_1600x1200.yaml",
+      "extrinsics": "front_left_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.4023,
+        0.5744,
+        -0.2103
+      ],
+      "optical_axis_yaw_deg": 55.7,
+      "hfov_deg": 73.65
+    },
+    "front_right": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.3:1.0-video-index0",
+      "resolution": [
+        1600,
+        1200
+      ],
+      "frame": "camera_front_right_optical_frame",
+      "intrinsics": "front_right_1600x1200.yaml",
+      "extrinsics": "front_right_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.3989,
+        -0.5818,
+        -0.1751
+      ],
+      "optical_axis_yaw_deg": -53.8,
+      "hfov_deg": 73.28
+    },
+    "back_left": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.3.4:1.0-video-index0",
+      "resolution": [
+        1600,
+        1200
+      ],
+      "frame": "camera_back_left_optical_frame",
+      "intrinsics": "back_left_1600x1200.yaml",
+      "extrinsics": "back_left_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.3533,
+        0.6773,
+        -0.1387
+      ],
+      "optical_axis_yaw_deg": 125.4,
+      "hfov_deg": 75.24
+    },
+    "back_right": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.4:1.0-video-index0",
+      "resolution": [
+        1600,
+        1200
+      ],
+      "frame": "camera_back_right_optical_frame",
+      "intrinsics": "back_right_1600x1200.yaml",
+      "extrinsics": "back_right_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        0.3838,
+        -0.6186,
+        -0.1557
+      ],
+      "optical_axis_yaw_deg": -123.4,
+      "hfov_deg": 73.64
+    },
+    "back": {
+      "device_by_path": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "frame": "camera_back_optical_frame",
+      "intrinsics": "back_1920x1080.yaml",
+      "extrinsics": "back_T_os_sensor.yaml",
+      "position_in_os_sensor_m": [
+        -1.2671,
+        -0.0122,
+        -0.2433
+      ],
+      "optical_axis_yaw_deg": -177.6,
+      "hfov_deg": 117.61
+    }
+  }
+}

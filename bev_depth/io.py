@@ -98,6 +98,7 @@ def write_jsonl_record(
     monotonic_ns: int | None = None,
     sensor_session_id: str | None = None,
     sensor_elapsed_ns: int | None = None,
+    tracks: list[dict] | None = None,
 ) -> None:
     record = {
         "frame_id": frame_id,
@@ -117,10 +118,15 @@ def write_jsonl_record(
                 "bev_xy": list(item.bev_xy) if item.bev_xy is not None else None,
                 "depth_source": item.depth_source,
                 "camera_name": item.camera_name,
+                "camera_track_id": item.camera_track_id,
+                "track_id": item.track_id,
             }
             for item in detections
         ],
     }
+    if tracks is not None:
+        # Confirmed tracks with their filtered state (--track-objects).
+        record["tracks"] = tracks
     handle.write(json.dumps(record, separators=(",", ":")) + "\n")
 
 

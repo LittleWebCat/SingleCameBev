@@ -23,15 +23,20 @@ target_include_directories(pointpillars_core PRIVATE
 target_link_libraries(pointpillars_core PRIVATE CUDA::cudart "${TENSORRT_LIBRARY}")
 target_compile_options(pointpillars_core PRIVATE
   $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>)
-add_library(bev_lidar_detector SHARED src/detector.cpp)
+add_library(bev_lidar_detector SHARED src/detector.cpp src/centerpoint_detector.cpp src/centerpoint_vfe.cu
+  src/sweep_accumulator.cpp)
 target_include_directories(bev_lidar_detector PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_include_directories(bev_lidar_detector PRIVATE
-  "${POINTPILLARS_ROOT}/src" "${POINTPILLARS_ROOT}/src/pointpillar")
-target_link_libraries(bev_lidar_detector PRIVATE pointpillars_core CUDA::cudart)
+  "${POINTPILLARS_ROOT}/src" "${POINTPILLARS_ROOT}/src/pointpillar" "${TENSORRT_INCLUDE_DIR}")
+target_link_libraries(bev_lidar_detector PRIVATE pointpillars_core CUDA::cudart "${TENSORRT_LIBRARY}")
 add_executable(pointpillars_benchmark src/pointpillars_benchmark.cpp)
 target_link_libraries(pointpillars_benchmark PRIVATE bev_lidar_detector)
+add_executable(centerpoint_benchmark src/centerpoint_benchmark.cpp)
+target_link_libraries(centerpoint_benchmark PRIVATE bev_lidar_detector)
+add_executable(centerpoint_sweep_eval src/centerpoint_sweep_eval.cpp)
+target_link_libraries(centerpoint_sweep_eval PRIVATE bev_lidar_detector)
 
 if(NOT BEV_LIDAR_STANDALONE)
   find_package(ament_cmake REQUIRED)
@@ -42,13 +47,14 @@ if(NOT BEV_LIDAR_STANDALONE)
   find_package(diagnostic_msgs REQUIRED)
   find_package(geometry_msgs REQUIRED)
   find_package(tf2_msgs REQUIRED)
+  find_package(nav_msgs REQUIRED)
   add_executable(lidar_vehicle_detector src/lidar_vehicle_detector.cpp)
   target_compile_options(lidar_vehicle_detector PRIVATE -Wall -Wextra -Wpedantic)
   target_link_libraries(lidar_vehicle_detector PRIVATE bev_lidar_detector)
-  ament_target_dependencies(lidar_vehicle_detector PUBLIC rclcpp sensor_msgs vision_msgs visualization_msgs diagnostic_msgs geometry_msgs tf2_msgs)
+  ament_target_dependencies(lidar_vehicle_detector PUBLIC rclcpp sensor_msgs vision_msgs visualization_msgs diagnostic_msgs geometry_msgs tf2_msgs nav_msgs)
   install(TARGETS pointpillars_core bev_lidar_detector
     EXPORT bev_lidar_detector_targets LIBRARY DESTINATION lib)
-  install(TARGETS pointpillars_benchmark lidar_vehicle_detector DESTINATION lib/${PROJECT_NAME})
+  install(TARGETS pointpillars_benchmark centerpoint_benchmark centerpoint_sweep_eval lidar_vehicle_detector DESTINATION lib/${PROJECT_NAME})
   install(DIRECTORY include/ DESTINATION include)
   ament_export_targets(bev_lidar_detector_targets HAS_LIBRARY_TARGET)
   ament_package()

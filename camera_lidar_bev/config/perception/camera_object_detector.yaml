@@ -12,4 +12,5 @@
     confidence: 0.35
     nms_iou: 0.5
     max_detections: 100
-    classes: [person, car, motorcycle, bus, truck]
+    # traffic light and stop sign feed tools/map_landmarks.py; fusion ignores them.
+    classes: [person, car, motorcycle, bus, truck, traffic light, stop sign]

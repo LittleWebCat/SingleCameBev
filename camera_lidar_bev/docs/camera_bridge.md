@@ -23,7 +23,7 @@ The launch defaults select the parent's front-mid camera port. Confirm the physi
 
 | Launch argument | Default | Purpose |
 | --- | --- | --- |
-| `device` | `/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0` | V4L2 device path |
+| `device` | `/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.1:1.0-video-index0` (front mid; 4.1.2.2 before 2026-11-19, now the back camera) | V4L2 device path |
 | `width` | `640` | Requested image width |
 | `height` | `480` | Requested image height |
 | `fps` | `30.0` | Requested capture rate |

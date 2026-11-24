@@ -80,7 +80,7 @@ In a terminal with this project's overlay sourced, start the C++ bridge:
 ros2 launch bev_bringup front_camera.launch.py
 ```
 
-The default is the parent's front-mid device at `/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0`, requesting 640 × 480 MJPG at 30 frames/s. Confirm that this port corresponds to the intended front-facing camera; those settings are requests, not measured rates. To select a different device:
+The default is the front-mid (wide) device at `/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.1:1.0-video-index0` (4.1.2.2 before the 2026-11-19 re-cabling; that port is now the back camera), requesting 640 × 480 MJPG at 30 frames/s. Confirm that this port corresponds to the intended front-facing camera; those settings are requests, not measured rates. To select a different device:
 
 ```bash
 ros2 launch bev_bringup front_camera.launch.py device:=/dev/video0

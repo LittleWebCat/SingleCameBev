@@ -1,5 +1,7 @@
 import base64
+import io
 import json
+import struct
 import tempfile
 import time
 import unittest
@@ -9,10 +11,13 @@ import cv2
 import numpy as np
 
 from bev_depth.sensors import (
+    LiveSensorMonitor,
     RecorderSnapshot,
     RecordingSession,
     SensorRecordControls,
     SerialRecorder,
+    draw_live_sensor_panel,
+    write_matrix_sensor_record,
 )
 
 
@@ -109,6 +114,94 @@ class SerialRecorderTest(unittest.TestCase):
         self.assertEqual(base64.b64decode(record["xbus"]), payload)
         self.assertEqual(record["encoding"], "base64")
         self.assertEqual(record["session_id"], "aligned-session")
+
+
+class LiveSensorMonitorTest(unittest.TestCase):
+    @staticmethod
+    def _mtdata2_frame():
+        payload = b"".join(
+            (
+                bytes.fromhex("20300c") + struct.pack(">fff", 1.5, -2.5, 90.0),
+                bytes.fromhex("40200c") + struct.pack(">fff", 0.1, 0.2, 9.7),
+                bytes.fromhex("80200c") + struct.pack(">fff", 0.01, -0.02, 0.03),
+            )
+        )
+        body = bytes((0xFF, 0x36, len(payload))) + payload
+        return bytes((0xFA,)) + body + bytes(((-sum(body)) & 0xFF,))
+
+    def test_decodes_live_gps_and_imu_values(self):
+        gps_device = FakeSerial(
+            b"$GPGGA,152114.30,3016.5000,N,09744.2500,W,1,12,0.8,180.5,M,,M,,*00\r\n",
+            line_mode=True,
+        )
+        imu_device = FakeSerial(self._mtdata2_frame(), line_mode=False)
+
+        def serial_factory(**kwargs):
+            return gps_device if "gps" in kwargs["port"] else imu_device
+
+        monitor = LiveSensorMonitor(
+            gps_port="/dev/fake-gps",
+            imu_port="/dev/fake-imu",
+            serial_factory=serial_factory,
+        )
+        monitor.start()
+        try:
+            deadline = time.monotonic() + 1.0
+            while time.monotonic() < deadline:
+                snapshot = monitor.snapshot()
+                if snapshot.gps.received and snapshot.imu.packets:
+                    break
+                time.sleep(0.005)
+
+            self.assertTrue(snapshot.gps.fix)
+            self.assertAlmostEqual(snapshot.gps.latitude_deg, 30.275, places=6)
+            self.assertAlmostEqual(snapshot.gps.longitude_deg, -97.7375, places=6)
+            self.assertEqual(snapshot.gps.satellites, 12)
+            self.assertAlmostEqual(snapshot.gps.altitude_m, 180.5)
+            self.assertAlmostEqual(snapshot.imu.roll_deg, 1.5)
+            self.assertAlmostEqual(snapshot.imu.pitch_deg, -2.5)
+            self.assertAlmostEqual(snapshot.imu.yaw_deg, 90.0)
+            self.assertEqual(snapshot.imu.packets, 1)
+
+            frame = np.zeros((240, 800, 3), dtype=np.uint8)
+            rendered = draw_live_sensor_panel(frame, snapshot)
+            self.assertIs(rendered, frame)
+            self.assertGreater(np.count_nonzero(rendered), 0)
+        finally:
+            monitor.stop()
+
+        self.assertTrue(gps_device.closed)
+        self.assertTrue(imu_device.closed)
+
+    def test_writes_sensor_snapshot_aligned_to_matrix(self):
+        snapshot = LiveSensorMonitor().snapshot()
+        handle = io.StringIO()
+
+        write_matrix_sensor_record(
+            handle,
+            frame_id=12,
+            raw_matrix_file="matrix/000012.npy",
+            tracked_matrix_file="matrix_tracked/000012.npy",
+            wall_time_ns=1_000,
+            monotonic_ns=2_000,
+            camera_capture_monotonic_ns={
+                "left": 1_900,
+                "middle": 1_910,
+                "right": 1_920,
+            },
+            snapshot=snapshot,
+        )
+        record = json.loads(handle.getvalue())
+
+        self.assertEqual(record["frame_id"], 12)
+        self.assertEqual(record["raw_matrix_file"], "matrix/000012.npy")
+        self.assertEqual(
+            record["tracked_matrix_file"], "matrix_tracked/000012.npy"
+        )
+        self.assertEqual(record["camera_capture_monotonic_ns"]["middle"], 1_910)
+        self.assertIn("latitude_deg", record["gps"])
+        self.assertIn("angular_rate_rps", record["imu"])
+        self.assertIsNone(record["gps"]["age_ns"])
 
 
 class FakeRecorder:

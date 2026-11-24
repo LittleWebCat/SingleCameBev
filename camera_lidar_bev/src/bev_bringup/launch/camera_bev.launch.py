@@ -12,7 +12,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     share = get_package_share_directory('bev_bringup')
-    calibration = os.path.join(share, 'config', 'calibration', 'imported_front_001')
+    calibration = os.path.join(share, 'config', 'calibration', 'front_active')
     return LaunchDescription([
         DeclareLaunchArgument(
             'intrinsics_file',

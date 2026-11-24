@@ -4,7 +4,11 @@ Single-camera object detection, metric depth, and front BEV projection for NVIDI
 
 The pipeline can process videos, image folders, single images, or a live camera. It writes annotated camera frames, depth previews, BEV frames, and per-frame JSONL records.
 
-The separate [ROS 2 camera + LiDAR BEV project](camera_lidar_bev/README.md) provides the current Ouster/front-camera preview: native C++/TensorRT detection, a flat 60 m BEV, camera-matched learned boxes and a labeled camera pane. Its README contains the launch command, display behavior, measured 20 Hz updates and remaining calibration checks.
+The separate [ROS 2 camera + LiDAR BEV project](camera_lidar_bev/README.md) provides native C++/TensorRT detection, a labeled camera beside an 80 m combined BEV, mapping, experimental saved-map localization and Pure Pursuit diagnostic targets. Other RViz object profiles retain 60 m layouts. Its README distinguishes the 20 Hz object-preview measurements from the dense 10 Hz localized view and documents the optional DBW bridge, whose startup default is 6 mph and current software upper bound is 10 mph.
+
+It also has a [live 3D BEV](camera_lidar_bev/docs/live_3d_planning.md) with CenterPoint 3D boxes, object path prediction, mapped stop signs/stop lines and a shadow-mode route planner (one command: `camera_lidar_bev/tools/run_bev_3d.sh`; no vehicle commands), and object prediction can be [developed and benchmarked on any PC](camera_lidar_bev/docs/prediction_development.md) from a recorded drive with only numpy and scipy.
+
+See [previous issues and solutions](camera_lidar_bev/docs/issues_and_solutions.md) for the sensor, calibration, detection, recording, mapping and DBW troubleshooting history, including implemented fixes and remaining physical-validation limits.
 
 ## Camera + LiDAR results
 
@@ -165,9 +169,9 @@ Press `Esc` in the OpenCV window to stop.
 
 `configs/three_camera_bev.yaml` uses the verified physical layout:
 
-- Left: `/dev/video0`, yaw `-90°`, object detection and depth
+- Left: `/dev/video2`, yaw `-90°`, object detection and depth
 - Middle: `/dev/video4`, yaw `0°`, object detection, depth, and red/yellow/green classification
-- Right: `/dev/video2`, yaw `+90°`, object detection and depth
+- Right: `/dev/video0`, yaw `+90°`, object detection and depth
 
 All three cameras use `640x480 YUYV @ 20 FPS`. The device numbers identify the
 current USB topology; verify them with `v4l2-ctl --list-devices` after moving a
@@ -239,13 +243,18 @@ DISPLAY=:1 .venv/bin/python -m bev_depth.multicam_infer \
   --save-dir runs/three_camera_bev_live \
   --no-save-images \
   --display \
+  --show-sensors \
   --profile
 ```
 
-Use `--display-bev` instead of `--display` to show only the fused BEV. Press
-`q` or `Esc` to stop. The current intrinsics, camera offsets, and yaw angles are
-estimates; calibrate all three cameras before relying on fused positions or
-depth values as ground truth.
+Use `--display-bev` instead of `--display` to show only the fused BEV.
+`--show-sensors` adds a live panel with GPS fix, latitude/longitude, satellites,
+altitude, speed and UTC plus Xsens roll/pitch/yaw, acceleration and angular
+rate. Press `i` to hide or show the panel, and `q` or `Esc` to stop. Sensor
+ports are detected automatically; override them with `--gps-port`, `--imu-port`,
+`--gps-baud`, and `--imu-baud`. The current intrinsics, camera offsets, and yaw
+angles are estimates; calibrate all three cameras before relying on fused
+positions or depth values as ground truth.
 
 Run only the live fused BEV while saving one semantic matrix per frame:
 
@@ -261,6 +270,55 @@ DISPLAY=:1 PYTHONPATH=. .venv/bin/python -m bev_depth.multicam_infer \
 `--no-save-images` disables annotated, depth, dashboard, and BEV image files;
 it does not disable semantic matrices because `save_matrices: true` is set in
 the three-camera config.
+
+### Three-camera temporal tracking
+
+The fused semantic matrix can be passed directly to the causal Kalman tracker
+in `bef-tracking-kf-main`. The geometry and class IDs already match, so no grid
+conversion is required. Run the fused BEV with temporal tracking enabled:
+
+```bash
+cd /home/agxthor/SingleCameraBev
+DISPLAY=:1 PYTHONPATH=. .venv/bin/python -m bev_depth.multicam_infer \
+  --config configs/three_camera_bev.yaml \
+  --save-dir runs/three_camera_bev_tracked \
+  --no-save-images \
+  --display-causal-bev \
+  --tracker-hz 10 \
+  --save-sensors \
+  --profile
+```
+
+The camera and perception loop continues at its available rate. The tracker is
+rate-limited to its validated 10 Hz and receives the measured interval between
+updates. Create the tracker once per process; its state persists until the
+program exits.
+
+With tracking enabled:
+
+- `matrix/` contains every raw fused semantic matrix.
+- `matrix_tracked/` contains each causal cleaned matrix, named with its source
+  frame number.
+- `sensors/matrix_sensors.jsonl` contains one synchronized record per raw BEV
+  matrix. Each record names its raw and tracked matrix files, carries wall and
+  monotonic timestamps plus all three camera-capture timestamps, and stores the
+  latest decoded GPS/IMU values with their sample ages.
+- `--display-causal-bev` opens `bef-tracking-kf-main`'s own two-panel viewer: raw
+  current-frame detections on the left and online/causal tracking on the right.
+- The tracker viewer shows target speed, tracker latency, ego-motion estimates,
+  track IDs and velocity arrows. `C` marks a coasted prediction and `S` marks a
+  safety pass-through detection.
+- `--display` remains the separate three-camera dashboard when camera images
+  are needed for diagnostics.
+
+The default tracker location is
+`/home/agxthor/SingleCameraBev/bef-tracking-kf-main`. Use
+`--tracker-dir /another/path` if it is moved. SciPy is required; update the
+environment after pulling these changes with:
+
+```bash
+.venv/bin/python -m pip install -e .
+```
 
 The fused map covers 40 m to either side, 80 m forward, and 40 m rearward
 (80 m lateral by 120 m longitudinal). This retains the requested side/rear
@@ -565,6 +623,9 @@ If you already have a `detections.jsonl`, redraw BEV frames with a new range wit
 - `--max-frames N`: stop after N frames
 - `--save-bev-only`: save only BEV images, not annotated/depth frames
 - `--display-bev`: show only the live BEV window
+- `--display-causal-bev`: show the raw-vs-causal BEV and enable temporal tracking
+- `--show-sensors`: overlay live GPS and IMU values (three-camera display)
+- `--save-sensors`: save GPS/IMU values synchronized to each BEV matrix
 - `--input-width N`: override camera capture width
 - `--input-height N`: override camera capture height
 - `--input-fps N`: override camera capture FPS

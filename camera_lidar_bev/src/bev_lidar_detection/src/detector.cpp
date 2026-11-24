@@ -80,4 +80,8 @@ Detector::Detector(const std::string &p,float s,std::size_t n):impl_(std::make_u
 Detector::~Detector() = default;
 std::vector<Box3D> Detector::infer(const std::vector<PointXYZI> &p) { return impl_->infer(p); }
 const DetectorStats &Detector::lastStats() const noexcept { return impl_->stats_; }
+const std::vector<std::string> &Detector::classNames() const noexcept {
+  static const std::vector<std::string> names{"car", "person", "cyclist"};
+  return names;
+}
 }

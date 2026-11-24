@@ -71,6 +71,9 @@ def main():
                         help='playback speed; default 0.5 (half speed)')
     parser.add_argument('--no-loop', action='store_true',
                         help='play once and stop the viewer when playback ends')
+    parser.add_argument('--no-viewer', action='store_true',
+                        help='do not open the combined window; detectors and playback run until Ctrl+C '
+                             '(for viewing in RViz or Foxglove)')
     parser.add_argument('--no-road-lanes', action='store_true',
                         help='replay object boxes without starting the road/lane segmentation model')
     parser.add_argument('--pure-pursuit', action='store_true', help='show diagnostic route tracking; requires GPS-aligned saved map')
@@ -173,6 +176,8 @@ def main():
             launch.append(f'gps_alignment:={args.gps_alignment}')
     if args.no_road_lanes:
         launch.append('road_lanes:=false')
+    if args.no_viewer:
+        launch.append('viewer:=false')
     if args.pure_pursuit:
         launch += ['path_tracking:=true', f'tracking_config:={args.tracking_config}',
                    f'reference_trajectory:={args.gps_alignment/"trajectory_enu.csv"}']

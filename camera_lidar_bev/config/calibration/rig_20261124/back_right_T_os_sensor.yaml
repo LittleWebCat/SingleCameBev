@@ -1,0 +1,106 @@
+schema_version: 1
+calibrated: false
+calibration_status: external_candidate_unvalidated
+units: m
+direction: lidar_to_camera
+selected_hypothesis: B
+selection_basis: 'Rig calibration file: LiDAR frame is the Ouster sensor frame (x
+  forward, y left, z up)'
+calibration_date: '2026-11-24'
+device_by_path: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.4:1.0-video-index0
+fit_quality:
+  boards_used: 15
+  plane_rms_mm_median: 13.0
+  pattern_score_min_max:
+  - 0.65
+  - 0.8
+  intrinsics_rms_reprojection_px: 0.4611
+observed_driver_transform:
+  source_frame: os_lidar
+  target_frame: os_sensor
+  matrix:
+  - - -1.0
+    - 0.0
+    - 0.0
+    - 0.0
+  - - 0.0
+    - -1.0
+    - 0.0
+    - 0.0
+  - - 0.0
+    - 0.0
+    - 1.0
+    - 0.038195
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+transforms:
+  T_camera_from_os_sensor:
+    calibrated: false
+    source_frame: os_sensor
+    target_frame: camera_back_right_optical_frame
+    translation_m:
+    - 0.6592114639432296
+    - -0.154997113728613
+    - -0.30931216473862166
+    quaternion_xyzw:
+    - 0.20982471662286764
+    - 0.6851372848341886
+    - -0.6692607159424881
+    - 0.19659751605836095
+    matrix:
+    - - -0.8346460099476316
+      - 0.5506674619756561
+      - -0.011462303424158793
+      - 0.6592114639432296
+    - - 0.024367484576723244
+      - 0.01612736478056309
+      - -0.9995729757254537
+      - -0.154997113728613
+    - - -0.5502474568536426
+      - -0.8345689033426327
+      - -0.026879021551661535
+      - -0.30931216473862166
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    inverse_matrix:
+    - - -0.8346460099476316
+      - 0.024367484576723115
+      - -0.5502474568536424
+      - 0.38378687584885063
+    - - 0.550667461975656
+      - 0.016127364780562516
+      - -0.8345689033426321
+      - -0.6186489228782863
+    - - -0.011462303424158583
+      - -0.9995729757254532
+      - -0.026879021551662063
+      - -0.15568885272036578
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+  T_camera_from_os_lidar:
+    calibrated: false
+    source_frame: os_lidar
+    target_frame: camera_back_right_optical_frame
+    matrix:
+    - - 0.8346460099476316
+      - -0.5506674619756561
+      - -0.011462303424158793
+      - 0.6587736612639439
+    - - -0.024367484576723244
+      - -0.01612736478056309
+      - -0.9995729757254537
+      - -0.1931758035364467
+    - - 0.5502474568536426
+      - 0.8345689033426327
+      - -0.026879021551661535
+      - -0.3103388089667874
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0

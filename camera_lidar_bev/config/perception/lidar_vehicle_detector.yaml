@@ -14,6 +14,7 @@
     intensity_field: reflectivity
     intensity_scale: 255.0
     max_forward_m: 60.0
+    model_type: pointpillars
     # Same measured vehicle/mount envelope as the ground processor; mirrors excluded.
     self_mask_enabled: true
     self_mask_min_x_m: -2.131

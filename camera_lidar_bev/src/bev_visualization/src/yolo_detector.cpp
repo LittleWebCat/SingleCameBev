@@ -34,7 +34,8 @@ constexpr std::array<const char *, 80> kCocoNames{{
   "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier",
   "toothbrush"}};
 
-bool road_id(int id) { return id == 0 || id == 1 || id == 2 || id == 3 || id == 5 || id == 7; }
+// Road users plus traffic light (9) and stop sign (11) for map landmarks.
+bool road_id(int id) { return id == 0 || id == 1 || id == 2 || id == 3 || id == 5 || id == 7 || id == 9 || id == 11; }
 
 void check_letterbox(const Letterbox &box) {
   const auto expected = make_letterbox(box.source_width, box.source_height);
@@ -108,7 +109,7 @@ const char *coco_class_name(int class_id) {
 }
 
 int road_class_id(const std::string &name) {
-  for (const int id : {0, 1, 2, 3, 5, 7}) if (name == coco_class_name(id)) return id;
+  for (const int id : {0, 1, 2, 3, 5, 7, 9, 11}) if (name == coco_class_name(id)) return id;
   throw std::invalid_argument("Unsupported road-user class: " + name);
 }
 

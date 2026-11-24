@@ -20,7 +20,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     share = get_package_share_directory('bev_bringup')
-    calibration = os.path.join(share, 'config', 'calibration', 'imported_front_001')
+    calibration = os.path.join(share, 'config', 'calibration', 'front_active')
     models = '/home/agxthor/SingleCameraBev/camera_lidar_bev/models'
 
     def detector_launch(filename, arguments):
@@ -38,7 +38,7 @@ def generate_launch_description():
 
     declarations = [
         DeclareLaunchArgument('detectors', default_value='true', description=(
-            'Start PointPillars, YOLO and camera/LiDAR association. '
+            'Start the LiDAR 3D detector, YOLO and camera/LiDAR association. '
             'Set false when these processors already run.')),
         DeclareLaunchArgument('viewer', default_value='true'),
         DeclareLaunchArgument('use_sim_time', default_value='false'),
@@ -46,8 +46,10 @@ def generate_launch_description():
             calibration, 'front_camera_1024x768.candidate.yaml')),
         DeclareLaunchArgument('extrinsics_file', default_value=os.path.join(
             calibration, 'T_B_os_sensor.candidate.yaml')),
-        DeclareLaunchArgument('lidar_engine_file', default_value=os.path.join(
-            models, 'lidar_objects_001', 'pointpillar_fp16.plan')),
+        DeclareLaunchArgument('lidar_model', default_value='centerpoint',
+                              description='LiDAR 3D detector: centerpoint or pointpillars'),
+        DeclareLaunchArgument('lidar_engine_file', default_value='',
+                              description="Empty selects lidar_model's pinned engine."),
         DeclareLaunchArgument('camera_2d_engine_file', default_value=os.path.join(
             models, 'camera_objects_001', 'yolo11n_fp16_raw.engine')),
         DeclareLaunchArgument('viewer_script', default_value=os.path.join(
@@ -111,8 +113,9 @@ def generate_launch_description():
         RegisterEventHandler(OnProcessExit(
             target_action=tracker, on_exit=[EmitEvent(event=Shutdown(reason='Path tracker exited'))])),
         detector_launch('lidar_vehicle_detector.launch.py', {
-            'rviz': 'false', 'engine_file': LaunchConfiguration('lidar_engine_file'),
-            'max_forward_m': PythonExpression(['min(', LaunchConfiguration('range_m'), ', 69.12)'])}),
+            'rviz': 'false', 'model': LaunchConfiguration('lidar_model'),
+            'engine_file': LaunchConfiguration('lidar_engine_file'),
+            'max_forward_m': LaunchConfiguration('range_m')}),
         detector_launch('camera_objects.launch.py', {
             'detector': 'true', 'fusion': 'false', 'rviz': 'false',
             'engine_file': LaunchConfiguration('camera_2d_engine_file')}),

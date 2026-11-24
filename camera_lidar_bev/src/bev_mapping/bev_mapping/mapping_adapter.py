@@ -85,7 +85,7 @@ class MappingAdapter(Node):
             'imu_from_lidar_translation': [0.002441, 0.009725, 0.030662],
             'imu_from_lidar_rotation': [-1., 0., 0., 0., -1., 0., 0., 0., 1.],
             'initialization_seconds': 2.0, 'gyro_mean_limit': 0.03,
-            'gyro_std_limit': 0.02, 'accel_std_limit': 0.15,
+            'gyro_std_limit': 0.02, 'accel_std_limit': 0.25,
             'voxel_size_m': 0.25, 'max_map_voxels': 500000,
             'map_publish_period': 2.0, 'max_path_poses': 20000,
         }

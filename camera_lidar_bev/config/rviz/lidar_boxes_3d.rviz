@@ -1,0 +1,334 @@
+# 3D orbit view: raw scan coloured by height, kept landmarks, route, planned trajectory, CenterPoint 3D wireframe boxes and the own vehicle.
+# Drag to rotate, scroll to zoom, shift+drag to pan.
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+  Help Height: 78
+  Property Tree Widget:
+    Expanded:
+    - /Global Options1
+    - /LiDAR vehicle/person points1
+    - /LiDAR predicted vehicle/person footprints and size labels1
+    Splitter Ratio: 0.5
+  Tree Height: 500
+- Class: rviz_common/Views
+  Name: Views
+  Expanded:
+  - /Current View1
+  Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Alpha: 0.6
+    Autocompute Intensity Bounds: false
+    Autocompute Value Bounds:
+      Max Value: 1.5
+      Min Value: -2.0
+      Value: true
+    Axis: Z
+    Channel Name: reflectivity
+    Class: rviz_default_plugins/PointCloud2
+    Color: 255; 255; 255
+    Color Transformer: AxisColor
+    Decay Time: 0.0
+    Enabled: true
+    Invert Rainbow: false
+    Max Color: 230; 230; 230
+    Max Intensity: 60
+    Min Color: 40; 60; 90
+    Min Intensity: 0
+    Name: Raw LiDAR scan (/points, coloured by height)
+    Position Transformer: XYZ
+    Selectable: false
+    Size (Pixels): 2
+    Size (m): 0.003
+    Style: Points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      Filter size: 1
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /points
+    Use Fixed Frame: true
+    Use rainbow: false
+    Value: true
+  - Alpha: 1
+    Autocompute Intensity Bounds: true
+    Autocompute Value Bounds:
+      Max Value: 10
+      Min Value: -10
+      Value: true
+    Axis: Z
+    Channel Name: intensity
+    Class: rviz_default_plugins/PointCloud2
+    Color: 255; 255; 255
+    Color Transformer: RGB8
+    Decay Time: 0.0
+    Enabled: false
+    Invert Rainbow: false
+    Max Color: 255; 255; 255
+    Max Intensity: 255
+    Min Color: 0; 0; 0
+    Min Intensity: 0
+    Name: Ground / obstacles / unknown
+    Position Transformer: XYZ
+    Selectable: true
+    Size (Pixels): 2
+    Size (m): 0.003
+    Style: Points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      Filter size: 1
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /camera_lidar_bev/ground_bev_points
+    Use Fixed Frame: true
+    Use rainbow: false
+    Value: false
+  - Class: rviz_default_plugins/Map
+    Name: Observed occupancy (toggle)
+    Enabled: false
+    Value: false
+    Alpha: 0.5
+    Color Scheme: map
+    Draw Behind: true
+    Topic:
+      Value: /camera_lidar_bev/occupancy
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Use Timestamp: false
+  - Alpha: 1
+    Autocompute Intensity Bounds: true
+    Autocompute Value Bounds:
+      Max Value: 10
+      Min Value: -10
+      Value: true
+    Axis: Z
+    Channel Name: intensity
+    Class: rviz_default_plugins/PointCloud2
+    Color: 255; 255; 255
+    Color Transformer: RGB8
+    Decay Time: 0.0
+    Enabled: true
+    Invert Rainbow: false
+    Max Color: 255; 255; 255
+    Max Intensity: 255
+    Min Color: 0; 0; 0
+    Min Intensity: 0
+    Name: LiDAR points inside predicted boxes
+    Position Transformer: XYZ
+    Selectable: true
+    Size (Pixels): 4
+    Size (m): 0.003
+    Style: Points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      Filter size: 1
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /camera_lidar_bev/lidar_vehicle_points
+    Use Fixed Frame: true
+    Use rainbow: false
+    Value: true
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Camera objects: observed 3D extents and labels'
+    Enabled: false
+    Value: false
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/object_markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: LiDAR predicted 3D boxes and labels
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/lidar_boxes_3d_markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Own vehicle (3D outline, arrow to the front)
+    Enabled: true
+    Value: true
+    Namespaces:
+      ego_vehicle: false
+      ego_vehicle_3d: true
+    Topic:
+      Value: /camera_lidar_bev/ego_vehicle_marker
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Alpha: 1
+    Buffer Length: 1
+    Class: rviz_default_plugins/Path
+    Color: 25; 255; 0
+    Enabled: true
+    Head Diameter: 0.3
+    Head Length: 0.2
+    Length: 0.3
+    Line Style: Billboards
+    Line Width: 0.35
+    Name: Mapped route (green, ground level)
+    Offset:
+      X: 0
+      Y: 0
+      Z: -1.7
+    Pose Color: 255; 85; 255
+    Pose Style: None
+    Radius: 0.03
+    Shaft Diameter: 0.1
+    Shaft Length: 0.1
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      Filter size: 10
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /camera_lidar_bev/route/reference
+    Value: true
+  - Alpha: 1
+    Buffer Length: 1
+    Class: rviz_default_plugins/Path
+    Color: 0; 229; 255
+    Enabled: false
+    Head Diameter: 0.3
+    Head Length: 0.2
+    Length: 0.3
+    Line Style: Billboards
+    Line Width: 0.25
+    Name: Driven path (cyan, ground level, toggle)
+    Offset:
+      X: 0
+      Y: 0
+      Z: -1.7
+    Pose Color: 255; 85; 255
+    Pose Style: None
+    Radius: 0.03
+    Shaft Diameter: 0.1
+    Shaft Length: 0.1
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      Filter size: 10
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /camera_lidar_bev/route/driven
+    Value: false
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Kept stop signs (red), traffic lights (yellow), estimated stop lines (white)'
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/landmarks/kept_markers
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Landmark candidates while mapping (tools/map_landmarks.py, toggle)'
+    Enabled: false
+    Value: false
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/landmarks/markers
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Alpha: 1
+    Buffer Length: 1
+    Class: rviz_default_plugins/Path
+    Color: 255; 140; 0
+    Enabled: false
+    Head Diameter: 0.3
+    Head Length: 0.2
+    Length: 0.3
+    Line Style: Lines
+    Line Width: 0.03
+    Name: Planned trajectory (plain path, toggle)
+    Offset:
+      X: 0
+      Y: 0
+      Z: -1.5
+    Pose Color: 255; 85; 255
+    Pose Style: None
+    Radius: 0.03
+    Shaft Diameter: 0.1
+    Shaft Length: 0.1
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      Filter size: 10
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /camera_lidar_bev/planner/trajectory
+    Value: false
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Planner: 8 s plan coloured by speed (green fast, red stopping), stop target, lead vehicle, status'
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/planner/markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  Enabled: true
+  Global Options:
+    Background Color: 0; 0; 0
+    Fixed Frame: os_sensor
+    Frame Rate: 30
+  Name: root
+  Tools:
+  - Class: rviz_default_plugins/Interact
+    Hide Inactive Objects: true
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/FocusCamera
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 60.0
+      Focal Point:
+        X: 5.0
+        Y: 0.0
+        Z: 0.0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05
+      Invert Z Axis: false
+      Name: 'Orbit: behind and above the vehicle'
+      Near Clip Distance: 0.01
+      Pitch: 0.55
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 3.1416
+    Saved: null
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 950
+  Hide Left Dock: true
+  Hide Right Dock: true
+  Views:
+    collapsed: false
+  Width: 1440
+  X: 40
+  Y: 40

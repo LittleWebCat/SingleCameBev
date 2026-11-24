@@ -153,7 +153,20 @@ These are software configuration values, not surveyed actuator ratings, and the 
 
 Details, configuration and explicit startup/engagement procedures are in the [DBW bridge README](../../bev_bridge/README.md). Do not equate a fresh `/bev_dbw/bridge_status.last_output` with measured actuator response.
 
-## 7. Saved outputs and evidence
+## 7. Live 3D BEV, planner and prediction (2026-11-24)
+
+| Issue encountered | Solution or diagnostic action | Result and remaining limits |
+| --- | --- | --- |
+| The live view ran at 10 Hz although 20 Hz was intended. | `run_localization_compare.sh --start-sensors` starts the Ouster in 2048x10 when no driver runs, and reuses a running one. Start `tools/start_lidar.py --params-file config/sensors/ouster_baseline.yaml` first; `tools/run_bev_3d.sh` does this. | 1024x20 confirmed: LiDAR 20.0 Hz, localization 17.9 Hz, CenterPoint boxes 17.2 Hz. |
+| The RViz bridge used 780 % CPU. | Per-scan (N x 3) @ (3 x 3) products made OpenBLAS spin threads on every core; set `OPENBLAS_NUM_THREADS=1` before importing numpy in the per-scan tools. | About 22 % CPU, including startup. |
+| A restart command killed its own shell. | `pkill -f <pattern>` also matched the shell whose command line contained the restart. Stop processes by PID or exact argument match. | Avoided in the launcher and tools. |
+| After a USB hub replug no camera images arrived, and the narrow front camera was missing. | All cameras re-enumerated with new `/dev/videoN`; the running bridges kept dead handles, so restart the camera launch. The narrow camera (port 4.1.3.2) did not enumerate at all. | Hardware connection of the narrow camera unresolved; front-wide is used. |
+| The planner's simulated closed loop oscillated and diverged. | The speed estimate differentiated the end of a quadratic fit (amplifies steps). Use a linear fit over 0.5 s for velocity and a quadratic over 1 s for acceleration; follow the speed profile exactly one step ahead; plan from the measured speed in shadow mode (plan continuity only with `--continuity-mps`). | Simulated stop at the line, 2 s hold, car following; not a vehicle control test. |
+| RViz showed a red error on the prediction markers although they drew. | Duplicate marker id (the DELETEALL marker and the first marker both used id 0) and text markers with zero x/y scale. | Fixed ids and scales. |
+| The traffic-light colour model missed most lights beyond 20 m. | Measured with mapped lights projected into the image: 88 % at 0-20 m, 34 % at 20-40 m; the whole frame is shrunk to 640 px (55 px heads become ~18 px). | Not fixed: tiles / crops of the full image are the likely fix; the planner does not use traffic lights. |
+| Predicted vehicle paths were poor. | Built a replay benchmark; vehicle error is mostly along the direction of travel (new tracks start at zero speed; braking/accelerating). IMM for vehicles improved held-out 5 s error 3.7 -> 2.4 m; IMM with box heading made cyclists worse, so they keep the constant-velocity filter. | CenterPoint's velocity output is not yet decoded; see [prediction development](prediction_development.md). |
+
+## 8. Saved outputs and evidence
 
 Paths below are relative to `camera_lidar_bev/` unless prefixed with `../bev_bridge/`. Large recordings, maps, engines, session logs and most generated images remain local and are excluded from Git.
 
@@ -180,13 +193,13 @@ Retained evidence to start with:
 
 The earlier focused bridge unit run after the 6 mph change passed **31 tests**. The current 2026-10-15 check ran **32 tests: 31 passed, one configuration error**, caused by the external profile's 300-degree request versus its mode's 90-degree limit. The suite also covers the 10 mph boundary and first-stop-cause preservation. No adapter was opened or vehicle command sent by the tests. The latency change passed the 19 `test_run_localized_bev.py`/`test_path_tracking_overlay.py` checks. Historical reports such as the 28-test `verification_summary_001.json` are left unchanged.
 
-## 8. What remains unresolved
+## 9. What remains unresolved
 
 - Independent intrinsic/extrinsic accuracy, surveyed vehicle/antenna transforms and physical camera/LiDAR/GNSS acquisition-clock alignment.
 - Reliable distant-object/pedestrian recall and size/yaw accuracy on Ouster data; increasing display range does not extend a model's trained range.
 - Sustained recording loss and end-to-end latency measurements for each selected sensor/mode/workload combination.
 - Loop closure, validated global localization accuracy, a surveyed HD map and lane/traffic-rule topology.
-- Moving vehicle-frame occupancy, persistent object tracking/prediction, obstacle-aware planning, and a dedicated BEV training-sample exporter. Raw displayed points are not a learned planner feature tensor.
+- Moving vehicle-frame occupancy, obstacle-avoiding planning, closed-loop use of the shadow-mode planner, more accurate object prediction (see section 7), and a dedicated BEV training-sample exporter. Raw displayed points are not a learned planner feature tensor.
 - Independent DBW firmware/feedback/braking verification and measured closed-loop vehicle tracking performance. Sending a command is not a measurement of its physical effect.
 - **Vehicle speed does not follow the commanded speed** (up to 17.6–21.6 mph against a 7 mph cap; stationary while 5–7 mph is commanded). Firmware speed-hold, `0x284` delivery and operator pedal input must be checked before further runs at speed; until then the software cap does not bound vehicle speed.
 - The `hardware.json` steering rate (280 degrees/s) exceeds the operator-reported 200 degrees/s firmware limit; actual firmware rate behavior is unknown.

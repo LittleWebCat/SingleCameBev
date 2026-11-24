@@ -1,15 +1,37 @@
-# Three-camera fused object/depth BEV.
+# Three-camera fused object/depth BEV (front half of the vehicle).
 #
-# Camera order and Linux nodes were verified on this vehicle:
-#   left=/dev/video0, middle=/dev/video4, right=/dev/video2
+# Current rig, by USB port (verified 2026-10-31):
+#   4.1.2.4 front left   (16MP USB)        -> left
+#   4.1.2.1 front mid    (Global Shutter)  -> middle, runs traffic-light color (was 4.1.2.3 until 2026-11-19)
+#   4.1.4.3 front right  (16MP USB)        -> right
+#   Not used here: 4.1.3.4 back left, 4.1.4.4 back right (16MP USB),
+#   4.1.2.2 back (Global Shutter), 4.1.3.2 front narrow (HD USB, ~65 deg).
+# The previous HD USB rig is saved in three_camera_bev.yaml.2026-10-16.bak.
+# Sources use /dev/v4l/by-path so they survive /dev/videoN renumbering.
 # Intrinsics, mounting offsets, and yaw angles are initial estimates. Replace
 # them with measured calibration before using BEV distances as ground truth.
 
 input:
+  # 640x480 MJPG @ 30 on every camera (set 2026-10-03; was 1024x768). All six
+  # HD USB cameras hold 30 FPS together in this mode. MJPG, not YUYV: raw
+  # 640x480 needs about 18 MB/s per camera, so a third camera on the shared
+  # USB 2.0 bus stops all streams. 1024x768 MJPG @ 30 also works if more
+  # detail is needed. MJPG relies on the patched uvcvideo driver
+  # (mjpeg_payload=800, see CameraSetup/uvcvideo_mjpeg_patch).
   width: 640
   height: 480
-  fps: 20
-  fourcc: YUYV
+  fps: 30
+  # Auto exposure drops these cameras to 17-20 FPS in dim light (measured
+  # 2026-09-30): it lengthens the shutter past the 33 ms a 30 FPS frame allows,
+  # and adding gain does not shorten it. A fixed exposure holds 30 FPS on all
+  # six but does not adapt to light: 30 ms + gain 40 suits the garage. Outdoors
+  # in daylight use `exposure: auto` (the camera then picks short shutters and
+  # reaches 30 FPS) or a much shorter fixed value, or the picture blows out.
+  # A camera entry can override these under its own `input:`.
+  exposure: auto             # Adapt exposure to current lighting
+  gain: 40                   # 0-100
+  power_line_frequency: 60   # Hz; anti-flicker for US mains (cameras default to 50)
+  fourcc: MJPG  # YUYV x3 exceeds the shared USB 2.0 bandwidth
   camera_index_backend: v4l2
 
 models:
@@ -34,14 +56,17 @@ models:
     backend: tensorrt
     path: models/depth_anything_v2_small_fp16.engine
     input_size: 518
+    # Camera updates are staggered across cadence phases after initialization.
     cadence: 2
-    metric_scale: 1.0
+    metric_scale: 0.5
     metric_bias: 0.0
     inverse_depth: false
 
 camera:
   intrinsics:
-    # Approximate 90-degree horizontal field of view at 640x480.
+    # 16MP and Global Shutter lenses: approximate 90-degree horizontal field
+    # of view at 640x480 (not measured for these models yet). Defined at
+    # 640x480, the capture size. Calibrate before trusting BEV distances.
     fx: 320.0
     fy: 320.0
     cx: 320.0
@@ -58,15 +83,15 @@ camera:
 
 cameras:
   - name: left
-    source: 0
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.4:1.0-video-index0
     traffic_color: false
     extrinsics:
-      yaw_deg: -90.0
+      yaw_deg: -60.0  # front-left corner; estimate, measure on the car
       lateral_offset_m: -0.65
       forward_offset_m: 0.0
 
   - name: middle
-    source: 4
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.1:1.0-video-index0
     traffic_color: true
     extrinsics:
       yaw_deg: 0.0
@@ -74,10 +99,10 @@ cameras:
       forward_offset_m: 0.15
 
   - name: right
-    source: 2
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.3:1.0-video-index0
     traffic_color: false
     extrinsics:
-      yaw_deg: 90.0
+      yaw_deg: 60.0  # front-right corner; estimate, measure on the car
       lateral_offset_m: 0.65
       forward_offset_m: 0.0
 
@@ -86,6 +111,15 @@ bev:
   rear_range_m: 40.0
   lateral_range_m: 80.0
   pixels_per_meter: 5
+
+bev_view:
+  # What the BEV window shows: 20 m behind to 40 m ahead, 20 m to each side.
+  # Only the drawing changes; detection, the semantic matrix and tracking
+  # still use the full bev area above.
+  forward_range_m: 40.0
+  rear_range_m: 20.0
+  lateral_range_m: 40.0  # total width: -20 m (left) to +20 m (right)
+  pixels_per_meter: 10   # 400 x 600 px window
 
 runtime:
   target_fps: 20

@@ -14,6 +14,19 @@ class InputConfig:
     fps: int
     fourcc: str
     camera_index_backend: str
+    # Fixed exposure in 100 us units (300 = 30 ms), or None for the camera's
+    # auto exposure. Gain 0-100, None leaves it unchanged. Power line in Hz
+    # (50 or 60) for anti-flicker, None leaves it unchanged.
+    exposure: int | None = None
+    gain: int | None = None
+    power_line_hz: int | None = None
+
+
+def optional_int(value: Any) -> int | None:
+    """None, "auto" or an empty value mean unset; anything else is an int."""
+    if value is None or str(value).strip().lower() in ("", "auto", "none"):
+        return None
+    return int(value)
 
 
 @dataclass(frozen=True)
@@ -124,6 +137,9 @@ def load_config(path: str | Path) -> AppConfig:
             fps=int(_get(input_config, "fps", 15)),
             fourcc=str(_get(input_config, "fourcc", "MJPG")),
             camera_index_backend=str(_get(input_config, "camera_index_backend", "auto")),
+            exposure=optional_int(input_config.get("exposure")),
+            gain=optional_int(input_config.get("gain")),
+            power_line_hz=optional_int(input_config.get("power_line_frequency")),
         ),
         detector=_load_detector_config(detector),
         traffic_detector=(

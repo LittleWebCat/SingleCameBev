@@ -166,11 +166,33 @@ void test_person_matches_and_separate_class_families() {
   const auto mixed=associate_camera_boxes({person,car},{detection(p,"car"),camera_person},c,t);
   require(mixed[0].camera_index==1 && mixed[1].camera_index==0,
           "Coincident car/person projections created cross-class ambiguity");
-  for (const auto *unsupported : {"cyclist","bicycle","truck","unknown",""}) {
+  for (const auto *unsupported : {"cyclist","barrier","traffic_cone","unknown",""}) {
     auto other=person;other.class_name=unsupported;
     const auto result=associate_camera_boxes({other},{camera_person,detection(p,"car")},c,t);
     require(result[0].camera_index==-1 && result[0].projection.visible,
             "Unsupported LiDAR class must retain its projection while staying unmatched");
+  }
+}
+
+void test_centerpoint_class_families() {
+  const auto c=camera();const auto t=identity_transform();
+  const auto b=box();const auto p=project_oriented_box(b,c,t);
+  for (const auto *lidar_name : {"truck","bus","trailer","construction_vehicle"}) {
+    auto large=b;large.class_name=lidar_name;
+    for (const auto *camera_name : {"car","bus","truck"})
+      require(associate_camera_boxes({large},{detection(p,camera_name)},c,t)[0].camera_index==0,
+              "Large LiDAR vehicle must associate with car/bus/truck camera evidence");
+    for (const auto *camera_name : {"person","motorcycle","bicycle"})
+      require(associate_camera_boxes({large},{detection(p,camera_name)},c,t)[0].camera_index==-1,
+              "Large LiDAR vehicle must not associate with person/two-wheeler evidence");
+  }
+  for (const auto *two_wheeler : {"motorcycle","bicycle"}) {
+    auto lidar=b;lidar.class_name=two_wheeler;
+    require(associate_camera_boxes({lidar},{detection(p,two_wheeler)},c,t)[0].camera_index==0,
+            "LiDAR two-wheeler must associate with the same camera class");
+    for (const auto *camera_name : {"car","person","truck"})
+      require(associate_camera_boxes({lidar},{detection(p,camera_name)},c,t)[0].camera_index==-1,
+              "LiDAR two-wheeler must not associate with another camera class");
   }
 }
 
@@ -221,9 +243,10 @@ int main() {
     test_supported_classes_confidence_and_bad_camera_boxes();
     test_overlap_and_projected_center_gates();
     test_person_matches_and_separate_class_families();
+    test_centerpoint_class_families();
     test_row_column_ambiguity_and_mutual_best();
     test_invalid_global_calibration_and_configuration();
-    std::cout << "Camera box association tests passed: 9 groups, native geometry/distortion, visibility, immutable boxes, vehicle/person class gates, unique overlap and ambiguity\n";
+    std::cout << "Camera box association tests passed: 10 groups, native geometry/distortion, visibility, immutable boxes, vehicle/person/CenterPoint class gates, unique overlap and ambiguity\n";
   } catch (const std::exception &error) {
     std::cerr << error.what() << '\n'; return 1;
   }

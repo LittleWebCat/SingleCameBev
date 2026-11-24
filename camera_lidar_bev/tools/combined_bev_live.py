@@ -303,9 +303,9 @@ def arguments():
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--intrinsics", type=Path,
-                        default=root/"config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml")
+                        default=root/"config/calibration/front_active/front_camera_1024x768.candidate.yaml")
     parser.add_argument("--extrinsics", type=Path,
-                        default=root/"config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml")
+                        default=root/"config/calibration/front_active/T_B_os_sensor.candidate.yaml")
     parser.add_argument("--range-m", type=float, default=80.)
     parser.add_argument("--lateral-m", type=float, default=30.)
     parser.add_argument("--fps", type=float, default=10.)
@@ -1089,7 +1089,7 @@ def main():
                         mapping['world_boxes'] = transform_boxes(source_boxes, object_pose['transform'])
                     status['world matched boxes'] = world_metrics.get('world_detection_count', 0)
                 for node_name, label_name in (("camera_object_detector", "YOLO"),
-                                              ("lidar_vehicle_detector", "PointPillars")):
+                                              ("lidar_vehicle_detector", "LiDAR 3D")):
                     diagnostic = self.diagnostics.get(node_name)
                     if diagnostic and time.monotonic()-diagnostic[1] <= 2.5:
                         fields = diagnostic[0]

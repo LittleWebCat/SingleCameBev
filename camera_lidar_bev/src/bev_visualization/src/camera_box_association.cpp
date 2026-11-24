@@ -84,7 +84,7 @@ ProjectedBox project_validated(const OrientedBox &box, const Camera &camera,
 bool valid_camera_detection(const CameraDetection &box, const Camera &camera,
                             double min_confidence) {
   if (box.class_name != "person" && box.class_name != "car" && box.class_name != "motorcycle" &&
-      box.class_name != "bus" && box.class_name != "truck") return false;
+      box.class_name != "bus" && box.class_name != "truck" && box.class_name != "bicycle") return false;
   return std::isfinite(box.confidence) && box.confidence >= min_confidence && box.confidence <= 1 &&
       std::isfinite(box.x_min) && std::isfinite(box.y_min) &&
       std::isfinite(box.x_max) && std::isfinite(box.y_max) &&
@@ -93,10 +93,14 @@ bool valid_camera_detection(const CameraDetection &box, const Camera &camera,
 }
 
 bool compatible_class(const OrientedBox &lidar, const CameraDetection &camera) {
-  if (lidar.class_name == "person") return camera.class_name == "person";
-  if (lidar.class_name != "car") return false;
-  return camera.class_name == "car" || camera.class_name == "motorcycle" ||
-         camera.class_name == "bus" || camera.class_name == "truck";
+  const auto &l = lidar.class_name, &c = camera.class_name;
+  if (l == "person" || l == "motorcycle" || l == "bicycle") return c == l;
+  // KITTI PointPillars has a single Car class covering every road vehicle.
+  if (l == "car") return c == "car" || c == "motorcycle" || c == "bus" || c == "truck";
+  // nuScenes CenterPoint large vehicles; camera YOLO may label them car, bus or truck.
+  if (l == "truck" || l == "bus" || l == "trailer" || l == "construction_vehicle")
+    return c == "car" || c == "bus" || c == "truck";
+  return false;
 }
 
 double iou(const ProjectedBox &a, const CameraDetection &b) {

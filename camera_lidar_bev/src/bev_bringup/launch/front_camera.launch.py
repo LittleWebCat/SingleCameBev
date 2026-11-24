@@ -14,7 +14,9 @@ def generate_launch_description():
     config = Path(get_package_share_directory("bev_bringup")) / "config"
     defaults = {
         "params_file": (str(config / "sensors/front_camera.yaml"), str),
-        "device": ("/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0", str),
+        # Main front camera: front_narrow (HD USB, ~41 deg), calibrated at 1024x768 in
+        # config/calibration/front_active (rig_20261124). Port 4.1.2.1 is front_wide, 4.1.2.2 the back camera.
+        "device": ("/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.3.2:1.0-video-index0", str),
         "calibration_file": ("", str),
         "source_mode": ("camera", str),
         "width": ("640", int),

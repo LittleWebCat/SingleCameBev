@@ -11,7 +11,14 @@ import subprocess
 import time
 
 
-def matching_processes(executable, domain):
+# Several processes share an executable (e.g. the front and side camera bridges); these
+# executables are matched by ROS node name too, so only the front camera's bridge counts.
+NODE_NAMES = {'camera_bridge': 'front_camera_bridge', 'camera_object_detector': 'camera_object_detector',
+              'camera_lidar_box_fusion': 'camera_lidar_box_fusion'}
+
+
+def matching_processes(executable, domain, node_name=None):
+    node_name = node_name or NODE_NAMES.get(executable)
     matches = []
     for proc in Path('/proc').glob('[0-9]*'):
         try:
@@ -22,6 +29,8 @@ def matching_processes(executable, domain):
             script = (len(arguments) > 1 and executable.endswith('.py') and
                       Path(os.fsdecode(arguments[1])).name == executable)
             if not direct and not script:
+                continue
+            if node_name and f'__node:={node_name}'.encode() not in arguments:
                 continue
             values = (proc / 'environ').read_bytes().split(b'\0')
             actual = next((os.fsdecode(v).split('=', 1)[1] for v in values
@@ -36,8 +45,18 @@ def matching_processes(executable, domain):
     return matches
 
 
+LIDAR_MODES = {'1024x20': 'ouster_baseline.yaml', '2048x10': 'ouster_2048x10.yaml'}
+LIDAR_MODELS = {
+    'centerpoint': {'directory': 'models/lidar_objects_002', 'engine': 'centerpoint_pillar_fp16.plan',
+                    'classes': ['car', 'truck', 'construction_vehicle', 'bus', 'trailer', 'barrier',
+                                'motorcycle', 'bicycle', 'pedestrian', 'traffic_cone']},
+    'pointpillars': {'directory': 'models/lidar_objects_001', 'engine': 'pointpillar_fp16.plan',
+                     'classes': ['Car', 'Pedestrian', 'Cyclist']},
+}
+
+
 def preflight(root, camera_labels=False, lidar_3d_boxes=False, camera_lidar_boxes=False,
-              combined_view=False, road_lanes=True):
+              combined_view=False, road_lanes=True, lidar_model='centerpoint'):
     if combined_view:
         required = ['bev_sensor_bridge/lib/bev_sensor_bridge/camera_bridge',
                     'bev_lidar_detection/lib/bev_lidar_detection/lidar_vehicle_detector',
@@ -80,16 +99,19 @@ def preflight(root, camera_labels=False, lidar_3d_boxes=False, camera_lidar_boxe
             raise RuntimeError(f'Camera model is missing or differs from its provenance: {error}. '
                                'See docs/camera_objects.md.') from error
     if lidar_3d_boxes or camera_lidar_boxes or combined_view:
-        model = root / 'models/lidar_objects_001'
-        engine = model / 'pointpillar_fp16.plan'
+        model = root / LIDAR_MODELS[lidar_model]['directory']
+        engine = model / LIDAR_MODELS[lidar_model]['engine']
         try:
             provenance = json.loads((model / 'provenance.json').read_text())
             if provenance['engine_file'] != engine.name:
                 raise ValueError('recorded engine filename differs from the configured engine')
-            if provenance['classes'] != ['Car', 'Pedestrian', 'Cyclist']:
-                raise ValueError('model classes differ from the expected KITTI class mapping')
+            if provenance['classes'] != LIDAR_MODELS[lidar_model]['classes']:
+                raise ValueError('model classes differ from the expected class mapping')
             if hashlib.sha256(engine.read_bytes()).hexdigest() != provenance['engine_sha256']:
                 raise ValueError('engine hash differs from its recorded export')
+            weights = provenance.get('pfn_weights_file')
+            if weights and hashlib.sha256((model / weights).read_bytes()).hexdigest() != provenance['pfn_weights_sha256']:
+                raise ValueError('PFN weights hash differs from its recorded export')
         except (OSError, ValueError, KeyError, TypeError) as error:
             raise RuntimeError(f'LiDAR model is missing or differs from its provenance: {error}. '
                                'See docs/lidar_vehicle_detection.md.') from error
@@ -142,7 +164,10 @@ def main(argv=None):
     parser.add_argument('--vehicle-bev-boxes', action='store_true',
                         help='show labeled points and flat vehicle boxes in BEV; enables camera labels')
     parser.add_argument('--lidar-3d-boxes', action='store_true',
-                        help='run trained LiDAR car/person detection with flat BEV footprints and size labels')
+                        help='run trained LiDAR 3D detection with flat BEV footprints and size labels')
+    parser.add_argument('--lidar-model', choices=sorted(LIDAR_MODELS), default='centerpoint',
+                        help='LiDAR 3D detector: centerpoint (nuScenes, 10 classes, 360 deg, 51.2 m) '
+                             'or pointpillars (KITTI car/person, forward 69.12 m)')
     parser.add_argument('--camera-lidar-boxes', action='store_true',
                         help='show LiDAR car/person points with only camera-matched boxes in flat BEV')
     parser.add_argument('--combined-view', action='store_true',
@@ -153,7 +178,7 @@ def main(argv=None):
                         help='GPS alignment directory for --localize-map; default MAP/gps_alignment')
     parser.add_argument('--no-road-lanes', action='store_true',
                         help='with --combined-view: omit road/lane inference')
-    parser.add_argument('--lidar-mode', choices=('1024x20', '2048x10'),
+    parser.add_argument('--lidar-mode', choices=sorted(LIDAR_MODES),
                         help='mode for a missing driver; existing drivers are reused without reconfiguration')
     parser.add_argument('--range-m', type=float, default=80.)
     parser.add_argument('--max-points', type=int, default=30000)
@@ -194,13 +219,17 @@ def main(argv=None):
         parser.error('ROS_DOMAIN_ID must be an integer from 0 to 231')
     try:
         preflight(root, args.camera_labels, args.lidar_3d_boxes, args.camera_lidar_boxes,
-                  args.combined_view, not args.no_road_lanes)
-        camera = root / 'config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml'
+                  args.combined_view, not args.no_road_lanes, args.lidar_model)
+        camera = root / 'config/calibration/front_active/front_camera_1024x768.candidate.yaml'
         commands = ([
             ('os_driver', ['/usr/bin/python3', str(root / 'tools/start_lidar.py'), '--startup-timeout', '45']),
             ('lidar_vehicle_detector', ['ros2', 'launch', 'bev_bringup',
-                                        'lidar_vehicle_detector.launch.py', 'rviz:=false']+
-                                       (['max_forward_m:=69.12'] if args.combined_view else [])),
+                                        'lidar_vehicle_detector.launch.py', 'rviz:=false',
+                                        f'model:={args.lidar_model}']+
+                                       (['max_forward_m:=80'] if args.combined_view else [])+
+                                       # Multi-sweep poses from live localization instead of mapping.
+                                       (['odometry_topic:=/camera_lidar_bev/localization/odometry']
+                                        if args.localize_map else [])),
         ] if args.lidar_3d_boxes or args.camera_lidar_boxes or args.combined_view else [
             ('camera_bridge', ['ros2', 'launch', 'bev_bringup', 'front_camera.launch.py',
                                'width:=1024', 'height:=768', 'fps:=30.0', f'calibration_file:={camera}']),
@@ -239,7 +268,7 @@ def main(argv=None):
             commands += [
                 ('combined_bev_live.py', ['/usr/bin/python3', str(root / 'tools/combined_bev_live.py'),
                                          '--intrinsics', str(camera), '--extrinsics',
-                                         str(root / 'config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml'),
+                                         str(root / 'config/calibration/front_active/T_B_os_sensor.candidate.yaml'),
                                          '--range-m', str(args.range_m), '--max-points', str(args.max_points),
                                          '--max-map-points', str(args.max_map_points)] +
                                          (['--path-tracking', 'true'] if args.pure_pursuit else []) +
@@ -258,7 +287,7 @@ def main(argv=None):
         actions = []
         for executable, command in commands:
             if executable == 'os_driver' and args.lidar_mode:
-                command += ['--params-file', str(root / f'config/sensors/ouster_{args.lidar_mode}.yaml')]
+                command += ['--params-file', str(root / 'config/sensors' / LIDAR_MODES[args.lidar_mode])]
             existing = matching_processes(executable, domain)
             if executable == 'os_driver':
                 existing = existing or matching_processes('start_lidar.py', domain)

@@ -568,7 +568,7 @@ def main():
         points = np.fromfile(source['cloud'], np.float32).reshape(-1, 4)
         runs = [r for r in results.get('timing_runs', []) if r['sample_id'] == sample['sample_id']]
         status = {'source': 'cached predictions', 'alignment': 'saved candidate B'}
-        for key, name in [('lidar_processing_ms', 'PointPillars'), ('yolo_processing_ms', 'YOLO')]:
+        for key, name in [('lidar_processing_ms', 'LiDAR 3D'), ('yolo_processing_ms', 'YOLO')]:
             if runs:
                 status[name] = f'{np.median([r[key] for r in runs]):.1f} ms'
         return renderer.render(image, sample, points, status, layers)

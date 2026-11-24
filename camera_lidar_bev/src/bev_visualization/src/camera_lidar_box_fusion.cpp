@@ -92,6 +92,10 @@ Cloud empty_points(const std_msgs::msg::Header &h) {
   }
   return c;
 }
+bool known_lidar_class(const std::string &name) {
+  return name=="car" || name=="person" || name=="truck" || name=="bus" || name=="trailer" ||
+         name=="construction_vehicle" || name=="motorcycle" || name=="bicycle";
+}
 bool known_camera_class(const std::string &name) {
   return name=="person" || name=="bicycle" || name=="car" || name=="motorcycle" || name=="bus" || name=="truck";
 }
@@ -188,15 +192,16 @@ class CameraLidarBoxFusion final : public rclcpp::Node {
     if(m.header.frame_id!="os_sensor" || m.detections.size()>200)throw std::invalid_argument("LiDAR detection frame/count mismatch");
     std::vector<OrientedBox> out;out.reserve(m.detections.size());
     for(const auto &d:m.detections) {
-      if(!same_header(d.header,m.header) || d.results.size()!=1 ||
-         (d.results[0].hypothesis.class_id!="car" && d.results[0].hypothesis.class_id!="person") ||
+      // Barriers and cones have no camera class to associate with; they stay in the LiDAR-only view.
+      if(d.results.size()==1 && (d.results[0].hypothesis.class_id=="barrier" || d.results[0].hypothesis.class_id=="traffic_cone"))continue;
+      if(!same_header(d.header,m.header) || d.results.size()!=1 || !known_lidar_class(d.results[0].hypothesis.class_id) ||
          !std::isfinite(d.results[0].hypothesis.score) || d.results[0].hypothesis.score<0 || d.results[0].hypothesis.score>1)
         throw std::invalid_argument("LiDAR child header/class/score mismatch");
       const auto &b=d.bbox;const auto &p=b.center.position;const auto &q=b.center.orientation;
       const double norm=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w;
       if(!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z) ||
          !std::isfinite(b.size.x) || !std::isfinite(b.size.y) || !std::isfinite(b.size.z) ||
-         b.size.x<=0 || b.size.y<=0 || b.size.z<=0 || b.size.x>15 || b.size.y>6 || b.size.z>5 ||
+         b.size.x<=0 || b.size.y<=0 || b.size.z<=0 || b.size.x>20 || b.size.y>6 || b.size.z>5 ||
          !std::isfinite(norm) || std::abs(norm-1)>1e-6 || std::abs(q.x)>1e-6 || std::abs(q.y)>1e-6)
         throw std::invalid_argument("Invalid predicted vehicle dimensions/yaw quaternion");
       out.push_back({{p.x,p.y,p.z},{b.size.x,b.size.y,b.size.z},{q.x,q.y,q.z,q.w},d.results[0].hypothesis.class_id});
@@ -236,7 +241,6 @@ class CameraLidarBoxFusion final : public rclcpp::Node {
     last_camera_stamp_=stamp;
     try {decode_camera(m);}catch(const std::exception &){return;}
     camera_latest_valid_=true;
-    if(m.detections.empty())last_empty_camera_stamp_=stamp;
   }
   void clear(const std::string &reason) {
     if(!cleared_ || reason!=error_) {
@@ -341,8 +345,18 @@ class CameraLidarBoxFusion final : public rclcpp::Node {
       double best_delta=pair_delta_+1;
       camera_status_="Camera unavailable, invalid or stale; LiDAR boxes retained";
       if(camera_available) {
+        // An empty camera frame supersedes older camera evidence only when it belongs to this
+        // scan's pairing window. LiDAR results arrive later than camera results, so empty frames
+        // captured after the window must not block pairing with frames near the scan time.
+        std::int64_t superseding_empty=0;
         for(const auto &candidate:camera_ring_) {
-          if(!fresh(candidate) || candidate.message->header.frame_id!=camera_frame_ || stamp_ns(candidate.message->header)<last_empty_camera_stamp_)continue;
+          const auto camera_stamp=stamp_ns(candidate.message->header);
+          if(fresh(candidate) && candidate.message->detections.empty() &&
+             camera_stamp<=stamp+static_cast<std::int64_t>(pair_delta_*1e9))
+            superseding_empty=std::max(superseding_empty,camera_stamp);
+        }
+        for(const auto &candidate:camera_ring_) {
+          if(!fresh(candidate) || candidate.message->header.frame_id!=camera_frame_ || stamp_ns(candidate.message->header)<superseding_empty)continue;
           const double delta=std::abs(static_cast<double>(stamp_ns(candidate.message->header)-stamp))/1e9;
           if(delta>pair_delta_ || delta>=best_delta)continue;
           const Received<Info> *matching=nullptr;
@@ -401,7 +415,7 @@ class CameraLidarBoxFusion final : public rclcpp::Node {
   double pair_delta_{},stale_{},rate_{},processing_ms_{},source_age_{},last_delta_{-1};
   Received<Lidar> lidar_{};std::deque<Received<CameraBoxes>> camera_ring_;std::deque<Received<Info>> infos_;std::deque<Received<Cloud>> point_ring_;
   std::uint64_t lidar_version_{},camera_version_{},info_version_{},points_version_{},processed_lidar_{},processed_camera_{},processed_info_{},processed_points_{},checked_camera_{},published_{},clear_count_{};
-  std::int64_t last_lidar_stamp_{},last_camera_stamp_{},last_empty_camera_stamp_{},last_camera_stamp_used_{};
+  std::int64_t last_lidar_stamp_{},last_camera_stamp_{},last_camera_stamp_used_{};
   std::size_t last_boxes_{},last_matches_{},last_displayed_{},last_people_{};bool camera_latest_valid_{false},last_camera_available_{false},cleared_{false},lidar_input_valid_{false},require_camera_match_{false};
   rclcpp::Publisher<Markers>::SharedPtr markers_pub_;
   rclcpp::Publisher<Cloud>::SharedPtr points_pub_;

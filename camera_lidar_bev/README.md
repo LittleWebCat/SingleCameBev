@@ -16,6 +16,44 @@ Short **1× recording replay** using the original recording's saved trajectory p
 
 See the [visual results gallery](docs/results.md) for the GPS/LiDAR drive comparison, measured processing times and each result's context.
 
+## Live 3D BEV with prediction and planning
+
+One RViz 3D view of the localized car with CenterPoint 3D boxes (vehicles, pedestrians, cyclists), their
+predicted paths (5 s vehicles, 4 s pedestrians), the mapped route, the kept stop signs and stop lines, and a
+planned trajectory, plus charts of measured vs planned vx, vy, ax, ay and a recording of every drive.
+**It plans, displays and records only; nothing commands the vehicle.** Start the 20 Hz LiDAR in one
+terminal, then everything else in a second:
+
+```bash
+cd /home/agxthor/SingleCameraBev/camera_lidar_bev
+source /opt/ros/jazzy/setup.bash && source /home/agxthor/sensors_ws/install/setup.bash && source install/setup.bash
+export ROS_DOMAIN_ID=1 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp CYCLONEDDS_URI=file://$PWD/config/transport/cyclonedds_large_clouds.xml
+/usr/bin/python3 tools/start_lidar.py --params-file config/sensors/ouster_baseline.yaml --startup-timeout 90
+```
+
+```bash
+bash /home/agxthor/SingleCameraBev/camera_lidar_bev/tools/run_bev_3d.sh
+```
+
+The launcher starts localization (and waits for `localized`), CenterPoint, the RViz bridge, object
+prediction, the route planner with recording (`data/drive_<UTC>/`), the charts and the 3D view, reusing
+anything already running; Ctrl+C stops what it started. Measured with everything running: LiDAR 20 Hz,
+localization 18 Hz, 3D boxes 17 Hz. See the [live 3D BEV guide](docs/live_3d_planning.md) for the view,
+CenterPoint multi-sweep, mapped stop signs / traffic lights and their review page, the front-camera
+traffic-light check, the planner (stop lines, car following, 10 mph cap) and the recording format.
+
+**Object prediction can be developed on any PC** without ROS: the tracking/prediction code, a 24-minute
+replay of real detections (`datasets/prediction/`, 12.9 MB) and the benchmark need only numpy and scipy.
+
+```bash
+python3 -m pip install -r tools/requirements-prediction.txt
+python3 tools/eval_prediction.py --quick
+```
+
+See [prediction development](docs/prediction_development.md) for the metrics, adding your own model as a
+plugin and exporting more drives. Current vehicle error at 3 s is about 1.5 m (held-out half) to 3.7 m (busier
+first half), almost all along the direction of travel.
+
 ## Record camera + LiDAR test data
 
 For a five-minute sensors-only session with several scenes, position the stationary rig and run:
@@ -150,9 +188,14 @@ The project provides live sensor inputs and recording, camera-colored LiDAR, sta
 - [Camera object labels and observed extents](docs/camera_objects.md): native C++/TensorRT YOLO11n labels people and vehicles, with consistent camera/BEV colors and boxes enclosing accepted visible LiDAR returns. Bicycle labeling is available in the detector configuration. This association path does not infer complete 3D dimensions or heading.
 - [Camera labels on learned LiDAR boxes](docs/camera_lidar_boxes.md): camera-matched car/person predictions with unchanged LiDAR dimensions, yaw and score, native points for context, and a labeled camera pane beside the flat BEV.
 - [Combined image/BEV display](docs/combined_bev_display.md): camera 2D labels, projected LiDAR 3D boxes and image road/lane masks, with live and recorded-data entry points.
+- [CenterPoint 3D detection](docs/live_3d_planning.md#centerpoint-3d-detection): CenterPoint-PointPillar (nuScenes weights, 10 classes, 360 degrees, +-51.2 m) in native C++/TensorRT with 3 merged sweeps placed by localization poses and the Ouster gyro (`model:=centerpoint`). Ouster-domain accuracy remains unvalidated.
+- [Mapped stop signs, traffic lights and stop lines](docs/live_3d_planning.md#stop-signs-traffic-lights-and-stop-lines-on-the-map): camera detections located with LiDAR during a drive, reviewed on a local page (`tools/review_landmarks.py`), and shown in RViz; stop lines are estimated at the route point nearest each sign, not detected paint.
+- [Route planner and drive recording](docs/live_3d_planning.md#route-planner-shadow-mode-and-drive-recording): a shadow-mode speed/path planner along the mapped route with stops at kept stop lines and IDM car following, live measured-vs-planned charts, and per-drive CSV / plan / MCAP recordings. No vehicle commands.
+- [Object tracking and prediction](docs/live_3d_planning.md#object-tracking-and-prediction): map-frame Kalman/IMM tracking of CenterPoint boxes with 4-5 s predictions, a replay benchmark, and a ROS-free [development setup](docs/prediction_development.md).
+- [3D BEV view and launcher](docs/live_3d_planning.md#the-3d-view): `tools/run_bev_3d.sh` and `config/rviz/bev_planning_3d.rviz`.
 - Documentation, an intentionally incomplete calibration example, and a first-recording checklist.
 
-Stationary ground classification, conservative observed occupancy, camera object association, trained LiDAR car/person detection, camera road/lane segmentation, FAST-LIO2 deskew/odometry and experimental saved-map localization are implemented. Mapping deskew does not automatically deskew the native detector or stationary occupancy inputs. Vehicle-frame rolling occupancy, dense semantic fusion, persistent object tracking, Ouster-domain detector accuracy validation, a dedicated BEV feature exporter and a trajectory planner remain outstanding. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; dense `2048x10` mapping/localization and combined-view timing are documented separately below.
+Stationary ground classification, conservative observed occupancy, camera object association, trained LiDAR car/person detection, camera road/lane segmentation, FAST-LIO2 deskew/odometry and experimental saved-map localization are implemented. Mapping deskew does not automatically deskew the native detector or stationary occupancy inputs. Map-frame object tracking with short-term prediction and a shadow-mode route planner now exist as experimental tools (above). Vehicle-frame rolling occupancy, dense semantic fusion, Ouster-domain detector accuracy validation, a dedicated BEV feature exporter, an obstacle-avoiding planner and any closed-loop use of the planner remain outstanding. Short live checks measured approximately 20 Hz LiDAR and camera-colored cloud reception in `1024x20` mode; dense `2048x10` mapping/localization and combined-view timing are documented separately below.
 
 After building and sourcing the overlay, start the front camera with:
 

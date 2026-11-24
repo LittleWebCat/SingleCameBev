@@ -25,8 +25,13 @@ GPS_TOPICS = {
 }
 
 
-def capture_topics(gps=False):
-    return list(DEFAULT_TOPICS)+(list(GPS_TOPICS) if gps else [])
+# Front-left/right cameras from front_side_cameras.launch.py (start it before collecting).
+SIDE_CAMERA_TOPICS = [f'/camera/{side}/{kind}' for side in ('front_left', 'front_right')
+                      for kind in ('image_raw', 'camera_info')]
+
+
+def capture_topics(gps=False, side_cameras=False):
+    return list(DEFAULT_TOPICS)+(list(GPS_TOPICS) if gps else [])+(SIDE_CAMERA_TOPICS if side_cameras else [])
 
 
 def gps_observation(message, now_ns, received_at, monotonic_now,
@@ -98,8 +103,8 @@ def lidar_profile(root, mode):
 
 
 def context_snapshot(root, folder, lidar_mode='1024x20', gps_config=None):
-    sources = [root/'config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml',
-               root/'config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml',
+    sources = [root/'config/calibration/front_active/front_camera_1024x768.candidate.yaml',
+               root/'config/calibration/front_active/T_B_os_sensor.candidate.yaml',
                lidar_profile(root,lidar_mode), root/'config/sensors/front_camera.yaml',
                root/'config/transport/cyclonedds_large_clouds.xml', root/'config/recording/raw_sensor_qos.yaml']
     if gps_config is not None:
@@ -294,6 +299,9 @@ def main():
     parser.add_argument('--lidar-mode',choices=('1024x20','2048x10'),default='1024x20',
                         help='Ouster mode: 1024x20 (default) or denser 2048x10 at 10 Hz')
     parser.add_argument('--scene',default='multi_scene_test',help='free-text scene label saved with the session')
+    parser.add_argument('--side-cameras',action='store_true',
+                        help='also record /camera/front_left and /camera/front_right '
+                             '(run "ros2 launch bev_bringup front_side_cameras.launch.py" first)')
     parser.add_argument('--gps', action='store_true',
                         help='include passive Septentrio GPS and require a fresh usable position fix')
     parser.add_argument('--gps-config', type=Path, default=root/'config/sensors/septentrio_gps.yaml',
@@ -310,7 +318,7 @@ def main():
     if args.allow_no_gps_fix and not args.gps:
         parser.error('--allow-no-gps-fix requires --gps')
     gps_config = args.gps_config.expanduser().resolve()
-    topics = capture_topics(args.gps)
+    topics = capture_topics(args.gps, args.side_cameras)
     if not math.isfinite(args.min_free_gib) or args.min_free_gib<1:
         parser.error('minimum free-space floor must be at least 1 GiB')
     if not 1<=args.cache_mib<=4096:
@@ -320,7 +328,7 @@ def main():
     folder = Path(str(output)+'.capture')
     if any(p.exists() or p.is_symlink() for p in output_paths(output)):
         parser.error('refusing to overwrite an existing bag or capture/report path')
-    calibration = root/'config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml'
+    calibration = root/'config/calibration/front_active/front_camera_1024x768.candidate.yaml'
     profile = lidar_profile(root,args.lidar_mode)
     commands = [
         ('camera_bridge',['ros2','launch','bev_bringup','front_camera.launch.py','width:=1024','height:=768',

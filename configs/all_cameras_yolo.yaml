@@ -1,0 +1,142 @@
+# All seven cameras, YOLO object detection only, for the live camera window next to
+# the LiDAR view (layout and capture modes from ~/CameraSetup, 2026-11-19):
+#
+#   4.1.2.1 front mid (wide) (Global Shutter)  1920x1080 -> front_mid
+#   4.1.3.2 front narrow     (HD USB)          1024x768  -> front_narrow
+#   4.1.2.4 front left       (16MP USB)        1600x1200 -> front_left
+#   4.1.4.3 front right      (16MP USB)        1600x1200 -> front_right
+#   4.1.3.4 back left        (16MP USB)        1600x1200 -> back_left
+#   4.1.2.2 back             (Global Shutter)  1920x1080 -> back
+#   4.1.4.4 back right       (16MP USB)        1600x1200 -> back_right
+#
+# All modes are 30 fps MJPG and need the patched uvcvideo driver (mjpeg_payload=800).
+# No depth model (constant placeholder depth) and no traffic-light model: run with
+# --display-cameras, since fused BEV positions would be meaningless without depth.
+
+input:
+  width: 1600
+  height: 1200
+  fps: 30
+  fourcc: MJPG
+  camera_index_backend: v4l2
+
+models:
+  detector:
+    backend: ultralytics
+    path: models/yolo_vehicle_fp16.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [person, bicycle, car, motorcycle, bus, truck, stop sign]
+  depth:
+    backend: constant  # no depth model; placeholder distance only
+    constant_depth_m: 20.0
+
+camera:
+  intrinsics:
+    fx: 800.0
+    fy: 800.0
+    cx: 800.0
+    cy: 600.0
+    calibration_width: 1600
+    calibration_height: 1200
+  extrinsics:
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+    lateral_offset_m: 0.0
+    forward_offset_m: 0.0
+
+cameras:
+  - name: front_mid
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.1:1.0-video-index0
+    traffic_color: false
+    input:
+      width: 1920
+      height: 1080
+      fps: 30
+    intrinsics:
+      fx: 960.0
+      fy: 960.0
+      cx: 960.0
+      cy: 540.0
+      calibration_width: 1920
+      calibration_height: 1080
+    extrinsics:
+      yaw_deg: 0.0
+  - name: front_narrow
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.3.2:1.0-video-index0
+    traffic_color: false
+    input:
+      width: 1024
+      height: 768
+      fps: 30
+    intrinsics:
+      # Narrow lens, about 65 degrees: fx 500 at 640x480, scaled 1.6x.
+      fx: 500.0
+      fy: 500.0
+      cx: 320.0
+      cy: 240.0
+      calibration_width: 640
+      calibration_height: 480
+    extrinsics:
+      yaw_deg: 0.0
+      forward_offset_m: 0.15
+  - name: front_left
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.4:1.0-video-index0
+    traffic_color: false
+    extrinsics:
+      yaw_deg: -60.0
+      lateral_offset_m: -0.65
+  - name: front_right
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.3:1.0-video-index0
+    traffic_color: false
+    extrinsics:
+      yaw_deg: 60.0
+      lateral_offset_m: 0.65
+  - name: back_left
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.3.4:1.0-video-index0
+    traffic_color: false
+    extrinsics:
+      yaw_deg: -120.0
+      lateral_offset_m: -0.65
+  - name: back
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0
+    traffic_color: false
+    input:
+      width: 1920
+      height: 1080
+      fps: 30
+    intrinsics:
+      fx: 960.0
+      fy: 960.0
+      cx: 960.0
+      cy: 540.0
+      calibration_width: 1920
+      calibration_height: 1080
+    extrinsics:
+      yaw_deg: 180.0
+      forward_offset_m: -2.0
+  - name: back_right
+    source: /dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.4.4:1.0-video-index0
+    traffic_color: false
+    extrinsics:
+      yaw_deg: 120.0
+      lateral_offset_m: 0.65
+
+bev:
+  forward_range_m: 80.0
+  rear_range_m: 40.0
+  lateral_range_m: 80.0
+  pixels_per_meter: 5
+bev_view:
+  forward_range_m: 40.0
+  rear_range_m: 20.0
+  lateral_range_m: 40.0
+  pixels_per_meter: 10
+runtime:
+  target_fps: 30
+  save_images: false
+  save_matrices: false
+  max_frames: 0
