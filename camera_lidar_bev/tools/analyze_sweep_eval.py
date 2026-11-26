@@ -114,7 +114,8 @@ def main():
             if r['pose_ok'] == '1':
                 poses[int(r['index'])] = ([float(r['x']), float(r['y']), float(r['z'])],
                                           rot([float(r[k]) for k in ('qx', 'qy', 'qz', 'qw')]))
-    for label, threshold in (('per-class thresholds (current config)', None), ('all classes at 0.50', 0.5)):
+    for label, threshold in (('per-class thresholds (current config)', None), ('all classes at 0.30', 0.3),
+                             ('all classes at 0.50', 0.5)):
         results = {e.stem: analyse(load(e, poses, threshold)) for e in a.evals}
         names = list(results)
         print(f'\n=== {label} ===')
