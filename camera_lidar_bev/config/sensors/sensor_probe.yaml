@@ -1,0 +1,7 @@
+# Topic names are candidates. Inspect the live graph before recording.
+/**:
+  ros__parameters:
+    stale_after_s: 1.0
+    future_tolerance_s: 0.05
+# Launch arguments select the topics so they can be overridden for replay.
+# Clock checks assume message headers and the node use the same time basis.

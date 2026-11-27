@@ -1,0 +1,17 @@
+{
+  "device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0",
+  "protocol": "steer_deg speed_mph pedal mode",
+  "baud": 115200,
+  "steer_sign": -1,
+  "steer_ratio": 17.0,
+  "max_steering_wheel_deg": 280.0,
+  "max_steering_wheel_rate_deg_s": 280.0,
+  "firmware_heartbeat_timeout_s": 0.5,
+  "protocol_verified": true,
+  "steering_calibration_verified": true,
+  "speed_feedback_verified": true,
+  "zero_speed_braking_verified": true,
+  "timeout_braking_verified": true,
+  "hardware_estop_verified": true,
+  "verification_notes": "2026-10-14: operator confirmed all six checks (protocol, steering sign/ratio, 0x284 speed feedback, zero-speed braking, serial-timeout braking, hardware e-stop) were performed on the car. Firmware limits 450 deg / 200 deg/s / 0.5 s heartbeat supplied by the operator from dbw_esp_full; steering capped at the operator-chosen 280 deg / 280 deg/s (rate set above the reported 200 deg/s firmware limit at operator request). Baud 115200 as observed on the CP2102 adapter."
+}

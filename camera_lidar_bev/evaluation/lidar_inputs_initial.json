@@ -1,0 +1,177 @@
+{
+  "clock_caveat": "Header ages assume a common epoch and synchronized clock; receipt time is not exposure/scan time.",
+  "clock_end": {
+    "ros_time_ns": 1791309195831716494,
+    "system_time_ns": 1791309195831710771
+  },
+  "clock_start": {
+    "ros_time_ns": 1791309188760973419,
+    "system_time_ns": 1791309188760966697
+  },
+  "discovered_sensor_topics": {
+    "/camera/front/camera_info": [
+      "sensor_msgs/msg/CameraInfo"
+    ],
+    "/camera/front/image_raw": [
+      "sensor_msgs/msg/Image"
+    ],
+    "/imu": [
+      "sensor_msgs/msg/Imu"
+    ],
+    "/points": [
+      "sensor_msgs/msg/PointCloud2"
+    ]
+  },
+  "discovery_duration_s": 2.0,
+  "environment": {
+    "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp",
+    "ROS_AUTOMATIC_DISCOVERY_RANGE": "SUBNET",
+    "ROS_DOMAIN_ID": "1",
+    "ROS_LOCALHOST_ONLY": null
+  },
+  "expected_topics": {
+    "/camera/front/camera_info": {
+      "expected_type": "sensor_msgs/msg/CameraInfo",
+      "status": "observed"
+    },
+    "/camera/front/image_raw": {
+      "expected_type": "sensor_msgs/msg/Image",
+      "status": "observed"
+    },
+    "/imu": {
+      "expected_type": "sensor_msgs/msg/Imu",
+      "status": "observed"
+    },
+    "/lio_sam/mapping/odometry": {
+      "expected_type": "nav_msgs/msg/Odometry",
+      "reason": "topic_not_discovered_with_supported_sensor_type",
+      "status": "missing"
+    },
+    "/points": {
+      "expected_type": "sensor_msgs/msg/PointCloud2",
+      "reason": "no_messages_received",
+      "status": "missing"
+    },
+    "/sensing/imu/imu_data": {
+      "expected_type": "sensor_msgs/msg/Imu",
+      "reason": "topic_not_discovered_with_supported_sensor_type",
+      "status": "missing"
+    }
+  },
+  "finished_utc": "2026-10-06T17:53:15.831+00:00",
+  "motion_caveat": "Ouster IMU or other raw IMU is not equivalent to an odometry trajectory.",
+  "observation_duration_s": 5.069989,
+  "observed_topics": [
+    "/camera/front/camera_info",
+    "/camera/front/image_raw",
+    "/imu"
+  ],
+  "ros_domain_id": 1,
+  "schema_version": 1,
+  "stale_after_s": 2.0,
+  "started_utc": "2026-10-06T17:53:08.760+00:00",
+  "topics": {
+    "/camera/front/camera_info": {
+      "count": 150,
+      "frames": [
+        "camera_front_optical_frame"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "camera_front_optical_frame",
+      "last_header_age_at_end_s_assuming_common_clock": 0.033805,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.005043,
+      "last_header_time_ns": 1791309195797911886,
+      "latest_message": {
+        "distortion_model": "",
+        "height": 480,
+        "intrinsics_present": false,
+        "intrinsics_validation": "K[0] presence only; calibration accuracy unverified",
+        "width": 640
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.006443824,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.002297105,
+      "receipt_rate_hz": 30.001,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.028763,
+      "status": "observed",
+      "types": [
+        "sensor_msgs/msg/CameraInfo"
+      ]
+    },
+    "/camera/front/image_raw": {
+      "count": 150,
+      "frames": [
+        "camera_front_optical_frame"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "camera_front_optical_frame",
+      "last_header_age_at_end_s_assuming_common_clock": 0.033805,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.003962,
+      "last_header_time_ns": 1791309195797911886,
+      "latest_message": {
+        "encoding": "bgr8",
+        "height": 480,
+        "payload_bytes": 921600,
+        "step": 1920,
+        "width": 640
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.005171328,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.003587267,
+      "receipt_rate_hz": 30.001,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.029848,
+      "status": "observed",
+      "types": [
+        "sensor_msgs/msg/Image"
+      ]
+    },
+    "/imu": {
+      "count": 482,
+      "frames": [
+        "os_imu"
+      ],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "last_frame_id": "os_imu",
+      "last_header_age_at_end_s_assuming_common_clock": 0.000791,
+      "last_header_age_at_receipt_s_assuming_common_clock": 0.00019,
+      "last_header_time_ns": 1791309195830925839,
+      "latest_message": {
+        "angular_velocity_marked_available": true,
+        "linear_acceleration_marked_available": true,
+        "orientation_marked_available": false,
+        "trajectory_note": "IMU measurements alone are not an odometry trajectory for deskewing"
+      },
+      "max_header_age_at_receipt_s_assuming_common_clock": 0.003878913,
+      "min_header_age_at_receipt_s_assuming_common_clock": 0.000183547,
+      "receipt_rate_hz": 96.396,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": 0.000598,
+      "status": "observed",
+      "types": [
+        "sensor_msgs/msg/Imu"
+      ]
+    },
+    "/points": {
+      "count": 0,
+      "frames": [],
+      "header_regression_count": 0,
+      "invalid_or_zero_header_count": 0,
+      "receipt_rate_hz": null,
+      "receipt_rate_note": "callback receipts during sample; not verified sensor capture rate",
+      "repeated_header_count": 0,
+      "seconds_since_last_receipt": null,
+      "status": "missing",
+      "status_reason": "no_messages_received",
+      "types": [
+        "sensor_msgs/msg/PointCloud2"
+      ]
+    }
+  },
+  "use_sim_time": false
+}

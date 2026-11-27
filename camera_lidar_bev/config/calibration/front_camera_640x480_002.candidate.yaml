@@ -1,0 +1,57 @@
+# CANDIDATE INTRINSICS: unvalidated and not applied to the camera bridge.
+# Identity rectification is monocular CameraInfo bookkeeping, not sensor extrinsics.
+image_width: 640
+image_height: 480
+camera_name: front_camera_candidate
+camera_matrix:
+  rows: 3
+  cols: 3
+  data:
+  - 904.886360419207
+  - 0.0
+  - 348.9028141306046
+  - 0.0
+  - 894.1895195899784
+  - 239.2980665473161
+  - 0.0
+  - 0.0
+  - 1.0
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data:
+  - -0.4079651180025769
+  - 0.8080521177596051
+  - 0.004596374114669609
+  - 0.0009649587157795288
+  - -2.5422425595588662
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data:
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+projection_matrix:
+  rows: 3
+  cols: 4
+  data:
+  - 904.886360419207
+  - 0.0
+  - 348.9028141306046
+  - 0.0
+  - 0.0
+  - 894.1895195899784
+  - 239.2980665473161
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0

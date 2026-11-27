@@ -1,0 +1,36 @@
+{
+  "recorded_at_utc": "2026-10-08T17:19:59.590385+00:00",
+  "source": "User supplied approximate vehicle dimensions and LiDAR distances to body edges.",
+  "vehicle_length_m": 4.481,
+  "vehicle_width_m": 1.791,
+  "vehicle_width_with_mirrors_approx_m": 2.03,
+  "vehicle_height_approx_m": 1.56,
+  "lidar_height_user_m": 1.8,
+  "lidar_to_front_m": 2.35,
+  "lidar_to_rear_derived_m": 2.131,
+  "lidar_to_left_body_edge_m": 0.885,
+  "lidar_to_right_body_edge_m": 0.905,
+  "self_mask_frame": "os_sensor",
+  "self_mask_m": {
+    "x": [
+      -2.131,
+      2.35
+    ],
+    "y": [
+      -0.905,
+      0.885
+    ],
+    "z": [
+      -1.8,
+      0.0
+    ]
+  },
+  "vertical_mask_interpretation": "Vehicle and mounting structure within the measured body footprint below the LiDAR origin.",
+  "mirror_exclusion_enabled": false,
+  "vehicle_transform_independently_validated": false,
+  "physical_object_distance_test_completed": false,
+  "software_filter_validation_passed": true,
+  "software_filter_evidence": "ground_bev_replay_003.json",
+  "live_configured_bounds_and_cloud_exclusion_verified": true,
+  "live_filter_evidence": "ground_bev_live_002.json"
+}

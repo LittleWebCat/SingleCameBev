@@ -1,0 +1,36 @@
+# Stationary preview in os_sensor; height is the user's approximate mounting estimate.
+/**:
+  ros__parameters:
+    input_topic: /camera_lidar_bev/points_rgb
+    expected_frame: os_sensor
+    ground_height_m: 1.8
+    ground_height_tolerance_m: 0.35
+    max_slope_deg: 15.0
+    fit_min_range_m: 1.0
+    fit_max_range_m: 18.0
+    min_range_m: 0.5
+    max_range_m: 60.0
+    ground_distance_m: 0.10
+    obstacle_min_height_m: 0.15
+    obstacle_max_height_m: 3.0
+    patch_size_m: 1.0
+    local_support_radius_m: 2.0
+    min_ground_points: 80
+    min_ground_patches: 12
+    min_ground_span_m: 3.0
+    # User: length 4.481m; LiDAR 2.35m from front, .885m from left, .905m from right.
+    # Vehicle/mount envelope below LiDAR level; mirror positions are not included.
+    self_mask_enabled: true
+    self_x_min_m: -2.131
+    self_x_max_m: 2.350
+    self_y_min_m: -0.905
+    self_y_max_m: 0.885
+    self_z_min_m: -1.800
+    self_z_max_m: 0.0
+    grid_x_min_m: 0.0
+    grid_x_max_m: 40.0
+    grid_y_min_m: -15.0
+    grid_y_max_m: 15.0
+    grid_resolution_m: 0.20
+    stale_after_s: 0.75
+    max_publish_hz: 20.0

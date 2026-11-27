@@ -1,0 +1,533 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T18:27:57.937407+00:00",
+  "purpose": "read_only_live_camera_object_bev_observation",
+  "duration_requested_s": 12.0,
+  "provisional_stationary_mode": true,
+  "stationarity_independently_verified": false,
+  "physical_calibration_accuracy_validated": false,
+  "timing_and_motion_validated": false,
+  "learned_3d_detection_validated": false,
+  "complete_object_dimensions_validated": false,
+  "positive_camera_object_observed": true,
+  "positive_live_object_observed": true,
+  "errors": [],
+  "streams": {
+    "detections_2d": {
+      "messages": 236,
+      "distinct_source_headers": 236,
+      "receipt_span_fps": 20.024743822671137,
+      "source_header_span_fps": 19.96304954041519,
+      "nonempty_messages": 228,
+      "first_count": 1,
+      "last_count": 1,
+      "max_count": 2
+    },
+    "labeled_image": {
+      "messages": 237,
+      "distinct_source_headers": 237,
+      "receipt_span_fps": 20.094753367853276,
+      "source_header_span_fps": 19.998028150360923,
+      "nonempty_messages": 237,
+      "first_count": 1,
+      "last_count": 1,
+      "max_count": 1
+    },
+    "detections_3d": {
+      "messages": 234,
+      "distinct_source_headers": 234,
+      "receipt_span_fps": 19.844190628929386,
+      "source_header_span_fps": 19.91462043754348,
+      "nonempty_messages": 32,
+      "first_count": 0,
+      "last_count": 0,
+      "max_count": 1
+    },
+    "markers": {
+      "messages": 234,
+      "distinct_source_headers": 234,
+      "receipt_span_fps": 19.843718257210444,
+      "source_header_span_fps": 19.91462043754348,
+      "nonempty_messages": 32,
+      "first_count": 0,
+      "last_count": 0,
+      "max_count": 2
+    },
+    "semantic_points": {
+      "messages": 234,
+      "distinct_source_headers": 234,
+      "receipt_span_fps": 19.843639670200933,
+      "source_header_span_fps": 19.91462043754348,
+      "nonempty_messages": 32,
+      "first_count": 0,
+      "last_count": 0,
+      "max_count": 23
+    },
+    "occupancy": {
+      "messages": 234,
+      "distinct_source_headers": 234,
+      "receipt_span_fps": 19.826005825856555,
+      "source_header_span_fps": 19.915069211199867,
+      "nonempty_messages": 234,
+      "first_count": 727,
+      "last_count": 731,
+      "max_count": 752
+    }
+  },
+  "diagnostics": {
+    "camera_object_detector": {
+      "samples": 12,
+      "processed_counter_rate_hz": 19.99901798640264,
+      "timing_sample_policy": "one reported last-frame timing per approximately 1 Hz diagnostic, not every inference",
+      "metrics": {
+        "inference_ms": {
+          "samples": 12,
+          "min": 1.891701,
+          "median": 2.029768,
+          "p95": 2.21306605,
+          "max": 2.354146
+        },
+        "source_age_at_publish_s": {
+          "samples": 12,
+          "min": 0.041572,
+          "median": 0.0437635,
+          "p95": 0.04543079999999999,
+          "max": 0.046324
+        },
+        "postprocess_ms": {
+          "samples": 12,
+          "min": 3.627962,
+          "median": 3.8251865,
+          "p95": 4.134417399999999,
+          "max": 4.45679
+        },
+        "annotate_ms": {
+          "samples": 12,
+          "min": 2.189999,
+          "median": 2.2872075,
+          "p95": 2.9512703499999997,
+          "max": 3.067432
+        },
+        "source_age_at_start_s": {
+          "samples": 12,
+          "min": 0.030307,
+          "median": 0.033028,
+          "p95": 0.03407905,
+          "max": 0.035173
+        },
+        "preprocess_ms": {
+          "samples": 12,
+          "min": 2.439935,
+          "median": 2.5031749999999997,
+          "p95": 3.2594383,
+          "max": 3.290367
+        },
+        "publish_ms": {
+          "samples": 12,
+          "min": 3.487032,
+          "median": 4.073771499999999,
+          "p95": 4.7104662,
+          "max": 4.808111
+        },
+        "receipt_age_s": {
+          "samples": 12,
+          "min": 0.007776,
+          "median": 0.01225,
+          "p95": 0.012974,
+          "max": 0.013018
+        },
+        "gpu_compute_ms": {
+          "samples": 12,
+          "min": 1.482688,
+          "median": 1.6000640000000002,
+          "p95": 1.8227775999999998,
+          "max": 1.943584
+        },
+        "decode_ms": {
+          "samples": 12,
+          "min": 0.001843,
+          "median": 0.0029449999999999997,
+          "p95": 0.0046079499999999995,
+          "max": 0.004944
+        },
+        "source_age_s": {
+          "samples": 12,
+          "min": 0.013162,
+          "median": 0.01608,
+          "p95": 0.0164856,
+          "max": 0.016512
+        },
+        "processing_ms": {
+          "samples": 12,
+          "min": 10.394376,
+          "median": 10.9230265,
+          "p95": 11.77927205,
+          "max": 12.107946
+        }
+      },
+      "first": {
+        "receipt": 7311.543330127,
+        "level": 0,
+        "message": "COCO road-user 2D camera detections; native TensorRT",
+        "values": {
+          "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+          "received_frames": "330",
+          "processed_frames": "219",
+          "inferred_frames": "219",
+          "mailbox_dropped_frames": "110",
+          "stale_dropped_frames": "0",
+          "rejected_frames": "0",
+          "duplicate_frames": "0",
+          "inference_errors": "0",
+          "cleared_outputs": "0",
+          "outputs_cleared": "0",
+          "detections": "1",
+          "max_publish_hz": "20.000000",
+          "source_stamp_ns": "1791484078318891129",
+          "source_age_at_start_s": "0.031255",
+          "source_age_at_publish_s": "0.042165",
+          "source_age_s": "0.015080",
+          "receipt_age_s": "0.009599",
+          "decode_ms": "0.002537",
+          "preprocess_ms": "2.761337",
+          "inference_ms": "2.044422",
+          "gpu_compute_ms": "1.543744",
+          "postprocess_ms": "3.836240",
+          "annotate_ms": "2.253216",
+          "processing_ms": "10.904939",
+          "publish_ms": "4.091074"
+        }
+      },
+      "last": {
+        "receipt": 7322.543870261,
+        "level": 0,
+        "message": "COCO road-user 2D camera detections; native TensorRT",
+        "values": {
+          "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+          "received_frames": "660",
+          "processed_frames": "439",
+          "inferred_frames": "439",
+          "mailbox_dropped_frames": "220",
+          "stale_dropped_frames": "0",
+          "rejected_frames": "0",
+          "duplicate_frames": "0",
+          "inference_errors": "0",
+          "cleared_outputs": "0",
+          "outputs_cleared": "0",
+          "detections": "1",
+          "max_publish_hz": "20.000000",
+          "source_stamp_ns": "1791484089317038217",
+          "source_age_at_start_s": "0.033157",
+          "source_age_at_publish_s": "0.043556",
+          "source_age_s": "0.016446",
+          "receipt_age_s": "0.012660",
+          "decode_ms": "0.003176",
+          "preprocess_ms": "2.439935",
+          "inference_ms": "1.906906",
+          "gpu_compute_ms": "1.578912",
+          "postprocess_ms": "3.819996",
+          "annotate_ms": "2.218158",
+          "processing_ms": "10.394376",
+          "publish_ms": "3.697825"
+        }
+      }
+    },
+    "ground_bev": {
+      "samples": 11,
+      "processed_counter_rate_hz": 19.90102264788117,
+      "timing_sample_policy": "one reported last-frame timing per approximately 1 Hz diagnostic, not every inference",
+      "metrics": {
+        "serialize_ms": {
+          "samples": 11,
+          "min": 1.357904,
+          "median": 1.489307,
+          "p95": 2.4623945000000003,
+          "max": 2.702918
+        },
+        "core_ms": {
+          "samples": 11,
+          "min": 21.128499,
+          "median": 21.871599,
+          "p95": 24.2714385,
+          "max": 25.891394
+        },
+        "publish_ms": {
+          "samples": 11,
+          "min": 3.045848,
+          "median": 4.203088,
+          "p95": 5.294143,
+          "max": 5.61177
+        },
+        "processing_ms": {
+          "samples": 11,
+          "min": 27.380292,
+          "median": 29.770957,
+          "p95": 32.399821,
+          "max": 33.64532
+        },
+        "decode_ms": {
+          "samples": 11,
+          "min": 1.090477,
+          "median": 1.124626,
+          "p95": 1.6474425,
+          "max": 1.756012
+        },
+        "source_age_s": {
+          "samples": 11,
+          "min": 0.208907,
+          "median": 0.209067,
+          "p95": 0.209223,
+          "max": 0.209225
+        },
+        "source_age_at_processing_s": {
+          "samples": 11,
+          "min": 0.232839,
+          "median": 0.233747,
+          "p95": 0.23703249999999998,
+          "max": 0.238642
+        }
+      },
+      "first": {
+        "receipt": 7312.14482096,
+        "level": 1,
+        "message": "Provisional stationary ground/obstacle BEV; camera calibration and motion remain unvalidated",
+        "values": {
+          "provisional": "true",
+          "stationary_mode": "true",
+          "tf_published": "false",
+          "expected_frame": "os_sensor",
+          "input_topic": "/camera_lidar_bev/points_rgb",
+          "plane_valid": "true",
+          "ground_height_prior_used": "true",
+          "ground_height_m": "1.800000",
+          "self_mask_enabled": "true",
+          "self_x_min_m": "-2.131000",
+          "self_x_max_m": "2.350000",
+          "self_y_min_m": "-0.905000",
+          "self_y_max_m": "0.885000",
+          "self_z_min_m": "-1.800000",
+          "self_z_max_m": "0.000000",
+          "plane_a": "0.022072",
+          "plane_b": "-0.015434",
+          "plane_c": "-1.859863",
+          "ground_reason": "supported floor within configured height prior",
+          "support_points": "4213",
+          "support_patches": "47",
+          "ground_rms_m": "0.019537",
+          "slope_deg": "1.542762",
+          "input_points": "130125",
+          "invalid_points": "0",
+          "unknown_points": "55855",
+          "ground_points": "5600",
+          "obstacle_points": "66680",
+          "masked_points": "1990",
+          "grid_free_cells": "245",
+          "grid_occupied_cells": "484",
+          "grid_unknown_cells": "29271",
+          "processed_scans": "228",
+          "cleared_outputs": "1",
+          "processing_ms": "28.667448",
+          "decode_ms": "1.090477",
+          "core_ms": "21.154002",
+          "serialize_ms": "1.541605",
+          "publish_ms": "4.371105",
+          "cloud_outputs_active": "1",
+          "occupancy_image_active": "true",
+          "occupancy_image_subscribers": "1",
+          "source_age_s": "0.209167",
+          "source_age_at_processing_s": "0.232957",
+          "outputs_cleared": "false",
+          "current_error": ""
+        }
+      },
+      "last": {
+        "receipt": 7322.144307093,
+        "level": 1,
+        "message": "Provisional stationary ground/obstacle BEV; camera calibration and motion remain unvalidated",
+        "values": {
+          "provisional": "true",
+          "stationary_mode": "true",
+          "tf_published": "false",
+          "expected_frame": "os_sensor",
+          "input_topic": "/camera_lidar_bev/points_rgb",
+          "plane_valid": "true",
+          "ground_height_prior_used": "true",
+          "ground_height_m": "1.800000",
+          "self_mask_enabled": "true",
+          "self_x_min_m": "-2.131000",
+          "self_x_max_m": "2.350000",
+          "self_y_min_m": "-0.905000",
+          "self_y_max_m": "0.885000",
+          "self_z_min_m": "-1.800000",
+          "self_z_max_m": "0.000000",
+          "plane_a": "0.021758",
+          "plane_b": "-0.015187",
+          "plane_c": "-1.856724",
+          "ground_reason": "supported floor within configured height prior",
+          "support_points": "4217",
+          "support_patches": "47",
+          "ground_rms_m": "0.019416",
+          "slope_deg": "1.519949",
+          "input_points": "130126",
+          "invalid_points": "0",
+          "unknown_points": "55827",
+          "ground_points": "5616",
+          "obstacle_points": "66687",
+          "masked_points": "1996",
+          "grid_free_cells": "245",
+          "grid_occupied_cells": "487",
+          "grid_unknown_cells": "29268",
+          "processed_scans": "427",
+          "cleared_outputs": "1",
+          "processing_ms": "28.766574",
+          "decode_ms": "1.138200",
+          "core_ms": "21.445222",
+          "serialize_ms": "1.437555",
+          "publish_ms": "4.204447",
+          "cloud_outputs_active": "1",
+          "occupancy_image_active": "true",
+          "occupancy_image_subscribers": "1",
+          "source_age_s": "0.208907",
+          "source_age_at_processing_s": "0.232873",
+          "outputs_cleared": "false",
+          "current_error": ""
+        }
+      }
+    },
+    "camera_object_bev": {
+      "samples": 11,
+      "processed_counter_rate_hz": 19.60082311304574,
+      "timing_sample_policy": "one reported last-frame timing per approximately 1 Hz diagnostic, not every inference",
+      "metrics": {
+        "last_output_receipt_age_s": {
+          "samples": 11,
+          "min": 0.030006,
+          "median": 0.033951,
+          "p95": 0.038288,
+          "max": 0.040901
+        },
+        "fusion_ms": {
+          "samples": 11,
+          "min": 4.381677,
+          "median": 8.480177,
+          "p95": 10.309849,
+          "max": 10.46076
+        },
+        "header_delta_s": {
+          "samples": 11,
+          "min": 0.006515,
+          "median": 0.00733,
+          "p95": 0.010264,
+          "max": 0.010276
+        },
+        "processing_ms": {
+          "samples": 11,
+          "min": 9.189371,
+          "median": 16.124592,
+          "p95": 18.8911485,
+          "max": 19.985883
+        },
+        "decode_ms": {
+          "samples": 11,
+          "min": 4.635789,
+          "median": 7.514086,
+          "p95": 9.196365499999999,
+          "max": 9.28853
+        },
+        "source_age_at_processing_s": {
+          "samples": 11,
+          "min": 0.27819,
+          "median": 0.286179,
+          "p95": 0.2884195,
+          "max": 0.288806
+        }
+      },
+      "first": {
+        "receipt": 7312.146661855,
+        "level": 1,
+        "message": "Camera labels and observed extents active; geometry/synchronization provisional",
+        "values": {
+          "model": "YOLO11n_COCO_FP16",
+          "calibration_status": "external_candidate_unvalidated",
+          "accuracy_validated": "false",
+          "synchronization_validated": "false",
+          "tf_published": "false",
+          "output_frame": "os_sensor",
+          "observed_extent": "true",
+          "heading_estimated": "false",
+          "tracking_enabled": "false",
+          "occupancy_modified": "false",
+          "driver_tf_observed": "true",
+          "publishing_fresh_output": "true",
+          "received_arrays": "231",
+          "processed_arrays": "222",
+          "cleared_outputs": "1",
+          "publication_cap_hz": "20.000000",
+          "camera_detections": "1",
+          "supported_camera_boxes": "1",
+          "object_candidates": "0",
+          "semantic_points": "0",
+          "visible_geometry_points": "9128",
+          "supported_obstacle_points": "4045",
+          "rejected_invalid_detections": "0",
+          "rejected_unsupported": "1",
+          "rejected_ambiguous": "0",
+          "header_delta_s": "0.007323",
+          "source_age_at_processing_s": "0.286179",
+          "image_header_ns": "1791484078684192364",
+          "cloud_header_ns": "1791484078691515709",
+          "processing_ms": "17.433663",
+          "decode_ms": "7.042207",
+          "fusion_ms": "10.158938",
+          "last_output_receipt_age_s": "0.032581"
+        }
+      },
+      "last": {
+        "receipt": 7322.146241917,
+        "level": 1,
+        "message": "Camera labels and observed extents active; geometry/synchronization provisional",
+        "values": {
+          "model": "YOLO11n_COCO_FP16",
+          "calibration_status": "external_candidate_unvalidated",
+          "accuracy_validated": "false",
+          "synchronization_validated": "false",
+          "tf_published": "false",
+          "output_frame": "os_sensor",
+          "observed_extent": "true",
+          "heading_estimated": "false",
+          "tracking_enabled": "false",
+          "occupancy_modified": "false",
+          "driver_tf_observed": "true",
+          "publishing_fresh_output": "true",
+          "received_arrays": "431",
+          "processed_arrays": "418",
+          "cleared_outputs": "4",
+          "publication_cap_hz": "20.000000",
+          "camera_detections": "1",
+          "supported_camera_boxes": "1",
+          "object_candidates": "0",
+          "semantic_points": "0",
+          "visible_geometry_points": "9128",
+          "supported_obstacle_points": "4039",
+          "rejected_invalid_detections": "0",
+          "rejected_unsupported": "1",
+          "rejected_ambiguous": "0",
+          "header_delta_s": "0.006623",
+          "source_age_at_processing_s": "0.282556",
+          "image_header_ns": "1791484088685201570",
+          "cloud_header_ns": "1791484088691824573",
+          "processing_ms": "14.782321",
+          "decode_ms": "7.355002",
+          "fusion_ms": "7.260711",
+          "last_output_receipt_age_s": "0.035257"
+        }
+      }
+    }
+  },
+  "saved_images": {
+    "first": "/home/agxthor/SingleCameraBev/camera_lidar_bev/evaluation/camera_labeled_live_first_004.png",
+    "last": "/home/agxthor/SingleCameraBev/camera_lidar_bev/evaluation/camera_labeled_live_last_004.png"
+  },
+  "elapsed_s": 12.260210108999672,
+  "passed": true
+}

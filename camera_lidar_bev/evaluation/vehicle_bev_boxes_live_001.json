@@ -1,0 +1,10 @@
+{
+  "checked_at_utc": "2026-10-08T19:51:02.441296+00:00",
+  "purpose": "read_only_live_vehicle_bev_box_check",
+  "matched_updates": 98,
+  "nonempty_vehicle_updates": 0,
+  "vehicle_classes": [],
+  "physical_accuracy_validated": false,
+  "latest_source_age_s": 0.044569376,
+  "passed": true
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>fast_lio</name>
+  <version>0.0.1</version>
+  <description>Pinned FAST-LIO2 ROS2 backend with native Ouster input and local mapping integration.</description>
+  <maintainer email="dev@livoxtech.com">FAST-LIO contributors</maintainer>
+  <license>GPL-2.0</license>
+  <author>HKU-MARS FAST-LIO contributors; Ericsii ROS2 port contributors</author>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>pcl_conversions</depend>
+  <depend>eigen</depend>
+  <depend>libpcl-all-dev</depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

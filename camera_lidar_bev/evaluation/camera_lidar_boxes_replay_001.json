@@ -1,0 +1,216 @@
+{
+  "created_at_utc": "2026-10-08T20:36:29.575829+00:00",
+  "passed": true,
+  "domain_id": 77,
+  "software_only": true,
+  "physical_accuracy_validated": false,
+  "real_time_speed_validated": false,
+  "synthetic_messages": true,
+  "independent_projection": "OpenCV projectPoints of eight oriented cuboid corners using native K/D and candidate B",
+  "native_image_size": [
+    1024,
+    768
+  ],
+  "synthetic_projected_roi_xyxy": [
+    476.1695901431711,
+    260.72780359222895,
+    722.9661642104164,
+    392.91813344411173
+  ],
+  "synthetic_lidar_center_m": [
+    20.0,
+    0.0,
+    -1.0
+  ],
+  "synthetic_lidar_size_m": [
+    4.4,
+    1.8,
+    1.6
+  ],
+  "synthetic_lidar_yaw_rad": 0.4,
+  "executable": "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_lidar_box_fusion",
+  "executable_sha256": "06568ec67043aebff2e307469c330ede99b550eb8a10c95872c95c0b4952362f",
+  "intrinsics_sha256": "4e258e0b0959b9b624b726dffb26303421112f186c53dddb8e6689ceec8133db",
+  "extrinsics_sha256": "7473945aaaeb04b64c002ef65038b9a38f0cdec80c025365358494feea32dce6",
+  "stages": [
+    {
+      "name": "no_camera",
+      "passed": true,
+      "lidar_stamp_ns": 1791491789912936081,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "matched",
+      "passed": true,
+      "lidar_stamp_ns": 1791491790223270331,
+      "camera_associated": true,
+      "label": "car L:0.77 C:car 0.87\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "stale_camera",
+      "passed": true,
+      "lidar_stamp_ns": 1791491790892538131,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "camera_recovery",
+      "passed": true,
+      "lidar_stamp_ns": 1791491791073012838,
+      "camera_associated": true,
+      "label": "car L:0.77 C:car 0.87\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "ambiguous_camera",
+      "passed": true,
+      "lidar_stamp_ns": 1791491791302689418,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "fresh_empty_camera",
+      "passed": true,
+      "lidar_stamp_ns": 1791491791532557651,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "bad_camera_info",
+      "passed": true,
+      "lidar_stamp_ns": 1791491791761849219,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "camera_info_stamp_mismatch",
+      "passed": true,
+      "lidar_stamp_ns": 1791491792073472614,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "wrong_camera_frame",
+      "passed": true,
+      "lidar_stamp_ns": 1791491792263406787,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "camera_future",
+      "passed": true,
+      "lidar_stamp_ns": 1791491792573315304,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "pair_delta",
+      "passed": true,
+      "lidar_stamp_ns": 1791491792761707964,
+      "camera_associated": false,
+      "label": "car L:0.77 C:--\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "matched_before_wrong_lidar",
+      "passed": true,
+      "lidar_stamp_ns": 1791491793073488034,
+      "camera_associated": true,
+      "label": "car L:0.77 C:car 0.87\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "wrong_lidar_frame",
+      "passed": true,
+      "clear_stamp_ns": 1791491793170961311,
+      "explicit_delete_all": true
+    },
+    {
+      "name": "matched_before_stale_lidar",
+      "passed": true,
+      "lidar_stamp_ns": 1791491793473167686,
+      "camera_associated": true,
+      "label": "car L:0.77 C:car 0.87\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    },
+    {
+      "name": "stale_lidar",
+      "passed": true,
+      "clear_stamp_ns": 1791491794020809880,
+      "explicit_delete_all": true
+    },
+    {
+      "name": "recovery",
+      "passed": true,
+      "lidar_stamp_ns": 1791491794362944122,
+      "camera_associated": true,
+      "label": "car L:0.77 C:car 0.87\nL 4.40 W 1.80 H 1.60 m",
+      "full_lidar_footprint_unchanged": true,
+      "flat_closed_oriented_footprint": true,
+      "all_marker_headers_match_lidar": true
+    }
+  ],
+  "last_diagnostics": {
+    "camera_lidar_box_fusion": {
+      "geometry_source": "PointPillars_LiDAR",
+      "dimensions_modified": "false",
+      "heading_modified": "false",
+      "lidar_score_modified": "false",
+      "joint_confidence_computed": "false",
+      "camera_evidence": "projected_box_association",
+      "physical_accuracy_validated": "false",
+      "camera_calibration_validated": "false",
+      "tf_published": "false",
+      "output_frame": "os_sensor",
+      "publishing_fresh_output": "true",
+      "lidar_boxes": "1",
+      "camera_matches": "1",
+      "published_updates": "51",
+      "cleared_outputs": "1",
+      "processing_ms": "0.326549",
+      "source_age_s": "0.197920",
+      "header_delta_s": "0.005000",
+      "camera_header_ns": "1791491793478167686",
+      "lidar_header_ns": "1791491793473167686",
+      "publication_cap_hz": "20.000000"
+    }
+  },
+  "child_returncode": 0,
+  "node_log_tail": "[WARN] [1791491789.770703348] [camera_lidar_box_fusion]: Camera labels associated with unchanged PointPillars geometry. Camera calibration/timing remain provisional; image overlap is an association, not independent visibility confirmation.\n[INFO] [1791491794.453413079] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n"
+}

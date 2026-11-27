@@ -1,0 +1,175 @@
+{
+  "checked_at_utc": "2026-10-08T20:43:20.989867+00:00",
+  "duration_s": 10.003088856999966,
+  "physical_association_accuracy_validated": false,
+  "streams": {
+    "camera_2d": {
+      "messages": 200,
+      "distinct_sources": 200,
+      "nonempty_updates": 200,
+      "hz": 19.995316821486878
+    },
+    "camera_image": {
+      "messages": 200,
+      "distinct_sources": 200,
+      "nonempty_updates": 200,
+      "hz": 19.995571646059894
+    },
+    "lidar_3d": {
+      "messages": 201,
+      "distinct_sources": 201,
+      "nonempty_updates": 201,
+      "hz": 19.997897181117136
+    },
+    "combined_markers": {
+      "messages": 200,
+      "distinct_sources": 200,
+      "nonempty_updates": 200,
+      "hz": 19.997796942199038
+    }
+  },
+  "camera_matched_updates": 23,
+  "max_camera_matches_per_update": 1,
+  "matched_label_examples": [
+    "car L:0.43 C:truck 0.40\nL 4.26 W 1.73 H 1.53 m",
+    "car L:0.35 C:car 0.42\nL 3.89 W 1.62 H 1.65 m",
+    "car L:0.56 C:car 0.50\nL 3.77 W 1.62 H 1.58 m"
+  ],
+  "diagnostics": {
+    "lidar_vehicle_detector": {
+      "sample_count": 10,
+      "last_values": {
+        "model": "PointPillars_KITTI_FP16",
+        "trained_3d_detector": "true",
+        "full_dimensions_predicted": "true",
+        "heading_predicted": "true",
+        "physical_accuracy_validated": "false",
+        "tracking_enabled": "false",
+        "frame": "os_sensor",
+        "driver_tf_valid": "true",
+        "publishing_fresh_output": "true",
+        "vehicle_class": "Car_only",
+        "intensity_field": "reflectivity",
+        "intensity_scale": "255.000000",
+        "received_scans": "5216",
+        "processed_scans": "5192",
+        "cleared_outputs": "2",
+        "vehicle_boxes": "4",
+        "vehicle_points": "748",
+        "self_masked_points": "1877",
+        "model_input_points": "42969",
+        "detector_ms": "6.446187",
+        "input_pillars": "4723",
+        "accepted_pillars": "4723",
+        "truncated_pillars": "0",
+        "processing_ms": "10.206498",
+        "source_age_s": "0.121302",
+        "publication_cap_hz": "20.000000"
+      },
+      "timings": {
+        "processing_ms": {
+          "median": 9.3473255,
+          "p95": 10.277076749999999,
+          "max": 10.334823
+        },
+        "source_age_s": {
+          "median": 0.120446,
+          "p95": 0.12136414999999999,
+          "max": 0.121415
+        }
+      }
+    },
+    "camera_object_detector": {
+      "sample_count": 10,
+      "last_values": {
+        "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+        "received_frames": "8239",
+        "processed_frames": "5491",
+        "inferred_frames": "5491",
+        "mailbox_dropped_frames": "2747",
+        "stale_dropped_frames": "0",
+        "rejected_frames": "0",
+        "duplicate_frames": "0",
+        "inference_errors": "0",
+        "cleared_outputs": "1",
+        "outputs_cleared": "0",
+        "detections": "4",
+        "max_publish_hz": "20.000000",
+        "source_stamp_ns": "1791492200298130227",
+        "source_age_at_start_s": "0.036991",
+        "source_age_at_publish_s": "0.049871",
+        "source_age_s": "0.021505",
+        "receipt_age_s": "0.016306",
+        "decode_ms": "0.005703",
+        "preprocess_ms": "2.593590",
+        "inference_ms": "2.645460",
+        "gpu_compute_ms": "2.409888",
+        "postprocess_ms": "3.897875",
+        "annotate_ms": "3.728023",
+        "processing_ms": "12.875069",
+        "publish_ms": "3.033019"
+      },
+      "timings": {
+        "processing_ms": {
+          "median": 11.889905500000001,
+          "p95": 12.87696815,
+          "max": 12.878522
+        },
+        "inference_ms": {
+          "median": 1.6756445,
+          "p95": 2.2897160999999993,
+          "max": 2.64546
+        },
+        "source_age_s": {
+          "median": 0.019826,
+          "p95": 0.0213142,
+          "max": 0.021505
+        }
+      }
+    },
+    "camera_lidar_box_fusion": {
+      "sample_count": 10,
+      "last_values": {
+        "geometry_source": "PointPillars_LiDAR",
+        "dimensions_modified": "false",
+        "heading_modified": "false",
+        "lidar_score_modified": "false",
+        "joint_confidence_computed": "false",
+        "camera_evidence": "projected_box_association",
+        "physical_accuracy_validated": "false",
+        "camera_calibration_validated": "false",
+        "tf_published": "false",
+        "output_frame": "os_sensor",
+        "publishing_fresh_output": "true",
+        "lidar_boxes": "5",
+        "camera_matches": "0",
+        "published_updates": "5230",
+        "cleared_outputs": "3",
+        "processing_ms": "0.358242",
+        "source_age_s": "0.163460",
+        "header_delta_s": "0.004448",
+        "camera_header_ns": "1791492200763534155",
+        "lidar_header_ns": "1791492200767981832",
+        "publication_cap_hz": "20.000000"
+      },
+      "timings": {
+        "processing_ms": {
+          "median": 0.3360395,
+          "p95": 0.3817315,
+          "max": 0.387631
+        },
+        "header_delta_s": {
+          "median": 0.0029944999999999998,
+          "p95": 0.00431795,
+          "max": 0.004448
+        },
+        "source_age_s": {
+          "median": 0.1634555,
+          "p95": 0.1635507,
+          "max": 0.163566
+        }
+      }
+    }
+  },
+  "passed": true
+}

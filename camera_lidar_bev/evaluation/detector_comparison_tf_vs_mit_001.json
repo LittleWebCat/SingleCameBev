@@ -1,0 +1,184 @@
+{
+ "transfusion_openpcdet": {
+  "scans": 1671,
+  "groups": {
+   "vehicle": {
+    "per_scan": 4.218432076600838,
+    "per_scan_by_range": {
+     "0-20 m": 1.0035906642728905,
+     "20-35 m": 1.1980849790544583,
+     "35-55 m": 1.7564332734889287
+    },
+    "persistent": 0.8492975734355045,
+    "isolated": 0.036043706541790836,
+    "supported_by_other_same_group": 0.9015463186267556,
+    "supported_by_other_any_class": 0.9018300468151511,
+    "score_quartiles": [
+     0.4788,
+     0.5967,
+     0.6987
+    ],
+    "chains_10plus": 122,
+    "chain_travel_m_median": 0.24523973636537658,
+    "chains_static_share": 0.7377049180327869
+   },
+   "two-wheeler": {
+    "per_scan": 0.04248952722920407,
+    "per_scan_by_range": {
+     "0-20 m": 0.006582884500299222,
+     "20-35 m": 0.022142429682824656,
+     "35-55 m": 0.013165769000598444
+    },
+    "persistent": 0.4647887323943662,
+    "isolated": 0.2535211267605634,
+    "supported_by_other_same_group": 0.676056338028169,
+    "supported_by_other_any_class": 0.676056338028169,
+    "score_quartiles": [
+     0.3834,
+     0.4483,
+     0.5176499999999999
+    ],
+    "chains_10plus": 2,
+    "chain_travel_m_median": 0.17019260558977387,
+    "chains_static_share": 1.0
+   },
+   "person": {
+    "per_scan": 0.3734290843806104,
+    "per_scan_by_range": {
+     "0-20 m": 0.052663076002393776,
+     "20-35 m": 0.2106523040095751,
+     "35-55 m": 0.10891681627767803
+    },
+    "persistent": 0.5384615384615384,
+    "isolated": 0.1891025641025641,
+    "supported_by_other_same_group": 0.47596153846153844,
+    "supported_by_other_any_class": 0.47596153846153844,
+    "score_quartiles": [
+     0.347075,
+     0.40635,
+     0.490525
+    ],
+    "chains_10plus": 11,
+    "chain_travel_m_median": 1.1366831763175511,
+    "chains_static_share": 0.09090909090909091
+   },
+   "static": {
+    "per_scan": 1.1196888090963495,
+    "per_scan_by_range": {
+     "0-20 m": 0.7516457211250748,
+     "20-35 m": 0.32854578096947934,
+     "35-55 m": 0.03949730700179533
+    },
+    "persistent": 0.840726884019241,
+    "isolated": 0.04596472474612507,
+    "supported_by_other_same_group": 0.8711918760021379,
+    "supported_by_other_any_class": 0.8711918760021379,
+    "score_quartiles": [
+     0.5764,
+     0.6552,
+     0.71845
+    ],
+    "chains_10plus": 23,
+    "chain_travel_m_median": 0.13191688534950854,
+    "chains_static_share": 0.9565217391304348
+   }
+  },
+  "timing_ms": {
+   "median": 199.89880399998583,
+   "p95": 233.22317549991567,
+   "pre_median": 79.37203399978898,
+   "net_median": 120.55493499974546
+  }
+ },
+ "bevfusion_mit": {
+  "scans": 1671,
+  "groups": {
+   "vehicle": {
+    "per_scan": 4.141232794733693,
+    "per_scan_by_range": {
+     "0-20 m": 1.0059844404548175,
+     "20-35 m": 1.1789347695990424,
+     "35-55 m": 1.7151406343506883
+    },
+    "persistent": 0.8303468208092486,
+    "isolated": 0.043641618497109826,
+    "supported_by_other_same_group": 0.917485549132948,
+    "supported_by_other_any_class": 0.917485549132948,
+    "score_quartiles": [
+     0.46665,
+     0.60155,
+     0.710125
+    ],
+    "chains_10plus": 123,
+    "chain_travel_m_median": 0.21658060050297057,
+    "chains_static_share": 0.7967479674796748
+   },
+   "two-wheeler": {
+    "per_scan": 0.058049072411729505,
+    "per_scan_by_range": {
+     "0-20 m": 0.01615798922800718,
+     "20-35 m": 0.028126870137642132,
+     "35-55 m": 0.01376421304608019
+    },
+    "persistent": 0.5051546391752577,
+    "isolated": 0.2268041237113402,
+    "supported_by_other_same_group": 0.4948453608247423,
+    "supported_by_other_any_class": 0.5154639175257731,
+    "score_quartiles": [
+     0.4131,
+     0.4713,
+     0.5354
+    ],
+    "chains_10plus": 2,
+    "chain_travel_m_median": 0.15410016035545893,
+    "chains_static_share": 1.0
+   },
+   "person": {
+    "per_scan": 0.22980251346499103,
+    "per_scan_by_range": {
+     "0-20 m": 0.04488330341113106,
+     "20-35 m": 0.11909036505086774,
+     "35-55 m": 0.06582884500299221
+    },
+    "persistent": 0.5625,
+    "isolated": 0.1796875,
+    "supported_by_other_same_group": 0.7838541666666666,
+    "supported_by_other_any_class": 0.7838541666666666,
+    "score_quartiles": [
+     0.3386,
+     0.39285000000000003,
+     0.5018499999999999
+    ],
+    "chains_10plus": 7,
+    "chain_travel_m_median": 1.6298882982296365,
+    "chains_static_share": 0.14285714285714285
+   },
+   "static": {
+    "per_scan": 1.1460203470975463,
+    "per_scan_by_range": {
+     "0-20 m": 0.758228605625374,
+     "20-35 m": 0.3357271095152603,
+     "35-55 m": 0.05206463195691203
+    },
+    "persistent": 0.8323759791122716,
+    "isolated": 0.051697127937336815,
+    "supported_by_other_same_group": 0.8511749347258486,
+    "supported_by_other_any_class": 0.8511749347258486,
+    "score_quartiles": [
+     0.5692,
+     0.659,
+     0.7386
+    ],
+    "chains_10plus": 20,
+    "chain_travel_m_median": 0.2742991571137254,
+    "chains_static_share": 0.9
+   }
+  },
+  "timing_ms": {
+   "median": 192.42758299992602,
+   "p95": 215.41380400003618,
+   "pre_median": 78.07836199981466,
+   "net_median": 113.97056700002395
+  }
+ }
+}

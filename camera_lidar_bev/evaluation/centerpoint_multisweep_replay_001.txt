@@ -1,0 +1,51 @@
+CenterPoint single- vs multi-sweep, recording camera_lidar_20261010T221427_088256Z (2048x10), scans 18-186 s (1680 scans)
+Poses: maps/local_gps_recording_002/trajectory.csv (FAST-LIO, os_sensor at scan end). No ground truth: persistence/isolation/jitter are consistency proxies.
+Generated 2026-11-24T17:36:38Z with tools/extract_lidar_sweeps.py, centerpoint_sweep_eval, tools/analyze_sweep_eval.py
+
+=== per-class thresholds (current config) ===
+                                               eval_s1       eval_s3       eval_s5
+boxes per scan                                   16.94         15.40         14.86
+persistent (in prev AND next scan)               47.3%         55.8%         58.4%
+isolated (in neither)                            28.3%         21.2%         19.5%
+vehicle score median                             0.523         0.552         0.557
+vehicles beyond 30 m per scan                     3.83          3.92          3.63
+vehicle position jitter, median (m)              0.146         0.125         0.112
+vehicle heading jitter, median (deg)              2.82          2.42          2.31
+detector ms median                                16.3          40.4          55.8
+detector ms p95                                   18.3          44.5          63.8
+  pillar step ms                                   5.0          15.9          20.5
+  GPU ms                                          10.2          23.4          35.2
+points per input                               200,612       600,212       998,385
+pillars                                         31,204        48,904        60,338
+per class: boxes/scan (median score)
+  barrier                                  0.98 (0.69)   1.33 (0.73)   1.56 (0.75)
+  bicycle                                  0.45 (0.41)   0.81 (0.41)   0.77 (0.41)
+  bus                                      0.33 (0.53)   0.13 (0.52)   0.07 (0.52)
+  car                                      4.14 (0.50)   4.68 (0.56)   4.16 (0.56)
+  construction_vehicle                     0.29 (0.58)   0.20 (0.59)   0.44 (0.61)
+  motorcycle                               1.50 (0.43)   1.48 (0.43)   1.38 (0.42)
+  person                                   6.47 (0.39)   4.06 (0.38)   3.64 (0.39)
+  traffic_cone                             0.93 (0.50)   1.18 (0.50)   1.29 (0.50)
+  trailer                                  0.15 (0.57)   0.07 (0.55)   0.09 (0.56)
+  truck                                    1.70 (0.52)   1.46 (0.54)   1.45 (0.53)
+
+=== all classes at 0.50 ===
+                                               eval_s1       eval_s3       eval_s5
+boxes per scan                                    7.02          7.26          7.37
+persistent (in prev AND next scan)               52.8%         63.3%         63.6%
+isolated (in neither)                            23.7%         15.7%         14.8%
+vehicle score median                             0.633         0.651         0.652
+vehicles beyond 30 m per scan                     1.74          2.11          1.96
+vehicle position jitter, median (m)              0.116         0.101         0.094
+vehicle heading jitter, median (deg)              2.07          1.87          1.87
+per class: boxes/scan (median score)
+  barrier                                  0.98 (0.69)   1.33 (0.73)   1.56 (0.75)
+  bicycle                                  0.07 (0.56)   0.15 (0.55)   0.12 (0.55)
+  bus                                      0.21 (0.57)   0.08 (0.57)   0.04 (0.56)
+  car                                      2.09 (0.68)   2.75 (0.68)   2.49 (0.69)
+  construction_vehicle                     0.29 (0.58)   0.20 (0.59)   0.44 (0.61)
+  motorcycle                               0.42 (0.57)   0.39 (0.57)   0.35 (0.58)
+  person                                   1.38 (0.58)   0.74 (0.57)   0.73 (0.58)
+  traffic_cone                             0.45 (0.59)   0.61 (0.61)   0.66 (0.61)
+  trailer                                  0.15 (0.57)   0.07 (0.55)   0.09 (0.56)
+  truck                                    0.98 (0.60)   0.93 (0.61)   0.89 (0.61)

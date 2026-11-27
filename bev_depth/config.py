@@ -14,6 +14,19 @@ class InputConfig:
     fps: int
     fourcc: str
     camera_index_backend: str
+    # Fixed exposure in 100 us units (300 = 30 ms), or None for the camera's
+    # auto exposure. Gain 0-100, None leaves it unchanged. Power line in Hz
+    # (50 or 60) for anti-flicker, None leaves it unchanged.
+    exposure: int | None = None
+    gain: int | None = None
+    power_line_hz: int | None = None
+
+
+def optional_int(value: Any) -> int | None:
+    """None, "auto" or an empty value mean unset; anything else is an int."""
+    if value is None or str(value).strip().lower() in ("", "auto", "none"):
+        return None
+    return int(value)
 
 
 @dataclass(frozen=True)
@@ -22,6 +35,8 @@ class Intrinsics:
     fy: float
     cx: float
     cy: float
+    calibration_width: int = 0
+    calibration_height: int = 0
 
 
 @dataclass(frozen=True)
@@ -30,6 +45,8 @@ class Extrinsics:
     pitch_deg: float
     yaw_deg: float
     roll_deg: float
+    lateral_offset_m: float = 0.0
+    forward_offset_m: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -59,6 +76,7 @@ class BevConfig:
     forward_range_m: float
     lateral_range_m: float
     pixels_per_meter: int
+    rear_range_m: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -66,12 +84,14 @@ class RuntimeConfig:
     target_fps: int
     save_images: bool
     max_frames: int
+    save_matrices: bool = False
 
 
 @dataclass(frozen=True)
 class AppConfig:
     input: InputConfig
     detector: DetectorConfig
+    traffic_detector: DetectorConfig | None
     depth: DepthConfig
     intrinsics: Intrinsics
     extrinsics: Extrinsics
@@ -86,11 +106,23 @@ def _get(mapping: dict[str, Any], key: str, default: Any = None) -> Any:
     return value
 
 
+def _load_detector_config(data: dict[str, Any]) -> DetectorConfig:
+    return DetectorConfig(
+        backend=str(_get(data, "backend", "ultralytics")),
+        path=str(_get(data, "path", "")),
+        input_size=int(_get(data, "input_size", 640)),
+        confidence=float(_get(data, "confidence", 0.35)),
+        iou=float(_get(data, "iou", 0.5)),
+        classes=tuple(str(name) for name in _get(data, "classes", [])),
+    )
+
+
 def load_config(path: str | Path) -> AppConfig:
     data = yaml.safe_load(Path(path).read_text()) or {}
     input_config = data.get("input", {})
     models = data.get("models", {})
     detector = models.get("detector", {})
+    traffic_detector = models.get("traffic_detector")
     depth = models.get("depth", {})
     camera = data.get("camera", {})
     intrinsics = camera.get("intrinsics", {})
@@ -105,14 +137,15 @@ def load_config(path: str | Path) -> AppConfig:
             fps=int(_get(input_config, "fps", 15)),
             fourcc=str(_get(input_config, "fourcc", "MJPG")),
             camera_index_backend=str(_get(input_config, "camera_index_backend", "auto")),
+            exposure=optional_int(input_config.get("exposure")),
+            gain=optional_int(input_config.get("gain")),
+            power_line_hz=optional_int(input_config.get("power_line_frequency")),
         ),
-        detector=DetectorConfig(
-            backend=str(_get(detector, "backend", "ultralytics")),
-            path=str(_get(detector, "path", "")),
-            input_size=int(_get(detector, "input_size", 640)),
-            confidence=float(_get(detector, "confidence", 0.35)),
-            iou=float(_get(detector, "iou", 0.5)),
-            classes=tuple(str(name) for name in _get(detector, "classes", [])),
+        detector=_load_detector_config(detector),
+        traffic_detector=(
+            _load_detector_config(traffic_detector)
+            if isinstance(traffic_detector, dict)
+            else None
         ),
         depth=DepthConfig(
             backend=str(_get(depth, "backend", "tensorrt")),
@@ -131,21 +164,31 @@ def load_config(path: str | Path) -> AppConfig:
             fy=float(_get(intrinsics, "fy", 1200.0)),
             cx=float(_get(intrinsics, "cx", 960.0)),
             cy=float(_get(intrinsics, "cy", 540.0)),
+            calibration_width=int(
+                _get(intrinsics, "calibration_width", _get(input_config, "width", 1600))
+            ),
+            calibration_height=int(
+                _get(intrinsics, "calibration_height", _get(input_config, "height", 1200))
+            ),
         ),
         extrinsics=Extrinsics(
             height_m=float(_get(extrinsics, "height_m", 1.45)),
             pitch_deg=float(_get(extrinsics, "pitch_deg", 0.0)),
             yaw_deg=float(_get(extrinsics, "yaw_deg", 0.0)),
             roll_deg=float(_get(extrinsics, "roll_deg", 0.0)),
+            lateral_offset_m=float(_get(extrinsics, "lateral_offset_m", 0.0)),
+            forward_offset_m=float(_get(extrinsics, "forward_offset_m", 0.0)),
         ),
         bev=BevConfig(
             forward_range_m=float(_get(bev, "forward_range_m", 80.0)),
             lateral_range_m=float(_get(bev, "lateral_range_m", 20.0)),
             pixels_per_meter=int(_get(bev, "pixels_per_meter", 10)),
+            rear_range_m=float(_get(bev, "rear_range_m", 0.0)),
         ),
         runtime=RuntimeConfig(
             target_fps=int(_get(runtime, "target_fps", 30)),
             save_images=bool(_get(runtime, "save_images", True)),
             max_frames=int(_get(runtime, "max_frames", 0)),
+            save_matrices=bool(_get(runtime, "save_matrices", False)),
         ),
     )

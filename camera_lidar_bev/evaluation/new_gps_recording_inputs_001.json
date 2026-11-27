@@ -1,0 +1,30 @@
+{
+  "first_10_seconds_imu_samples": 1000,
+  "first_10_seconds_max_gyro_norm_rad_s": 0.02330380015445651,
+  "quiet_two_second_window": {
+    "start_after_first_imu_s": 0.0,
+    "end_after_first_imu_s": 1.990098237991333,
+    "gyro_std_rad_s": [
+      0.007227087430507009,
+      0.0015588843323899406,
+      0.0008301622143969157
+    ],
+    "accel_std_m_s2": [
+      0.03842585930096223,
+      0.09104986030533722,
+      0.029825221203679347
+    ]
+  },
+  "quiet_measurements_are_not_independent_proof_of_stationary_position": true,
+  "native_first_cloud": {
+    "frame": "os_lidar",
+    "size": [
+      2048,
+      128
+    ],
+    "per_point_t_min_ns": 0,
+    "per_point_t_max_ns": 99892160,
+    "ring_datatype": 4
+  },
+  "read_elapsed_s": 2.1457859319998533
+}

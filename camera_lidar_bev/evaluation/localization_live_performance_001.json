@@ -1,0 +1,68 @@
+{
+  "test": "stationary live GPS and LiDAR against saved map",
+  "reference_map": "maps/local_gps_recording_002",
+  "live_samples_are_new": true,
+  "moving_new_drive_tested": false,
+  "accuracy_ground_truth_available": false,
+  "recorded_poses_used_by_localizer": false,
+  "GPS": {
+    "observed_update_hz": 9.975033536545913,
+    "position_processing_ms": {
+      "samples": 343,
+      "median_ms": 0.6174580012157094,
+      "p95_ms": 0.6966419001400935,
+      "maximum_ms": 0.8691920011187904
+    },
+    "last_receiver_reported_sigma_m": 0.936023737528821
+  },
+  "LiDAR": {
+    "observed_accepted_update_hz": 9.999857817850796,
+    "accepted": 188,
+    "attempts": 190,
+    "states": {
+      "out_of_order_scan": 1,
+      "stale_scan_registration": 1,
+      "localized": 188
+    },
+    "steady_processing_ms": {
+      "samples": 188,
+      "median": 76.5986439982953,
+      "p95": 82.87712674982686,
+      "max": 87.03141899968614
+    },
+    "source_to_publication_age_s": {
+      "samples": 188,
+      "median": 0.27673864364624023,
+      "p95": 0.2921594977378845,
+      "max": 0.29871439933776855
+    },
+    "scan_registration_residual_m": {
+      "samples": 188,
+      "median": 0.25297137883770154,
+      "p95": 0.2550710570095848,
+      "max": 0.25650651226625887
+    },
+    "gps_horizontal_separation_m": {
+      "samples": 188,
+      "median": 0.7714112571710934,
+      "p95": 0.7922837901222738,
+      "max": 0.7979637283434472
+    },
+    "map_preparation_s": 4.3699044969998795,
+    "configured_max_rate_hz": 10.0
+  },
+  "optimistic_recording_benchmark": "evaluation/localization_performance_002/comparison.json",
+  "viewer_snapshot": "data/localization_compare_live_001/latest.png",
+  "live_command": "bash tools/run_localization_compare.sh --live --start-sensors --max-rate 10",
+  "unit_checks_passed": {
+    "map_view": 7,
+    "localizer": 8,
+    "controller": 9
+  },
+  "limitations": [
+    "Stationary live performance does not validate driving accuracy.",
+    "GPS covariance, scan residual and GPS/ICP separation are not absolute pose accuracy.",
+    "GNSS antenna lever arm and physical acquisition clock alignment are unverified.",
+    "Approximate gyro/velocity motion compensation; no loop closure or global guarantee."
+  ]
+}

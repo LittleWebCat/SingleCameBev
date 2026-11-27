@@ -1,0 +1,1468 @@
+{
+  "created_at_utc": "2026-10-08T21:17:33.400263+00:00",
+  "domain_id": 1,
+  "read_only": true,
+  "measurement_duration_s": 10.000293229999443,
+  "requested_duration_s": 10.0,
+  "topics": {
+    "raw_points": {
+      "topic": "/points",
+      "messages": 199,
+      "nonempty_messages": 199,
+      "last_class_counts": {},
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_lidar"
+      ],
+      "distinct_source_headers": 199,
+      "messages_per_measurement_second": 19.89941648941139,
+      "message_rate_between_first_and_last_hz": 19.99783124732122,
+      "distinct_header_rate_between_first_and_last_hz": 19.99783124732122,
+      "item_count_min": 131072,
+      "item_count_median": 131072,
+      "item_count_max": 131072,
+      "class_instances_across_messages": {},
+      "class_positive_message_counts": {}
+    },
+    "lidar_detections_3d": {
+      "topic": "/camera_lidar_bev/lidar_detections_3d",
+      "messages": 199,
+      "nonempty_messages": 199,
+      "last_class_counts": {
+        "car": 3
+      },
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_sensor"
+      ],
+      "distinct_source_headers": 199,
+      "messages_per_measurement_second": 19.89941648941139,
+      "message_rate_between_first_and_last_hz": 20.01020005394854,
+      "distinct_header_rate_between_first_and_last_hz": 20.01020005394854,
+      "item_count_min": 3,
+      "item_count_median": 5,
+      "item_count_max": 6,
+      "class_instances_across_messages": {
+        "car": 980
+      },
+      "class_positive_message_counts": {
+        "car": 199
+      }
+    },
+    "lidar_vehicle_points": {
+      "topic": "/camera_lidar_bev/lidar_vehicle_points",
+      "messages": 199,
+      "nonempty_messages": 199,
+      "last_class_counts": {
+        "car_by_orange_rgb": 5312,
+        "person_by_magenta_rgb": 0,
+        "other_rgb": 0
+      },
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_sensor"
+      ],
+      "distinct_source_headers": 199,
+      "messages_per_measurement_second": 19.89941648941139,
+      "message_rate_between_first_and_last_hz": 20.008535562448152,
+      "distinct_header_rate_between_first_and_last_hz": 20.008535562448152,
+      "item_count_min": 4760,
+      "item_count_median": 5892,
+      "item_count_max": 6998,
+      "class_instances_across_messages": {
+        "car_by_orange_rgb": 1201346,
+        "person_by_magenta_rgb": 0,
+        "other_rgb": 0
+      },
+      "class_positive_message_counts": {
+        "car_by_orange_rgb": 199
+      }
+    },
+    "detections_2d": {
+      "topic": "/camera_lidar_bev/detections_2d",
+      "messages": 199,
+      "nonempty_messages": 199,
+      "last_class_counts": {
+        "truck": 1,
+        "car": 1
+      },
+      "marker_text_samples": [],
+      "frame_ids": [
+        "camera_front_optical_frame"
+      ],
+      "distinct_source_headers": 199,
+      "messages_per_measurement_second": 19.89941648941139,
+      "message_rate_between_first_and_last_hz": 19.991579581011532,
+      "distinct_header_rate_between_first_and_last_hz": 19.991579581011532,
+      "item_count_min": 2,
+      "item_count_median": 2,
+      "item_count_max": 2,
+      "class_instances_across_messages": {
+        "truck": 199,
+        "car": 199
+      },
+      "class_positive_message_counts": {
+        "truck": 199,
+        "car": 199
+      }
+    },
+    "camera_labeled": {
+      "topic": "/camera_lidar_bev/camera_labeled",
+      "messages": 199,
+      "nonempty_messages": 199,
+      "last_class_counts": {},
+      "marker_text_samples": [],
+      "frame_ids": [
+        "camera_front_optical_frame"
+      ],
+      "distinct_source_headers": 199,
+      "messages_per_measurement_second": 19.89941648941139,
+      "message_rate_between_first_and_last_hz": 19.991096401832188,
+      "distinct_header_rate_between_first_and_last_hz": 19.991096401832188,
+      "item_count_min": 1,
+      "item_count_median": 1,
+      "item_count_max": 1,
+      "class_instances_across_messages": {},
+      "class_positive_message_counts": {}
+    },
+    "camera_lidar_detections_3d": {
+      "topic": "/camera_lidar_bev/camera_lidar_detections_3d",
+      "messages": 198,
+      "nonempty_messages": 0,
+      "last_class_counts": {},
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_sensor"
+      ],
+      "distinct_source_headers": 198,
+      "messages_per_measurement_second": 19.7994194216254,
+      "message_rate_between_first_and_last_hz": 19.998902657166745,
+      "distinct_header_rate_between_first_and_last_hz": 19.998902657166745,
+      "item_count_min": 0,
+      "item_count_median": 0.0,
+      "item_count_max": 0,
+      "class_instances_across_messages": {},
+      "class_positive_message_counts": {}
+    },
+    "camera_lidar_points": {
+      "topic": "/camera_lidar_bev/camera_lidar_points",
+      "messages": 198,
+      "nonempty_messages": 0,
+      "last_class_counts": {},
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_sensor"
+      ],
+      "distinct_source_headers": 198,
+      "messages_per_measurement_second": 19.7994194216254,
+      "message_rate_between_first_and_last_hz": 19.99787205587109,
+      "distinct_header_rate_between_first_and_last_hz": 19.99787205587109,
+      "item_count_min": 0,
+      "item_count_median": 0.0,
+      "item_count_max": 0,
+      "class_instances_across_messages": {},
+      "class_positive_message_counts": {}
+    },
+    "camera_lidar_markers": {
+      "topic": "/camera_lidar_bev/camera_lidar_markers",
+      "messages": 198,
+      "nonempty_messages": 0,
+      "last_class_counts": {},
+      "marker_text_samples": [],
+      "frame_ids": [
+        "os_sensor"
+      ],
+      "distinct_source_headers": 198,
+      "messages_per_measurement_second": 19.7994194216254,
+      "message_rate_between_first_and_last_hz": 19.999589559690623,
+      "distinct_header_rate_between_first_and_last_hz": 19.999589559690623,
+      "item_count_min": 0,
+      "item_count_median": 0.0,
+      "item_count_max": 0,
+      "class_instances_across_messages": {},
+      "class_positive_message_counts": {}
+    }
+  },
+  "diagnostic_samples": [
+    {
+      "receipt_offset_s": 0.41960169199956,
+      "header_ns": 1791494243608496061,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "8957",
+            "processed_scans": "8953",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "4",
+            "person_boxes": "0",
+            "object_boxes": "4",
+            "vehicle_points": "5646",
+            "self_masked_points": "1874",
+            "model_input_points": "45479",
+            "detector_ms": "6.685282",
+            "input_pillars": "4176",
+            "accepted_pillars": "4176",
+            "truncated_pillars": "0",
+            "processing_ms": "10.932492",
+            "source_age_s": "0.160615",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 0.4294266859997151,
+      "header_ns": 1791494243618264796,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "13851",
+            "processed_frames": "9232",
+            "inferred_frames": "9232",
+            "mailbox_dropped_frames": "4618",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494243542952338",
+            "source_age_at_start_s": "0.025193",
+            "source_age_at_publish_s": "0.038139",
+            "source_age_s": "0.010401",
+            "receipt_age_s": "0.005161",
+            "decode_ms": "0.003315",
+            "preprocess_ms": "2.878463",
+            "inference_ms": "2.288588",
+            "gpu_compute_ms": "1.948928",
+            "postprocess_ms": "4.405517",
+            "annotate_ms": "3.357725",
+            "processing_ms": "12.940339",
+            "publish_ms": "2.292208"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 0.9058520010003122,
+      "header_ns": 1791494244094843010,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "6",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "8969",
+            "cleared_outputs": "3",
+            "processing_ms": "0.333696",
+            "source_age_s": "0.186369",
+            "header_delta_s": "0.011185",
+            "camera_header_ns": "1791494243847640718",
+            "lidar_header_ns": "1791494243858825925",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 1.4199298059993453,
+      "header_ns": 1791494244608459256,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "8977",
+            "processed_scans": "8973",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "4",
+            "person_boxes": "0",
+            "object_boxes": "4",
+            "vehicle_points": "5753",
+            "self_masked_points": "1876",
+            "model_input_points": "45484",
+            "detector_ms": "5.185939",
+            "input_pillars": "4174",
+            "accepted_pillars": "4174",
+            "truncated_pillars": "0",
+            "processing_ms": "8.051539",
+            "source_age_s": "0.157743",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 1.430504239999209,
+      "header_ns": 1791494244618213093,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "13880",
+            "processed_frames": "9252",
+            "inferred_frames": "9252",
+            "mailbox_dropped_frames": "4627",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494244548015048",
+            "source_age_at_start_s": "0.020136",
+            "source_age_at_publish_s": "0.029235",
+            "source_age_s": "0.037196",
+            "receipt_age_s": "0.031325",
+            "decode_ms": "0.004481",
+            "preprocess_ms": "2.511117",
+            "inference_ms": "2.426052",
+            "gpu_compute_ms": "2.150432",
+            "postprocess_ms": "2.865684",
+            "annotate_ms": "1.279091",
+            "processing_ms": "9.093370",
+            "publish_ms": "1.231748"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 1.9059622029999446,
+      "header_ns": 1791494245094866165,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "6",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "8989",
+            "cleared_outputs": "3",
+            "processing_ms": "0.212502",
+            "source_age_s": "0.186287",
+            "header_delta_s": "0.014273",
+            "camera_header_ns": "1791494244844500054",
+            "lidar_header_ns": "1791494244858772616",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 2.4196709810003085,
+      "header_ns": 1791494245608617202,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "8997",
+            "processed_scans": "8993",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "6",
+            "person_boxes": "0",
+            "object_boxes": "6",
+            "vehicle_points": "6712",
+            "self_masked_points": "1853",
+            "model_input_points": "45485",
+            "detector_ms": "5.530719",
+            "input_pillars": "4171",
+            "accepted_pillars": "4171",
+            "truncated_pillars": "0",
+            "processing_ms": "10.392072",
+            "source_age_s": "0.160059",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 2.4294864749990666,
+      "header_ns": 1791494245618123203,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "13911",
+            "processed_frames": "9272",
+            "inferred_frames": "9272",
+            "mailbox_dropped_frames": "4638",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494245547611099",
+            "source_age_at_start_s": "0.020535",
+            "source_age_at_publish_s": "0.031386",
+            "source_age_s": "0.006135",
+            "receipt_age_s": "0.000593",
+            "decode_ms": "0.003676",
+            "preprocess_ms": "3.520336",
+            "inference_ms": "1.906882",
+            "gpu_compute_ms": "1.613952",
+            "postprocess_ms": "3.852116",
+            "annotate_ms": "1.556926",
+            "processing_ms": "10.846464",
+            "publish_ms": "1.258777"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 2.905858341999192,
+      "header_ns": 1791494246094821924,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "4",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9009",
+            "cleared_outputs": "3",
+            "processing_ms": "0.342770",
+            "source_age_s": "0.186580",
+            "header_delta_s": "0.012527",
+            "camera_header_ns": "1791494245846222942",
+            "lidar_header_ns": "1791494245858749805",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 3.419470535000073,
+      "header_ns": 1791494246608434303,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9017",
+            "processed_scans": "9013",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "5",
+            "person_boxes": "0",
+            "object_boxes": "5",
+            "vehicle_points": "6314",
+            "self_masked_points": "1865",
+            "model_input_points": "45474",
+            "detector_ms": "4.604796",
+            "input_pillars": "4183",
+            "accepted_pillars": "4183",
+            "truncated_pillars": "0",
+            "processing_ms": "8.230420",
+            "source_age_s": "0.157908",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 3.430371278000166,
+      "header_ns": 1791494246618297308,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "13941",
+            "processed_frames": "9292",
+            "inferred_frames": "9292",
+            "mailbox_dropped_frames": "4648",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494246544254500",
+            "source_age_at_start_s": "0.023901",
+            "source_age_at_publish_s": "0.035327",
+            "source_age_s": "0.004899",
+            "receipt_age_s": "0.000102",
+            "decode_ms": "0.004815",
+            "preprocess_ms": "2.712516",
+            "inference_ms": "1.920716",
+            "gpu_compute_ms": "1.622496",
+            "postprocess_ms": "3.830152",
+            "annotate_ms": "2.944600",
+            "processing_ms": "11.419448",
+            "publish_ms": "2.196605"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 3.9059605109996482,
+      "header_ns": 1791494247094866908,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "5",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9029",
+            "cleared_outputs": "3",
+            "processing_ms": "0.356512",
+            "source_age_s": "0.186477",
+            "header_delta_s": "0.012397",
+            "camera_header_ns": "1791494246846373262",
+            "lidar_header_ns": "1791494246858770164",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 4.419595855999432,
+      "header_ns": 1791494247608463577,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9037",
+            "processed_scans": "9033",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "4",
+            "person_boxes": "0",
+            "object_boxes": "4",
+            "vehicle_points": "5744",
+            "self_masked_points": "1873",
+            "model_input_points": "45486",
+            "detector_ms": "5.256967",
+            "input_pillars": "4181",
+            "accepted_pillars": "4181",
+            "truncated_pillars": "0",
+            "processing_ms": "9.744587",
+            "source_age_s": "0.159440",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 4.431385353000223,
+      "header_ns": 1791494247618130839,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "13970",
+            "processed_frames": "9312",
+            "inferred_frames": "9312",
+            "mailbox_dropped_frames": "4657",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494247546406172",
+            "source_age_at_start_s": "0.021722",
+            "source_age_at_publish_s": "0.029105",
+            "source_age_s": "0.036502",
+            "receipt_age_s": "0.030719",
+            "decode_ms": "0.003954",
+            "preprocess_ms": "2.488340",
+            "inference_ms": "1.958631",
+            "gpu_compute_ms": "1.552640",
+            "postprocess_ms": "1.594103",
+            "annotate_ms": "1.326063",
+            "processing_ms": "7.377397",
+            "publish_ms": "1.819298"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 4.906015556998682,
+      "header_ns": 1791494248094819963,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "4",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9049",
+            "cleared_outputs": "3",
+            "processing_ms": "0.316640",
+            "source_age_s": "0.186379",
+            "header_delta_s": "0.011177",
+            "camera_header_ns": "1791494247847589591",
+            "lidar_header_ns": "1791494247858766807",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 5.41946379699948,
+      "header_ns": 1791494248608509074,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9057",
+            "processed_scans": "9053",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "6",
+            "person_boxes": "0",
+            "object_boxes": "6",
+            "vehicle_points": "6601",
+            "self_masked_points": "1867",
+            "model_input_points": "45486",
+            "detector_ms": "5.840025",
+            "input_pillars": "4177",
+            "accepted_pillars": "4177",
+            "truncated_pillars": "0",
+            "processing_ms": "11.389754",
+            "source_age_s": "0.161144",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 5.438342262999868,
+      "header_ns": 1791494248618141420,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "14000",
+            "processed_frames": "9332",
+            "inferred_frames": "9332",
+            "mailbox_dropped_frames": "4667",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494248547756625",
+            "source_age_at_start_s": "0.020410",
+            "source_age_at_publish_s": "0.031453",
+            "source_age_s": "0.038452",
+            "receipt_age_s": "0.032692",
+            "decode_ms": "0.003805",
+            "preprocess_ms": "2.478904",
+            "inference_ms": "1.803946",
+            "gpu_compute_ms": "1.499808",
+            "postprocess_ms": "3.812653",
+            "annotate_ms": "2.931315",
+            "processing_ms": "11.036529",
+            "publish_ms": "2.478756"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 5.905830453999442,
+      "header_ns": 1791494249094830991,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "5",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9069",
+            "cleared_outputs": "3",
+            "processing_ms": "0.339790",
+            "source_age_s": "0.186484",
+            "header_delta_s": "0.012426",
+            "camera_header_ns": "1791494248846284259",
+            "lidar_header_ns": "1791494248858710540",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 6.419618607000302,
+      "header_ns": 1791494249608433773,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9077",
+            "processed_scans": "9073",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "5",
+            "person_boxes": "0",
+            "object_boxes": "5",
+            "vehicle_points": "5679",
+            "self_masked_points": "1885",
+            "model_input_points": "45473",
+            "detector_ms": "4.555723",
+            "input_pillars": "4168",
+            "accepted_pillars": "4168",
+            "truncated_pillars": "0",
+            "processing_ms": "7.676621",
+            "source_age_s": "0.157407",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 6.429202768000323,
+      "header_ns": 1791494249618261148,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "14031",
+            "processed_frames": "9352",
+            "inferred_frames": "9352",
+            "mailbox_dropped_frames": "4678",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494249546330691",
+            "source_age_at_start_s": "0.021797",
+            "source_age_at_publish_s": "0.032756",
+            "source_age_s": "0.005287",
+            "receipt_age_s": "0.000100",
+            "decode_ms": "0.002019",
+            "preprocess_ms": "2.464348",
+            "inference_ms": "1.784668",
+            "gpu_compute_ms": "1.500736",
+            "postprocess_ms": "3.805607",
+            "annotate_ms": "2.892211",
+            "processing_ms": "10.954020",
+            "publish_ms": "2.146847"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 6.905885030999343,
+      "header_ns": 1791494250094856891,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "5",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9089",
+            "cleared_outputs": "3",
+            "processing_ms": "0.363539",
+            "source_age_s": "0.187095",
+            "header_delta_s": "0.011251",
+            "camera_header_ns": "1791494249847429721",
+            "lidar_header_ns": "1791494249858680587",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 7.421668042999954,
+      "header_ns": 1791494250608423686,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9097",
+            "processed_scans": "9093",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "4",
+            "person_boxes": "0",
+            "object_boxes": "4",
+            "vehicle_points": "6281",
+            "self_masked_points": "1888",
+            "model_input_points": "45484",
+            "detector_ms": "5.199439",
+            "input_pillars": "4177",
+            "accepted_pillars": "4177",
+            "truncated_pillars": "0",
+            "processing_ms": "8.512671",
+            "source_age_s": "0.158242",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 7.4312020919987845,
+      "header_ns": 1791494250618175996,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "14060",
+            "processed_frames": "9372",
+            "inferred_frames": "9372",
+            "mailbox_dropped_frames": "4687",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494250547467884",
+            "source_age_at_start_s": "0.020661",
+            "source_age_at_publish_s": "0.032260",
+            "source_age_s": "0.038608",
+            "receipt_age_s": "0.032965",
+            "decode_ms": "0.003583",
+            "preprocess_ms": "2.540535",
+            "inference_ms": "2.209846",
+            "gpu_compute_ms": "1.953920",
+            "postprocess_ms": "3.918496",
+            "annotate_ms": "2.915601",
+            "processing_ms": "11.593729",
+            "publish_ms": "2.016169"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 7.905922076999559,
+      "header_ns": 1791494251094849511,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "6",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9109",
+            "cleared_outputs": "3",
+            "processing_ms": "0.342113",
+            "source_age_s": "0.186471",
+            "header_delta_s": "0.015510",
+            "camera_header_ns": "1791494250843180233",
+            "lidar_header_ns": "1791494250858690542",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 8.419475511998826,
+      "header_ns": 1791494251608470132,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9117",
+            "processed_scans": "9113",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "6",
+            "person_boxes": "0",
+            "object_boxes": "6",
+            "vehicle_points": "6614",
+            "self_masked_points": "1879",
+            "model_input_points": "45487",
+            "detector_ms": "5.743090",
+            "input_pillars": "4177",
+            "accepted_pillars": "4177",
+            "truncated_pillars": "0",
+            "processing_ms": "10.511795",
+            "source_age_s": "0.160320",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 8.430491207998784,
+      "header_ns": 1791494251618131430,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "14090",
+            "processed_frames": "9392",
+            "inferred_frames": "9392",
+            "mailbox_dropped_frames": "4697",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494251546271127",
+            "source_age_at_start_s": "0.021858",
+            "source_age_at_publish_s": "0.032751",
+            "source_age_s": "0.040617",
+            "receipt_age_s": "0.034933",
+            "decode_ms": "0.002139",
+            "preprocess_ms": "2.455431",
+            "inference_ms": "1.678000",
+            "gpu_compute_ms": "1.308768",
+            "postprocess_ms": "3.806912",
+            "annotate_ms": "2.940740",
+            "processing_ms": "10.887677",
+            "publish_ms": "2.005058"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 8.90584694899917,
+      "header_ns": 1791494252094825041,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "5",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9129",
+            "cleared_outputs": "3",
+            "processing_ms": "0.336205",
+            "source_age_s": "0.186573",
+            "header_delta_s": "0.015975",
+            "camera_header_ns": "1791494251842649035",
+            "lidar_header_ns": "1791494251858624088",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 9.41937667899947,
+      "header_ns": 1791494252608444947,
+      "statuses": [
+        {
+          "name": "lidar_vehicle_detector",
+          "level": 1,
+          "message": "Trained KITTI car/person predictions active; Ouster accuracy remains provisional",
+          "values": {
+            "model": "PointPillars_KITTI_FP16",
+            "trained_3d_detector": "true",
+            "full_dimensions_predicted": "true",
+            "heading_predicted": "true",
+            "physical_accuracy_validated": "false",
+            "tracking_enabled": "false",
+            "frame": "os_sensor",
+            "driver_tf_valid": "true",
+            "publishing_fresh_output": "true",
+            "vehicle_class": "Car_and_Pedestrian",
+            "intensity_field": "reflectivity",
+            "intensity_scale": "255.000000",
+            "received_scans": "9137",
+            "processed_scans": "9133",
+            "cleared_outputs": "3",
+            "vehicle_boxes": "5",
+            "person_boxes": "0",
+            "object_boxes": "5",
+            "vehicle_points": "5785",
+            "self_masked_points": "1856",
+            "model_input_points": "45479",
+            "detector_ms": "6.410280",
+            "input_pillars": "4177",
+            "accepted_pillars": "4177",
+            "truncated_pillars": "0",
+            "processing_ms": "10.749667",
+            "source_age_s": "0.160694",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 9.42932460999873,
+      "header_ns": 1791494252618128145,
+      "statuses": [
+        {
+          "name": "camera_object_detector",
+          "level": 0,
+          "message": "COCO road-user 2D camera detections; native TensorRT",
+          "values": {
+            "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+            "received_frames": "14120",
+            "processed_frames": "9412",
+            "inferred_frames": "9412",
+            "mailbox_dropped_frames": "4707",
+            "stale_dropped_frames": "0",
+            "rejected_frames": "0",
+            "duplicate_frames": "0",
+            "inference_errors": "0",
+            "cleared_outputs": "1",
+            "outputs_cleared": "0",
+            "detections": "2",
+            "max_publish_hz": "20.000000",
+            "source_stamp_ns": "1791494252547661904",
+            "source_age_at_start_s": "0.020466",
+            "source_age_at_publish_s": "0.032189",
+            "source_age_s": "0.037885",
+            "receipt_age_s": "0.031744",
+            "decode_ms": "0.002204",
+            "preprocess_ms": "2.641766",
+            "inference_ms": "1.664602",
+            "gpu_compute_ms": "1.406880",
+            "postprocess_ms": "3.991144",
+            "annotate_ms": "3.412178",
+            "processing_ms": "11.716978",
+            "publish_ms": "2.476821"
+          }
+        }
+      ]
+    },
+    {
+      "receipt_offset_s": 9.905942739998864,
+      "header_ns": 1791494253094854665,
+      "statuses": [
+        {
+          "name": "camera_lidar_box_fusion",
+          "level": 1,
+          "message": "Fresh time-aligned camera associations",
+          "values": {
+            "geometry_source": "PointPillars_LiDAR",
+            "dimensions_modified": "false",
+            "heading_modified": "false",
+            "lidar_score_modified": "false",
+            "joint_confidence_computed": "false",
+            "camera_evidence": "projected_box_association",
+            "physical_accuracy_validated": "false",
+            "camera_calibration_validated": "false",
+            "tf_published": "false",
+            "output_frame": "os_sensor",
+            "publishing_fresh_output": "true",
+            "lidar_boxes": "5",
+            "camera_matches": "0",
+            "camera_match_required": "true",
+            "displayed_boxes": "0",
+            "displayed_people": "0",
+            "published_updates": "9149",
+            "cleared_outputs": "3",
+            "processing_ms": "0.255029",
+            "source_age_s": "0.186668",
+            "header_delta_s": "0.012127",
+            "camera_header_ns": "1791494252846349254",
+            "lidar_header_ns": "1791494252858475782",
+            "publication_cap_hz": "20.000000"
+          }
+        }
+      ]
+    }
+  ],
+  "diagnostic_timing_summary": {
+    "lidar_vehicle_detector": {
+      "detector_ms": {
+        "samples": 10,
+        "median": 5.393843,
+        "min": 4.555723,
+        "max": 6.685282
+      },
+      "processing_ms": {
+        "samples": 10,
+        "median": 10.0683295,
+        "min": 7.676621,
+        "max": 11.389754
+      },
+      "source_age_s": {
+        "samples": 10,
+        "median": 0.1597495,
+        "min": 0.157407,
+        "max": 0.161144
+      }
+    },
+    "camera_object_detector": {
+      "source_age_s": {
+        "samples": 10,
+        "median": 0.036849,
+        "min": 0.004899,
+        "max": 0.040617
+      },
+      "decode_ms": {
+        "samples": 10,
+        "median": 0.0036295,
+        "min": 0.002019,
+        "max": 0.004815
+      },
+      "preprocess_ms": {
+        "samples": 10,
+        "median": 2.5258260000000003,
+        "min": 2.455431,
+        "max": 3.520336
+      },
+      "inference_ms": {
+        "samples": 10,
+        "median": 1.913799,
+        "min": 1.664602,
+        "max": 2.426052
+      },
+      "gpu_compute_ms": {
+        "samples": 10,
+        "median": 1.583296,
+        "min": 1.308768,
+        "max": 2.150432
+      },
+      "postprocess_ms": {
+        "samples": 10,
+        "median": 3.8214025,
+        "min": 1.594103,
+        "max": 4.405517
+      },
+      "annotate_ms": {
+        "samples": 10,
+        "median": 2.923458,
+        "min": 1.279091,
+        "max": 3.412178
+      },
+      "processing_ms": {
+        "samples": 10,
+        "median": 10.9952745,
+        "min": 7.377397,
+        "max": 12.940339
+      },
+      "publish_ms": {
+        "samples": 10,
+        "median": 2.0815080000000004,
+        "min": 1.231748,
+        "max": 2.478756
+      }
+    },
+    "camera_lidar_box_fusion": {
+      "processing_ms": {
+        "samples": 10,
+        "median": 0.33799749999999995,
+        "min": 0.212502,
+        "max": 0.363539
+      },
+      "source_age_s": {
+        "samples": 10,
+        "median": 0.1864805,
+        "min": 0.186287,
+        "max": 0.187095
+      },
+      "header_delta_s": {
+        "samples": 10,
+        "median": 0.012411499999999999,
+        "min": 0.011177,
+        "max": 0.015975
+      }
+    }
+  },
+  "physical_accuracy_validated": false,
+  "confirmed_live_person": false,
+  "zero_camera_matches_is_failure": false,
+  "limitations": [
+    "Ten-second descriptive sample, not sustained throughput or physical-accuracy validation.",
+    "Rates use received messages and distinct source headers; marker refreshes may repeat LiDAR headers.",
+    "Probe subscribes to full raw scans and labeled images and adds transport/deserialization load.",
+    "Class totals count repeated observations across messages, not unique tracked objects.",
+    "Point classes are inferred only from the configured orange/magenta RGB palette.",
+    "Strict camera-associated outputs may be empty even while native LiDAR and camera detections are present.",
+    "Camera calibration and timing remain provisional; model KITTI-to-Ouster accuracy is unvalidated."
+  ]
+}

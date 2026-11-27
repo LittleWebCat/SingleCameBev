@@ -1,0 +1,46 @@
+{
+  "map_startup_s": 4.362807683000938,
+  "normal_preparation_s": 3.415038649000053,
+  "crops": [
+    {
+      "elapsed_ms": 27.886560999832,
+      "target_points": 84796
+    },
+    {
+      "elapsed_ms": 25.584007000361453,
+      "target_points": 82049
+    },
+    {
+      "elapsed_ms": 27.190323000468197,
+      "target_points": 84796
+    }
+  ],
+  "registration": {
+    "accepted": true,
+    "status": "localized",
+    "stamp_sec": 1791670532.3107817,
+    "map_frame": "enu",
+    "child_frame": "os_sensor",
+    "backend": "bounded_robust_3d_icp",
+    "saved_trajectory_used": false,
+    "preprocess_ms": 27.954144999966957,
+    "scan_points": 3500,
+    "map_crop_ms": 0.029508999432437122,
+    "target_points": 84796,
+    "bootstrap_ms": 581.0055589990952,
+    "fine_icp_ms": 297.0645420009532,
+    "bootstrap_hypotheses": 24,
+    "bootstrap_score_margin": 0.5420605466077728,
+    "fitness": 1.0,
+    "rmse_m": 0.26507802350947746,
+    "structural_fitness": 1.0,
+    "matched_points": 3500,
+    "structural_points": 2287,
+    "iterations": 8,
+    "registration_ms": 878.1761119989824,
+    "elapsed_ms": 906.1967109992111,
+    "initializing": true,
+    "gps_horizontal_offset_m": 0.8444215722967554,
+    "information_condition": 1125.4839426956198
+  }
+}

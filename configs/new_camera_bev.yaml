@@ -1,0 +1,68 @@
+# Combined BEV pipeline for the 32e4:0234 Global Shutter Camera.
+#
+# The camera intrinsics and mounting pose below are initial estimates. Replace
+# them with a real calibration before treating projected BEV positions or
+# monocular depth values as measured ground-truth distances.
+
+input:
+  width: 1920
+  height: 1200
+  fps: 90
+  fourcc: MJPG
+  camera_index_backend: v4l2
+
+models:
+  # General road users and stop signs.
+  detector:
+    backend: ultralytics
+    path: models/yolo_vehicle_fp16.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [person, bicycle, car, motorcycle, bus, truck, stop sign]
+
+  # Dedicated traffic-light color classifier: classifies red/yellow/green.
+  traffic_detector:
+    backend: ultralytics
+    path: untested_model/best.engine
+    input_size: 640
+    confidence: 0.35
+    iou: 0.5
+    classes: [red, yellow, green]
+
+  # Metric Depth Anything V2. Running every second frame preserves live FPS.
+  depth:
+    backend: tensorrt
+    path: models/depth_anything_v2_small_fp16.engine
+    input_size: 518
+    cadence: 2
+    metric_scale: 1.0
+    metric_bias: 0.0
+    inverse_depth: false
+
+camera:
+  intrinsics:
+    # Initial 90-degree-HFOV pinhole estimate for 1920x1200. The new lens is
+    # visibly wide-angle, so calibrate intrinsics and distortion for accuracy.
+    fx: 960.0
+    fy: 960.0
+    cx: 960.0
+    cy: 600.0
+    calibration_width: 1920
+    calibration_height: 1200
+  extrinsics:
+    # Measure these values after the camera is fixed in its final vehicle mount.
+    height_m: 1.45
+    pitch_deg: 0.0
+    yaw_deg: 0.0
+    roll_deg: 0.0
+
+bev:
+  forward_range_m: 80.0
+  lateral_range_m: 40.0
+  pixels_per_meter: 10
+
+runtime:
+  target_fps: 30
+  save_images: true
+  max_frames: 0

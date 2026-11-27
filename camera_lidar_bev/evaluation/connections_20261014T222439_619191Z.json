@@ -1,0 +1,548 @@
+{
+  "checked_at_utc": "2026-10-14T22:24:22.956148+00:00",
+  "ros_domain_id": 1,
+  "read_only": true,
+  "serial_devices_opened": false,
+  "engagement_messages_sent": false,
+  "vehicle_commands_sent": false,
+  "links": {
+    "enP2p1s0": {
+      "carrier": "1",
+      "operstate": "up"
+    },
+    "enx1a3202991545": {
+      "carrier": "1",
+      "operstate": "unknown"
+    },
+    "can0": {
+      "carrier": null,
+      "operstate": "down"
+    },
+    "can1": {
+      "carrier": null,
+      "operstate": "down"
+    },
+    "can2": {
+      "carrier": null,
+      "operstate": "down"
+    },
+    "can3": {
+      "carrier": null,
+      "operstate": "down"
+    }
+  },
+  "dds": {
+    "rmem_max": "16777216",
+    "rmem_default": "4194304"
+  },
+  "serial_devices": [
+    {
+      "id": "usb-Septentrio_Septentrio_USB_Device_3689556-if02",
+      "device": "/dev/ttyACM0",
+      "read_write_access": true
+    },
+    {
+      "id": "usb-Septentrio_Septentrio_USB_Device_3689556-if04",
+      "device": "/dev/ttyACM1",
+      "read_write_access": true
+    }
+  ],
+  "dbw_alias_present": false,
+  "camera_devices": [
+    {
+      "id": "usb-HD_USB_Camera_HD_USB_Camera_2020040501-video-index0",
+      "device": "/dev/video10",
+      "name": "HD USB Camera: HD USB Camera"
+    },
+    {
+      "id": "usb-HD_USB_Camera_HD_USB_Camera_2020040501-video-index1",
+      "device": "/dev/video11",
+      "name": "HD USB Camera: HD USB Camera"
+    }
+  ],
+  "processes": [
+    {
+      "pid": 52678,
+      "program": "septentrio_gps.py"
+    },
+    {
+      "pid": 52680,
+      "program": "lidar_map_localizer.py"
+    },
+    {
+      "pid": 52732,
+      "program": "os_driver"
+    },
+    {
+      "pid": 52781,
+      "program": "combined_bev_live.py"
+    },
+    {
+      "pid": 52792,
+      "program": "path_tracker"
+    },
+    {
+      "pid": 52804,
+      "program": "lidar_vehicle_detector"
+    },
+    {
+      "pid": 52805,
+      "program": "camera_object_detector"
+    },
+    {
+      "pid": 52806,
+      "program": "camera_bridge"
+    }
+  ],
+  "lidar_http": {
+    "/api/v1/sensor/metadata/sensor_info": {
+      "reachable": true,
+      "values": {
+        "prod_line": "OS-1-128",
+        "prod_sn": "122610007682",
+        "build_rev": "v3.1.0",
+        "status": "RUNNING"
+      }
+    },
+    "/api/v1/sensor/config": {
+      "reachable": true,
+      "values": {
+        "lidar_mode": "2048x10",
+        "timestamp_mode": "TIME_FROM_INTERNAL_OSC",
+        "udp_dest": "169.254.1.100",
+        "udp_port_lidar": 50653,
+        "udp_port_imu": 57597,
+        "operating_mode": "NORMAL"
+      }
+    }
+  },
+  "gps_passive_tcp": {
+    "host": "192.168.3.1",
+    "port": 28784,
+    "connected": true,
+    "bytes_received": 5,
+    "valid_sbf_blocks": 0,
+    "crc_errors": 0,
+    "latest_position_status": null
+  },
+  "ros_nodes": [
+    "/path_tracker",
+    "/camera_lidar_bev/camera_lidar_box_fusion",
+    "/camera_lidar_bev/camera_object_detector",
+    "/septentrio_gps_bridge",
+    "/saved_map_lidar_localizer",
+    "/bev_lidar_lifecycle_controller",
+    "/localization_map_view",
+    "/camera_lidar_bev/lidar_vehicle_detector",
+    "/camera_lidar_bev/front_camera_bridge",
+    "/combined_bev_view",
+    "/os_driver"
+  ],
+  "ros_observation_seconds": 13.01,
+  "ros_topics": {
+    "/bev_dbw/dry_run_engage": {
+      "messages": 0,
+      "observed_hz": null,
+      "receipt_age_s": null,
+      "publishers": [],
+      "subscribers": []
+    },
+    "/bev_dbw/engage": {
+      "messages": 0,
+      "observed_hz": null,
+      "receipt_age_s": null,
+      "publishers": [],
+      "subscribers": []
+    },
+    "/camera/front/camera_info": {
+      "type": "sensor_msgs/msg/CameraInfo",
+      "messages": 256,
+      "advancing_headers": 255,
+      "header_age_s": 0.009214983,
+      "frame": "camera_front_optical_frame",
+      "last_stamp_ns": 1792016679340996832,
+      "width": 1024,
+      "height": 768,
+      "observed_hz": 19.96,
+      "receipt_age_s": 0.054,
+      "publishers": [
+        {
+          "node": "front_camera_bridge",
+          "namespace": "/camera_lidar_bev",
+          "reliability": "BEST_EFFORT"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "camera_lidar_box_fusion",
+          "namespace": "/camera_lidar_bev"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera/front/image_raw": {
+      "type": "sensor_msgs/msg/Image",
+      "messages": 257,
+      "advancing_headers": 256,
+      "header_age_s": 0.014153226,
+      "frame": "camera_front_optical_frame",
+      "last_stamp_ns": 1792016679389675273,
+      "width": 1024,
+      "height": 768,
+      "encoding": "bgr8",
+      "observed_hz": 19.96,
+      "receipt_age_s": 0.0,
+      "publishers": [
+        {
+          "node": "front_camera_bridge",
+          "namespace": "/camera_lidar_bev",
+          "reliability": "BEST_EFFORT"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "camera_object_detector",
+          "namespace": "/camera_lidar_bev"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/camera_lidar_detections_3d": {
+      "type": "vision_msgs/msg/Detection3DArray",
+      "messages": 257,
+      "advancing_headers": 128,
+      "header_age_s": 0.360485573,
+      "frame": "os_sensor",
+      "last_stamp_ns": 1792016679016662412,
+      "last_detection_count": 0,
+      "observed_hz": 20.0,
+      "receipt_age_s": 0.027,
+      "publishers": [
+        {
+          "node": "camera_lidar_box_fusion",
+          "namespace": "/camera_lidar_bev",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/combined_view/status": {
+      "type": "std_msgs/msg/String",
+      "messages": 129,
+      "advancing_headers": 0,
+      "latest_status": {
+        "map_ready": false,
+        "path_tracking_state": "waiting for source-paired ENU pose"
+      },
+      "observed_hz": 10.0,
+      "receipt_age_s": 0.014,
+      "publishers": [
+        {
+          "node": "combined_bev_view",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": []
+    },
+    "/camera_lidar_bev/detections_2d": {
+      "type": "vision_msgs/msg/Detection2DArray",
+      "messages": 256,
+      "advancing_headers": 255,
+      "header_age_s": 0.030884837,
+      "frame": "camera_front_optical_frame",
+      "last_stamp_ns": 1792016679340996832,
+      "last_detection_count": 0,
+      "observed_hz": 19.91,
+      "receipt_age_s": 0.032,
+      "publishers": [
+        {
+          "node": "camera_object_detector",
+          "namespace": "/camera_lidar_bev",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "camera_lidar_box_fusion",
+          "namespace": "/camera_lidar_bev"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/lidar_detections_3d": {
+      "type": "vision_msgs/msg/Detection3DArray",
+      "messages": 128,
+      "advancing_headers": 127,
+      "header_age_s": 0.296592563,
+      "frame": "os_sensor",
+      "last_stamp_ns": 1792016679016662412,
+      "last_detection_count": 1,
+      "observed_hz": 10.0,
+      "receipt_age_s": 0.091,
+      "publishers": [
+        {
+          "node": "lidar_vehicle_detector",
+          "namespace": "/camera_lidar_bev",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "camera_lidar_box_fusion",
+          "namespace": "/camera_lidar_bev"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/localization/detections_3d": {
+      "type": "vision_msgs/msg/Detection3DArray",
+      "messages": 129,
+      "advancing_headers": 128,
+      "header_age_s": 0.01073295,
+      "frame": "enu",
+      "last_stamp_ns": 1792016679353124081,
+      "last_detection_count": 0,
+      "observed_hz": 9.99,
+      "receipt_age_s": 0.04,
+      "publishers": [
+        {
+          "node": "combined_bev_view",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": []
+    },
+    "/camera_lidar_bev/localization/odometry": {
+      "type": "nav_msgs/msg/Odometry",
+      "messages": 0,
+      "advancing_headers": 0,
+      "observed_hz": null,
+      "receipt_age_s": null,
+      "publishers": [
+        {
+          "node": "saved_map_lidar_localizer",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "localization_map_view",
+          "namespace": "/"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/localization/status": {
+      "type": "std_msgs/msg/String",
+      "messages": 129,
+      "advancing_headers": 0,
+      "latest_status": {
+        "state": "lost",
+        "accepted": false,
+        "status": "waiting_for_fresh_gps"
+      },
+      "observed_hz": 9.99,
+      "receipt_age_s": 0.061,
+      "publishers": [
+        {
+          "node": "saved_map_lidar_localizer",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "localization_map_view",
+          "namespace": "/"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/path_tracking/source_pose": {
+      "type": "nav_msgs/msg/Odometry",
+      "messages": 0,
+      "advancing_headers": 0,
+      "observed_hz": null,
+      "receipt_age_s": null,
+      "publishers": [
+        {
+          "node": "combined_bev_view",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "path_tracker",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/camera_lidar_bev/path_tracking/status": {
+      "type": "std_msgs/msg/String",
+      "messages": 128,
+      "advancing_headers": 0,
+      "latest_status": {
+        "state": "waiting",
+        "source_mode": "live_localization",
+        "tracking_valid": false,
+        "targets_valid": false,
+        "vehicle_curvature_valid": false,
+        "source_stamp_ns": 0
+      },
+      "observed_hz": 10.0,
+      "receipt_age_s": 0.074,
+      "publishers": [
+        {
+          "node": "path_tracker",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/clock": {
+      "messages": 0,
+      "observed_hz": null,
+      "receipt_age_s": null,
+      "publishers": [],
+      "subscribers": []
+    },
+    "/imu": {
+      "type": "sensor_msgs/msg/Imu",
+      "messages": 1271,
+      "advancing_headers": 1270,
+      "header_age_s": 0.000344177,
+      "frame": "os_imu",
+      "last_stamp_ns": 1792016679391650092,
+      "observed_hz": 98.83,
+      "receipt_age_s": 0.012,
+      "publishers": [
+        {
+          "node": "os_driver",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "saved_map_lidar_localizer",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/points": {
+      "type": "sensor_msgs/msg/PointCloud2",
+      "messages": 128,
+      "advancing_headers": 127,
+      "header_age_s": 0.24412559,
+      "frame": "os_lidar",
+      "last_stamp_ns": 1792016679116664749,
+      "width": 2048,
+      "height": 128,
+      "observed_hz": 10.0,
+      "receipt_age_s": 0.043,
+      "publishers": [
+        {
+          "node": "os_driver",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "saved_map_lidar_localizer",
+          "namespace": "/"
+        },
+        {
+          "node": "lidar_vehicle_detector",
+          "namespace": "/camera_lidar_bev"
+        },
+        {
+          "node": "combined_bev_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/sensing/gnss/fix": {
+      "type": "sensor_msgs/msg/NavSatFix",
+      "messages": 129,
+      "advancing_headers": 128,
+      "header_age_s": 0.068062743,
+      "frame": "gnss_antenna",
+      "last_stamp_ns": 1792016679280319735,
+      "fix_status": -1,
+      "observed_hz": 10.0,
+      "receipt_age_s": 0.056,
+      "publishers": [
+        {
+          "node": "septentrio_gps_bridge",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "saved_map_lidar_localizer",
+          "namespace": "/"
+        },
+        {
+          "node": "localization_map_view",
+          "namespace": "/"
+        }
+      ]
+    },
+    "/sensing/gnss/status": {
+      "type": "std_msgs/msg/String",
+      "messages": 148,
+      "advancing_headers": 0,
+      "latest_status": {
+        "valid_fix": false,
+        "solution_mode": 0,
+        "mode_name": "no_pvt",
+        "satellites_used": null
+      },
+      "observed_hz": 11.48,
+      "receipt_age_s": 0.055,
+      "publishers": [
+        {
+          "node": "septentrio_gps_bridge",
+          "namespace": "/",
+          "reliability": "RELIABLE"
+        }
+      ],
+      "subscribers": []
+    }
+  }
+}

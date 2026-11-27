@@ -1,0 +1,70 @@
+{
+  "feature": "live camera/LiDAR object BEV with frozen-map ENU localization",
+  "live_session": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/localized_bev_live_005",
+  "live_sample_report": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/localized_bev_live_005/check/report.json",
+  "live_sample_duration_s": 20.005988575998344,
+  "viewer_observed_hz": 10.010300979098153,
+  "world_topic_observed_hz": 10.00995420479643,
+  "accepted_localizations": 200,
+  "map_ready_frames": 200,
+  "sampled_status_frames": 200,
+  "localization_compute_ms": {
+    "n": 200,
+    "median": 78.89001100011228,
+    "p95": 90.88578329792652,
+    "maximum": 106.85918800118088
+  },
+  "localization_source_age_s": {
+    "n": 200,
+    "median": 0.2503929138183594,
+    "p95": 0.3006563663482666,
+    "maximum": 0.3183116912841797
+  },
+  "viewer_update_ms_including_mapping_and_render": {
+    "median": 73.15632399968308,
+    "p95": 82.34596529955525,
+    "maximum": 85.29264299977513
+  },
+  "world_detection_semantics": "fresh production camera-matched LiDAR subset in ENU at native scan end",
+  "nonempty_world_messages_in_final_scene": 0,
+  "nonempty_world_messages_in_preceding_physical_scene": 43,
+  "invalid_world_frame_or_geometry_in_physical_checks": 0,
+  "source_pose_methods": [
+    "live localization sample"
+  ],
+  "saved_trajectory_used_for_localization": false,
+  "reference_map_modified": false,
+  "recorder_started": false,
+  "accuracy_independently_validated": false,
+  "display_only_sampling": true,
+  "detector_and_localizer_input_sampling_changed": false,
+  "synthetic_protocol": {
+    "report": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/localized_bev_protocol_001/report.json",
+    "passed": true,
+    "assertions": {
+      "exact_native_end_stamp": true,
+      "world_frame_enu": true,
+      "camera_matched_subset_only": true,
+      "id_dimensions_hypotheses_preserved": true,
+      "full_roll_pitch_yaw_composition": true,
+      "translated_box_and_hypothesis_positions": true,
+      "pose_covariance_rotated": true,
+      "world_empty_after_pose_and_status_stop": true,
+      "map_not_ready_with_fresh_sensors_after_localization_stop": true,
+      "no_recorded_pose_fallback": true
+    },
+    "physical_drivers_or_inference_started": false
+  },
+  "focused_checks_passed": {
+    "live_map_geometry": 7,
+    "combined_live_localization": 7,
+    "localized_runner": 9,
+    "saved_map_regression": 7,
+    "existing_comparison_controller": 9
+  },
+  "limitations": [
+    "20-second final live check excludes initialization; sustained moving accuracy has no independent ground truth.",
+    "Camera-only 2D detections have no metric map location; unmatched LiDAR predictions appear orange in the visual inset but are excluded from the world topic.",
+    "Object IDs remain source IDs/frame-local display indices; persistent object tracking is not added."
+  ]
+}

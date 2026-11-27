@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T15:42:01.804992+00:00",
+  "purpose": "recorded_fixture_software_integration_check",
+  "ros_domain_id": 42,
+  "live_hardware_used": false,
+  "calibration_qualification": "provisional_no_independent_accuracy_validation",
+  "physical_calibration_accuracy_validated": false,
+  "exposure_synchronization_validated": false,
+  "errors": [],
+  "output_cloud_messages": 10,
+  "output_empty_messages": 2,
+  "output_verified_messages": 8,
+  "published_cloud_messages": 14,
+  "verified_provisional_diagnostics": 7,
+  "verified_fresh_diagnostics": 3,
+  "source_files": {
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml": "4e258e0b0959b9b624b726dffb26303421112f186c53dddb8e6689ceec8133db",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml": "7473945aaaeb04b64c002ef65038b9a38f0cdec80c025365358494feea32dce6",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_B_001/camera_raw.png": "779960f1ffb380fd34abf081df08017855ed98b4221d57b54ae6d2cc3000f054",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_B_001/cloud.bin": "4b2ba454d2d8dc30658b087734cbb9a18f231df3dee9ec262cda7b4a28bdbe91",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_B_001/cloud_metadata.json": "8ab64985421f37ef6ca266eae7ea8c0182dfbc59664a18487ba52ba50e4e583f",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_B_001/camera_info.json": "36905b8ad977a08c891a4b1e45f5281b6d2d770fb9bb21922d882dd8a083b4cb",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_B_001/projection_report.json": "407291675472b1dab5b10b92d840ce2548bf1b26fa92d7d188a30773e2763664"
+  },
+  "fixture": {
+    "original_point_count": 262144,
+    "valid_point_count": 260248,
+    "camera_colored_point_count": 18260,
+    "native_image_size": [
+      1024,
+      768
+    ],
+    "original_header_difference_s": 0.015557455,
+    "replay_header_policy": "fresh_host_stamps_preserving_recorded_pair_offset",
+    "output_frame": "os_sensor"
+  },
+  "node_arguments": [
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_rgb_cloud",
+    "--ros-args",
+    "-r",
+    "__node:=camera_bev_check_cpp",
+    "-p",
+    "image_topic:=/camera_bev_check/image_raw",
+    "-p",
+    "camera_info_topic:=/camera_bev_check/camera_info",
+    "-p",
+    "points_topic:=/camera_bev_check/points",
+    "-p",
+    "output_topic:=/camera_bev_check/rgb_points",
+    "-p",
+    "intrinsics_file:=/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml",
+    "-p",
+    "extrinsics_file:=/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml",
+    "-p",
+    "max_pair_delta_s:=0.15",
+    "-p",
+    "stale_after_s:=0.5",
+    "-p",
+    "max_publish_hz:=3.0"
+  ],
+  "last_diagnostic": {
+    "level": 1,
+    "message": "Waiting for a fresh LiDAR cloud; no cached scan is republished",
+    "values": {
+      "calibration_status": "external_candidate_unvalidated",
+      "source_frame_selection": "user_visual_B_os_sensor",
+      "accuracy_validated": "false",
+      "synchronization_validated": "false",
+      "tf_published": "false",
+      "output_frame": "os_sensor",
+      "driver_tf_observed": "true",
+      "publishing_fresh_cloud": "false",
+      "published_clouds": "8",
+      "stale_outputs_cleared": "2",
+      "input_points": "262144",
+      "valid_points": "260248",
+      "colored_points": "18260",
+      "radial_domain_excluded_points": "87016",
+      "header_delta_s": "0.015557",
+      "image_header_ns": "1791474128104291887",
+      "cloud_header_ns": "1791474128119849342",
+      "last_output_receipt_age_s": "0.638966"
+    }
+  },
+  "verified_by_stage": {
+    "valid": 5,
+    "valid_recovered": 3
+  },
+  "valid_replay_output_rate_hz": 2.333577,
+  "bad_camera_info_rejected_before_and_after_valid_input": true,
+  "wrong_camera_info_diagnostic_stages": [
+    "bad_after_valid",
+    "bad_initial"
+  ],
+  "recovered_after_matching_camera_info": true,
+  "stale_output_cleared": true,
+  "old_cloud_republication_observed": false,
+  "post_input_observation_s": 1.711784,
+  "node_log_tail": "[WARN] [1791474122.088646107] [camera_bev_check_cpp]: Camera RGB preview uses user-selected B calibration; geometric accuracy and sensor synchronization remain unvalidated. No TF is published.\n[INFO] [1791474123.447226443] [camera_bev_check_cpp]: RGB preview publishing in os_sensor: 260248 valid points, 18260 camera-colored, 0.015557 s header delta\n[INFO] [1791474129.971973004] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n",
+  "elapsed_s": 8.439455,
+  "checks_passed": true
+}

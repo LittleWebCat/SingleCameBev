@@ -1,0 +1,60 @@
+{
+  "created_at_utc": "2026-10-08T15:38:34.965590+00:00",
+  "purpose": "Independent offline reference for C++ RGB association; recorded inputs, not live.",
+  "fixture": "data/calibration/imported_projection_B_001",
+  "input_point_count": 262144,
+  "valid_point_count": 260248,
+  "camera_colored_point_count": 18260,
+  "in_metric_extent_point_count": 128067,
+  "displayed_metric_cell_count": 13573,
+  "displayed_camera_colored_cell_count": 7169,
+  "T_camera_from_os_lidar": [
+    [
+      -0.028967378097069285,
+      0.9992975470186691,
+      0.023776112563909657,
+      0.012921729382965664
+    ],
+    [
+      0.0804743876465468,
+      0.026040334183155656,
+      -0.996416466106689,
+      -0.23259921848031573
+    ],
+    [
+      -0.9963356683061658,
+      -0.02695020441666257,
+      -0.08117217837908153,
+      -0.4782952600343137
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "axes": {
+    "x": "os_sensor forward, image up",
+    "y": "os_sensor left, image left"
+  },
+  "extent_m": {
+    "x": [
+      0,
+      20
+    ],
+    "y": [
+      -10,
+      10
+    ]
+  },
+  "resolution_m": 0.05,
+  "calibration_status": "external_candidate_unvalidated",
+  "fusion_ready": false,
+  "snapshot": "camera_bev_reference_001.png",
+  "source_files_sha256": {
+    "camera_raw.png": "779960f1ffb380fd34abf081df08017855ed98b4221d57b54ae6d2cc3000f054",
+    "cloud.bin": "4b2ba454d2d8dc30658b087734cbb9a18f231df3dee9ec262cda7b4a28bdbe91",
+    "cloud_metadata.json": "8ab64985421f37ef6ca266eae7ea8c0182dfbc59664a18487ba52ba50e4e583f"
+  }
+}

@@ -1,0 +1,28 @@
+# Camera class evidence on observed LiDAR extents in the provisional stationary frame.
+/**:
+  ros__parameters:
+    allow_provisional_calibration: true
+    camera_frame: camera_front_optical_frame
+    model_name: YOLO11n_COCO_FP16
+    detections_topic: /camera_lidar_bev/detections_2d
+    camera_info_topic: /camera/front/camera_info
+    full_points_topic: /camera_lidar_bev/points_rgb
+    classified_points_topic: /camera_lidar_bev/ground_bev_points
+    detections_3d_topic: /camera_lidar_bev/detections_3d
+    markers_topic: /camera_lidar_bev/object_markers
+    vehicle_bev_markers_topic: /camera_lidar_bev/vehicle_bev_markers
+    semantic_points_topic: /camera_lidar_bev/semantic_points
+    max_publish_hz: 20.0
+    stale_after_s: 0.75
+    max_pair_delta_s: 0.15
+    max_cloud_points: 500000
+    min_confidence: 0.35
+    min_support_points: 8
+    min_visible_pixels: 6
+    min_central_points: 2
+    cluster_resolution_m: 0.45
+    max_optical_depth_m: 60.0
+    max_observed_extent_m: 12.0
+    max_observed_height_m: 4.5
+    ambiguity_depth_m: 0.90
+    ambiguity_support_ratio: 0.65

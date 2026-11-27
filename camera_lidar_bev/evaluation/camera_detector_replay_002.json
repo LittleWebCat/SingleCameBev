@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T17:50:03.577558+00:00",
+  "purpose": "native_tensor_rt_camera_detector_software_check",
+  "ros_domain_id": 74,
+  "live_hardware_used": false,
+  "physical_calibration_accuracy_validated": false,
+  "timing_and_motion_validated": false,
+  "learned_3d_detection_validated": false,
+  "image_size": [
+    1024,
+    768
+  ],
+  "camera_frame": "camera_front_optical_frame",
+  "source_files": {
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine": "3c4805022a0677b8961c60b9d5d30afb862f9ef29f545e65f339f911b7165475",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n.engine": "a023e0b2d3f2afe2d28d86a3bd0153fc1343ff33906a829eed437f7898671665",
+    "/home/agxthor/SingleCameraBev/.venv/lib/python3.12/site-packages/ultralytics/assets/bus.jpg": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63"
+  },
+  "reference": {
+    "detections": [
+      {
+        "class_name": "person",
+        "score": 0.88623046875,
+        "bbox_xyxy": [
+          846.4000244140625,
+          279.5,
+          1024.0,
+          622.9000244140625
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.880859375,
+        "bbox_xyxy": [
+          63.400001525878906,
+          281.5,
+          300.8000183105469,
+          646.5
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.8681640625,
+        "bbox_xyxy": [
+          283.6000061035156,
+          287.0,
+          434.0,
+          610.6000366210938
+        ]
+      },
+      {
+        "class_name": "bus",
+        "score": 0.859375,
+        "bbox_xyxy": [
+          158.40000915527344,
+          167.3000030517578,
+          1020.7999877929688,
+          531.1000366210938
+        ]
+      },
+      {
+        "class_name": "person",
+        "score": 0.69384765625,
+        "bbox_xyxy": [
+          0.25,
+          393.6000061035156,
+          92.8499984741211,
+          619.2000122070312
+        ]
+      }
+    ],
+    "setup_and_prediction_ms": 1908.6689089999709,
+    "speed_ms": {
+      "preprocess": 3.52413600012369,
+      "inference": 1.5982009999788716,
+      "postprocess": 32.61430299971835
+    },
+    "confidence": 0.35,
+    "nms_iou": 0.5,
+    "rect": false,
+    "engine_metadata": {
+      "version": "8.4.90",
+      "description": "Ultralytics YOLO11n model trained on /usr/src/ultralytics/ultralytics/cfg/datasets/coco.yaml",
+      "batch": 1,
+      "imgsz": [
+        640,
+        640
+      ],
+      "license": "AGPL-3.0 License (https://ultralytics.com/license)"
+    },
+    "native_box_tolerance_px": 2.0,
+    "score_tolerance": 0.005
+  },
+  "stage_results": {
+    "native_bgr_reference": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "duplicate_source_header": {
+      "original_source_not_republished": true
+    },
+    "native_rgb_reference": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "wrong_size": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_wrong_size": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "wrong_frame": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_wrong_frame": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "wrong_encoding": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_wrong_encoding": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "wrong_layout": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_wrong_layout": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "stale": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_stale": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "future": {
+      "invalid_source_not_republished": true,
+      "empty_detections_and_cleared_image_with_matching_fresh_header": true
+    },
+    "recovered_after_future": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    },
+    "source_stopped": {
+      "stale_detections_and_image_cleared_without_new_input": true
+    },
+    "final_recovered": {
+      "exact_source_header_preserved": true,
+      "detections": [
+        {
+          "class_name": "person",
+          "score": 0.88623046875,
+          "bbox_xyxy": [
+            846.4000000000001,
+            279.30000000000007,
+            1024.0,
+            623.1
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.8818359375,
+          "bbox_xyxy": [
+            63.60000000000001,
+            281.5,
+            300.8,
+            646.5
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.86767578125,
+          "bbox_xyxy": [
+            283.6,
+            287.0,
+            433.6,
+            610.6
+          ]
+        },
+        {
+          "class_name": "bus",
+          "score": 0.859375,
+          "bbox_xyxy": [
+            156.79999999999995,
+            167.20000000000002,
+            1020.8,
+            531.2
+          ]
+        },
+        {
+          "class_name": "person",
+          "score": 0.69384765625,
+          "bbox_xyxy": [
+            0.15000000000000568,
+            394.0,
+            91.7,
+            618.8
+          ]
+        }
+      ],
+      "reference_matches": [
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.1999999999999318,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.19999847412110228,
+          "score_difference": 0.0009765625
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 0.39999999999997726,
+          "score_difference": 0.00048828125
+        },
+        {
+          "class_name": "bus",
+          "max_box_difference_px": 1.600009155273483,
+          "score_difference": 0.0
+        },
+        {
+          "class_name": "person",
+          "max_box_difference_px": 1.149998474121091,
+          "score_difference": 0.0
+        }
+      ],
+      "native_labeled_image_size": [
+        1024,
+        768
+      ],
+      "annotated_pixels_changed": true
+    }
+  },
+  "errors": [],
+  "detection_messages": 17,
+  "labeled_image_messages": 17,
+  "verified_source_pairs": 10,
+  "verified_clear_pairs": 7,
+  "node_arguments": [
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_visualization/lib/bev_visualization/camera_object_detector",
+    "--ros-args",
+    "-r",
+    "__node:=camera_detector_check_cpp",
+    "-r",
+    "/camera_lidar_bev/diagnostics:=/camera_detector_check/diagnostics",
+    "-p",
+    "image_topic:=/camera_detector_check/input",
+    "-p",
+    "detections_topic:=/camera_detector_check/detections",
+    "-p",
+    "labeled_image_topic:=/camera_detector_check/labeled_image",
+    "-p",
+    "engine_file:=/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+    "-p",
+    "camera_frame:=camera_front_optical_frame",
+    "-p",
+    "image_width:=1024",
+    "-p",
+    "image_height:=768",
+    "-p",
+    "max_publish_hz:=20.0",
+    "-p",
+    "stale_after_s:=0.75",
+    "-p",
+    "confidence:=0.35",
+    "-p",
+    "nms_iou:=0.5",
+    "-p",
+    "max_detections:=100",
+    "-p",
+    "classes:=[\"person\", \"bicycle\", \"car\", \"motorcycle\", \"bus\", \"truck\"]"
+  ],
+  "last_diagnostic": {
+    "stage": "final_recovered",
+    "level": 0,
+    "message": "COCO road-user 2D camera detections; native TensorRT",
+    "values": {
+      "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+      "received_frames": "17",
+      "processed_frames": "10",
+      "inferred_frames": "10",
+      "mailbox_dropped_frames": "0",
+      "stale_dropped_frames": "2",
+      "rejected_frames": "4",
+      "duplicate_frames": "1",
+      "inference_errors": "0",
+      "cleared_outputs": "7",
+      "outputs_cleared": "0",
+      "detections": "5",
+      "max_publish_hz": "20.000000",
+      "source_stamp_ns": "1791481810797007369",
+      "source_age_at_start_s": "0.012689",
+      "source_age_at_publish_s": "0.032022",
+      "source_age_s": "0.112758",
+      "receipt_age_s": "0.109501",
+      "decode_ms": "0.003741",
+      "preprocess_ms": "2.718930",
+      "inference_ms": "2.246501",
+      "gpu_compute_ms": "1.741728",
+      "postprocess_ms": "4.175908",
+      "annotate_ms": "10.175351",
+      "processing_ms": "19.328328",
+      "publish_ms": "5.134015"
+    }
+  },
+  "verified_diagnostics": {
+    "stage": "final_recovered",
+    "level": 0,
+    "message": "COCO road-user 2D camera detections; native TensorRT",
+    "values": {
+      "engine_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine",
+      "received_frames": "17",
+      "processed_frames": "10",
+      "inferred_frames": "10",
+      "mailbox_dropped_frames": "0",
+      "stale_dropped_frames": "2",
+      "rejected_frames": "4",
+      "duplicate_frames": "1",
+      "inference_errors": "0",
+      "cleared_outputs": "7",
+      "outputs_cleared": "0",
+      "detections": "5",
+      "max_publish_hz": "20.000000",
+      "source_stamp_ns": "1791481810797007369",
+      "source_age_at_start_s": "0.012689",
+      "source_age_at_publish_s": "0.032022",
+      "source_age_s": "0.112758",
+      "receipt_age_s": "0.109501",
+      "decode_ms": "0.003741",
+      "preprocess_ms": "2.718930",
+      "inference_ms": "2.246501",
+      "gpu_compute_ms": "1.741728",
+      "postprocess_ms": "4.175908",
+      "annotate_ms": "10.175351",
+      "processing_ms": "19.328328",
+      "publish_ms": "5.134015"
+    }
+  },
+  "passed": true,
+  "node_log_tail": "[INFO] [1791481808.909629438] [camera_detector_check_cpp]: Native TensorRT COCO road-user labels: /home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine, 640x640 batch 1, 20.0 Hz maximum\n[INFO] [1791481810.910487401] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n",
+  "child_returncode": 0,
+  "elapsed_s": 7.708987834000254
+}

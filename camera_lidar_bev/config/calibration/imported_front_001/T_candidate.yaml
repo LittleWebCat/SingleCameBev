@@ -1,0 +1,57 @@
+schema_version: 1
+calibrated: false
+calibration_status: external_candidate_unvalidated
+units: m
+direction: lidar_to_camera
+point_mapping: p_camera = R * p_lidar + t
+frame_mapping_status: source_unconfirmed
+target_frame_mapping_note: camera_front_optical_frame is the project integration label;
+  the source JSON does not name ROS frames.
+transforms:
+  T_camera_from_lidar:
+    calibrated: false
+    source_frame: UNKNOWN
+    target_frame: camera_front_optical_frame
+    translation_m:
+    - 0.012013600763587136
+    - -0.19454109155737073
+    - -0.4751948886811247
+    quaternion_xyzw:
+    - 0.532958696959555
+    - -0.5064988810695578
+    - 0.47851352585559265
+    - 0.4800403278722614
+    matrix:
+    - - 0.028967378097069285
+      - -0.9992975470186691
+      - 0.023776112563909657
+      - 0.012013600763587136
+    - - -0.0804743876465468
+      - -0.026040334183155656
+      - -0.996416466106689
+      - -0.19454109155737073
+    - - 0.9963356683061658
+      - 0.02695020441666257
+      - -0.08117217837908153
+      - -0.4751948886811247
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+T_lidar_from_camera:
+- - 0.02896737809706983
+  - -0.08047438764654714
+  - 0.9963356683061665
+  - 0.4574500392589864
+- - -0.9992975470186696
+  - -0.026040334183155184
+  - 0.02695020441666211
+  - 0.019745846125113823
+- - 0.023776112563910122
+  - -0.9964164661066894
+  - -0.08117217837908128
+  - -0.2327021879550381
+- - 0.0
+  - 0.0
+  - 0.0
+  - 1.0

@@ -1,0 +1,91 @@
+# Schema example for future calibration tooling; the input probe does not load it.
+# Null values mean unknown. Do not substitute identity transforms for missing data.
+# A future loader must reject calibrated: false for geometric fusion.
+schema_version: 1
+calibrated: false
+calibration_id: null
+measured_at_utc: null
+vehicle_frame: base_link
+coordinate_convention: {x: forward, y: left, z: up}
+
+camera_front:
+  calibrated: false
+  serial_number: null
+  optical_frame: camera_front_optical_frame
+  optical_convention: {x: right, y: down, z: forward}
+  image_width_px: null
+  image_height_px: null
+  lens_settings: null
+  shutter_type: null
+  horizontal_fov_deg: null
+  intrinsics:
+    fx_px: null
+    fy_px: null
+    cx_px: null
+    cy_px: null
+  distortion:
+    model: null
+    coefficients: null
+  preprocessing:
+    resize_width_px: null
+    resize_height_px: null
+    padding_left_px: null
+    padding_top_px: null
+  exposure_timestamp_source: null
+  clock_domain: null
+
+lidar:
+  calibrated: false
+  model: null
+  serial_number: null
+  frame: null  # Read the effective PointCloud2 header; do not assume legacy YAML IDs.
+  scan_mode: null
+  point_time_field: null
+  point_time_units: null
+  point_time_reference: null
+  message_stamp_reference: null
+  clock_domain: null
+
+motion:
+  imu_frame: null
+  odometry_frame: null
+  source: null
+  clock_domain: null
+
+# Each transform maps points from source_frame into target_frame:
+# p_target = T_target_from_source * p_source.
+# Representation: translation in meters and quaternion [x, y, z, w].
+transforms:
+  T_camera_from_lidar:
+    calibrated: false
+    source_frame: null
+    target_frame: camera_front_optical_frame
+    translation_m: null
+    quaternion_xyzw: null
+  T_base_from_lidar:
+    calibrated: false
+    source_frame: null
+    target_frame: base_link
+    translation_m: null
+    quaternion_xyzw: null
+  T_base_from_imu:
+    calibrated: false
+    source_frame: null
+    target_frame: base_link
+    translation_m: null
+    quaternion_xyzw: null
+
+time_alignment:
+  validated: false
+  # Convention: t_common = t_sensor + offset_to_common_s.
+  common_clock_domain: null
+  camera_offset_to_common_s: null
+  lidar_offset_to_common_s: null
+  imu_offset_to_common_s: null
+  maximum_residual_offset_s: null
+
+validation:
+  independent_recording: null
+  near_middle_far_projection_error_px: null
+  moving_sequence_alignment_error_m: null
+  notes: null

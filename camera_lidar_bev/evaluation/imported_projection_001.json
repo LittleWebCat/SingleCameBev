@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "accepted_at_utc": "2026-10-08T15:11:31.482658+00:00",
+  "purpose": "visual comparison of two unconfirmed external source frames",
+  "frame_unselected": true,
+  "selected_source_frame": null,
+  "tf_published": false,
+  "calibration_status": "external_candidate_unvalidated",
+  "fusion_ready": false,
+  "source_files": {
+    "intrinsics": {
+      "path": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front.json",
+      "sha256": "ab27f407449f2b81a0e7e48c41e61cd8a06b17757c4da77a89d7f011fa590b2d"
+    },
+    "extrinsics": {
+      "path": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front_external.json",
+      "sha256": "628cc06ecc8d8b992dfbee734a6246c64a3ef8023885cdfc436423382d3f2191"
+    }
+  },
+  "image_header": {
+    "frame_id": "camera_front_optical_frame",
+    "stamp_sec": 1791472291,
+    "stamp_nanosec": 58027422
+  },
+  "camera_info_header": {
+    "frame_id": "camera_front_optical_frame",
+    "stamp_sec": 1791472291,
+    "stamp_nanosec": 58027422
+  },
+  "cloud_header": {
+    "frame_id": "os_lidar",
+    "stamp_sec": 1791472291,
+    "stamp_nanosec": 70073825
+  },
+  "native_image_width_px": 1024,
+  "native_image_height_px": 768,
+  "native_dimensions_and_camera_info_k_d_r_p_match": true,
+  "intrinsics_rescaled": false,
+  "projection_domain": "raw_distorted_image",
+  "camera_info": {
+    "header": {
+      "frame_id": "camera_front_optical_frame",
+      "stamp_sec": 1791472291,
+      "stamp_nanosec": 58027422
+    },
+    "width": 1024,
+    "height": 768,
+    "distortion_model": "plumb_bob",
+    "k": [
+      1411.1610848577463,
+      0.0,
+      548.0799104532791,
+      0.0,
+      1401.833643127103,
+      378.1495280199014,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "d": [
+      -0.4430230293674048,
+      0.7644587241471862,
+      0.003543153617926078,
+      -0.00020622865673565534,
+      -1.7672146488596931
+    ],
+    "r": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "p": [
+      1411.1610848577463,
+      0.0,
+      548.0799104532791,
+      0.0,
+      0.0,
+      1401.833643127103,
+      378.1495280199014,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "binning_x": 0,
+    "binning_y": 0,
+    "roi": {
+      "x_offset": 0,
+      "y_offset": 0,
+      "width": 0,
+      "height": 0,
+      "do_rectify": false
+    }
+  },
+  "absolute_header_difference_s": 0.012046403,
+  "receipt_age_s": {
+    "image": 0.30976915000064764,
+    "cloud": 0.08158799400553107,
+    "camera_info": 0.30919111099501606
+  },
+  "pairing_qualification": "header_pairing_heuristic_only",
+  "exposure_synchronization_verified": false,
+  "scene_requirement": "Keep rig and scene stationary; motion is not verified by this tool",
+  "observed_driver_tf": {
+    "parent_frame": "os_sensor",
+    "child_frame": "os_lidar",
+    "header": {
+      "frame_id": "os_sensor",
+      "stamp_sec": 1791472083,
+      "stamp_nanosec": 545496441
+    },
+    "translation_m": [
+      0.0,
+      0.0,
+      0.038195
+    ],
+    "quaternion_xyzw": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "source_topic": "/tf_static"
+  },
+  "T_os_sensor_from_os_lidar": [
+    [
+      -1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.038195
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "hypotheses": {
+    "direct_os_lidar": {
+      "T_camera_from_os_lidar": [
+        [
+          0.028967378097069285,
+          -0.9992975470186691,
+          0.023776112563909657,
+          0.012013600763587136
+        ],
+        [
+          -0.0804743876465468,
+          -0.026040334183155656,
+          -0.996416466106689,
+          -0.19454109155737073
+        ],
+        [
+          0.9963356683061658,
+          0.02695020441666257,
+          -0.08117217837908153,
+          -0.4751948886811247
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "input_point_count": 262144,
+      "valid_point_count": 260316,
+      "positive_optical_depth_point_count": 120152,
+      "radial_domain_excluded_point_count": 82201,
+      "in_frame_point_count": 16786,
+      "unique_projected_pixel_count": 16762,
+      "drawn_pixel_count": 6000
+    },
+    "via_os_sensor": {
+      "T_camera_from_os_lidar": [
+        [
+          -0.028967378097069285,
+          0.9992975470186691,
+          0.023776112563909657,
+          0.012921729382965664
+        ],
+        [
+          0.0804743876465468,
+          0.026040334183155656,
+          -0.996416466106689,
+          -0.23259921848031573
+        ],
+        [
+          -0.9963356683061658,
+          -0.02695020441666257,
+          -0.08117217837908153,
+          -0.4782952600343137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "input_point_count": 262144,
+      "valid_point_count": 260316,
+      "positive_optical_depth_point_count": 120386,
+      "radial_domain_excluded_point_count": 87614,
+      "in_frame_point_count": 15654,
+      "unique_projected_pixel_count": 15572,
+      "drawn_pixel_count": 6000
+    }
+  },
+  "raw_evidence_directory": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/calibration/imported_projection_001"
+}

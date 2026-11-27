@@ -1,0 +1,42 @@
+{
+  "bag_path": "/home/agxthor/SingleCameraBev/camera_lidar_bev/bags/lidar_camera_check_001",
+  "started_utc": "2026-10-06T18:03:52.703+00:00",
+  "ros_domain_id": 42,
+  "discovery_range": "LOCALHOST",
+  "probe_command": [
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/install/bev_sensor_bridge/lib/bev_sensor_bridge/sensor_probe",
+    "--ros-args",
+    "-r",
+    "__ns:=/bev_replay_check",
+    "-p",
+    "use_sim_time:=true",
+    "-p",
+    "imu_topic:=/imu",
+    "-p",
+    "lidar_reliability:=reliable"
+  ],
+  "replay_command": [
+    "ros2",
+    "bag",
+    "play",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/bags/lidar_camera_check_001",
+    "--clock",
+    "--exclude-topics",
+    "/camera_lidar_bev/diagnostics"
+  ],
+  "logs": "/tmp/bev-replay-check-g_arrhn8",
+  "probe_messages_received": {},
+  "observed_stream_statuses": {},
+  "latest_statuses": {},
+  "sensor_clock_alignment": "unverified; replay receipt does not validate acquisition timing",
+  "point_time_units_and_origin": "unverified",
+  "calibration_status": "pending",
+  "motion_trajectory_status": "missing odometry expected for this stationary session",
+  "full_sensor_gate": "partial",
+  "result": "failed",
+  "error": "invalid literal for int() with base 10: b'\\x01'",
+  "diagnostic_arrays_received": 1,
+  "ended_utc": "2026-10-06T18:03:56.174+00:00",
+  "elapsed_seconds": 3.47,
+  "probe_returncode_after_cleanup": 0
+}

@@ -18,3 +18,6 @@ class ProjectedDetection:
     z_m_forward: float | None
     bev_xy: tuple[int, int] | None
     depth_source: str
+    camera_name: str | None = None
+    camera_track_id: int | None = None   # ByteTrack ID within this camera
+    track_id: int | None = None          # global BEV track ID (confirmed tracks only)

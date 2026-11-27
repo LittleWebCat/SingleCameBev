@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "calibration_status": "external_candidate_unvalidated",
+  "validation_passed": false,
+  "fusion_ready": false,
+  "hardware_changed": false,
+  "intrinsics_rescaled": false,
+  "tf_published": false,
+  "native_image_width_px": 1024,
+  "native_image_height_px": 768,
+  "lidar_source_frame": "UNKNOWN",
+  "target_frame": "camera_front_optical_frame",
+  "same_sensor_current_mounting_user_confirmed": true,
+  "camera_reported_training_rms_px": 0.3199328317453365,
+  "camera_reported_view_count": 40,
+  "board": {
+    "cols": 5,
+    "rows": 4,
+    "square_m": 0.065
+  },
+  "extrinsics": {
+    "rotation_determinant": 0.9999999999999992,
+    "rotation_orthogonality_max_abs_error": 6.661338147750939e-16,
+    "inverse_product_max_abs_error": 2.220446049250313e-16,
+    "point_count": 120,
+    "inlier_count": 68,
+    "inlier_fraction": 0.5666666666666667,
+    "all_points_rms_px_recomputed": 8.89672607991465,
+    "inlier_rms_px_recomputed": 4.86945549065024,
+    "maximum_point_error_px": 19.406394348294864,
+    "ransac_threshold_px": 8.0,
+    "maximum_final_inlier_error_px": 7.875889971015283,
+    "pair_file_count": 6,
+    "unique_pair_file_count": 5,
+    "duplicate_pair_files": {
+      "results/pose4_pairs.json": 2
+    },
+    "residual_interpretation": "Fitting residuals from supplied correspondences; not held-out validation."
+  },
+  "warnings": [
+    "No independent reprojection validation or correspondence geometry was supplied.",
+    "Intrinsic camera and LiDAR extrinsic errors are training residuals, not held-out accuracy measurements.",
+    "Native image size must match capture; intrinsics have not been resized, cropped or applied.",
+    "Source JSON does not identify LiDAR coordinate frame or sensor serial numbers.",
+    "Rigid sensor mounting and matching sensor identities must be confirmed separately.",
+    "LiDAR source frame remains UNKNOWN; do not publish this transform as ROS TF.",
+    "Repeated pair_files entries may weight a pose more than once; data was preserved without refitting."
+  ],
+  "imported_at_utc": "2026-10-07T21:06:46.625356+00:00",
+  "source_files": {
+    "intrinsics": {
+      "path": "/home/agxthor/Downloads/front.json",
+      "sha256": "ab27f407449f2b81a0e7e48c41e61cd8a06b17757c4da77a89d7f011fa590b2d",
+      "preserved_copy": "front.json"
+    },
+    "extrinsics": {
+      "path": "/home/agxthor/Downloads/front_external.json",
+      "sha256": "628cc06ecc8d8b992dfbee734a6246c64a3ef8023885cdfc436423382d3f2191",
+      "preserved_copy": "front_external.json"
+    }
+  },
+  "candidate_camera_file": "front_camera_1024x768.candidate.yaml",
+  "candidate_transform_file": "T_candidate.yaml",
+  "native_capture_resolution_user_confirmed": true,
+  "source_frame_user_confirmation": "unknown",
+  "live_preview_intent": "Compare direct os_lidar and via os_sensor hypotheses without selecting or publishing an extrinsic TF."
+}

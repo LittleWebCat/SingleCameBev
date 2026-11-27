@@ -1,0 +1,98 @@
+{
+ "created_utc": "2026-11-26T01:23:46+00:00",
+ "hdmap": "/home/agxthor/SingleCameraBev/hdmap_20261125_125612_20261125_1820",
+ "hdmap_version": "20261125_1820",
+ "hdmap_recording": "20261125_125612",
+ "map": "local_gps_recording_002",
+ "T_enu_from_hdmap": [
+  [
+   0.998761,
+   0.044666,
+   0.021947,
+   5.171942
+  ],
+  [
+   -0.044491,
+   0.998974,
+   -0.008399,
+   -8.507851
+  ],
+  [
+   -0.0223,
+   0.007412,
+   0.999724,
+   0.133353
+  ],
+  [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ]
+ ],
+ "T_coarse_from_trajectories": [
+  [
+   0.998752,
+   0.044952,
+   0.021743,
+   5.107696
+  ],
+  [
+   -0.044776,
+   0.998961,
+   -0.00852,
+   -8.539022
+  ],
+  [
+   -0.022104,
+   0.007536,
+   0.999727,
+   0.101395
+  ],
+  [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ]
+ ],
+ "yaw_deg": -2.551,
+ "tilt_deg": 1.347,
+ "translation_m": [
+  5.172,
+  -8.508,
+  0.133
+ ],
+ "route_residual_after_coarse": {
+  "median_m": 0.288,
+  "p90_m": 1.689
+ },
+ "route_residual_final": {
+  "median_m": 0.289,
+  "p90_m": 1.757
+ },
+ "paint_points": {
+  "hdmap": 7679,
+  "our_map": 95718
+ },
+ "paint_residual_final": {
+  "median_m": 0.219,
+  "p90_m": 0.983
+ },
+ "paint_within_0.3m": 0.665,
+ "stop_signs_vs_hd_stop_lines": [
+  {
+   "stop_sign": 0,
+   "nearest_hd_stop_line": 0,
+   "sign_to_line_m": 1.31,
+   "our_estimated_line_to_hd_line_m": 0.37
+  },
+  {
+   "stop_sign": 40,
+   "nearest_hd_stop_line": 8,
+   "sign_to_line_m": 21.7,
+   "our_estimated_line_to_hd_line_m": 18.56
+  }
+ ],
+ "note": "route residuals include that the two drives used different lane positions; paint residuals are the alignment check"
+}

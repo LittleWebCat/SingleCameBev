@@ -1,0 +1,31 @@
+{
+  "source_bag_name": "camera_lidar_20261010T221427_088256Z",
+  "map_directory": "maps/local_gps_recording_002",
+  "alignment_directory": "maps/local_gps_recording_002/gps_alignment",
+  "status_frames": 118,
+  "map_ready_frames": 116,
+  "all_ready_frames_gps_aligned": true,
+  "all_ready_frames_map_enabled": true,
+  "ready_with_camera_and_lidar_boxes": 56,
+  "maximum_accepted_camera_lidar_matches": 0,
+  "maximum_pose_delta_ms": 0.150023,
+  "maximum_camera_cloud_delta_ms": 137.330612,
+  "camera_detection_source_headers_exact": true,
+  "original_pointcloud_unchanged": true,
+  "original_trajectory_unchanged": true,
+  "gps_horizontal_fit_rmse_m": 0.9016416273133103,
+  "gps_fit_residual_is_true_accuracy": false,
+  "source_trajectory_replay_only": true,
+  "tests_passed": {
+    "gps_alignment": 13,
+    "saved_map": 7,
+    "native_visualization_ctest": 6
+  },
+  "loop_and_toggle_validation": "evaluation/gps_aligned_saved_map_replay_001.json",
+  "preview": "data/gps_aligned_saved_map_replay_002/map_on_with_detections.png",
+  "active_replay_command": "bash tools/replay_combined_bev.sh --saved-map maps/local_gps_recording_002 --no-road-lanes --max-points 300000 --range-m 80 --start-offset 35",
+  "replay_domain": 89,
+  "physical_sensors_started": false,
+  "gps_fused_in_lio_estimator": false,
+  "localization_against_another_recording": false
+}

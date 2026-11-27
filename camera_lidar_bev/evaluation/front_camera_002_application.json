@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "application_verified_at_utc": "2026-10-07T19:59:19.387590+00:00",
+  "application_status": "applied_provisionally_to_live_camera_bridge",
+  "calibration_file": "config/calibration/front_camera_640x480_002.candidate.yaml",
+  "calibration_sha256": "d7ece9347537bba5a11123e4d7f0763c5b4eb8a79b202aea3b32f855ee77ed0a",
+  "fit_report": "front_camera_002_fit.json",
+  "fit_report_note": "The fit report and generated YAML comments preserve the not-applied state when fitting completed. This application record describes the later live state.",
+  "user_visual_check": {
+    "result": "user_reported_straight_edge_remains_straight",
+    "user_statement": "it stays straight",
+    "source": "conversation feedback after the live raw/candidate comparison",
+    "scope": "Qualitative report; no numerical straightness residual or per-position measurement was recorded."
+  },
+  "intrinsic_accuracy_validated": false,
+  "calibration_qualification": "candidate_unvalidated",
+  "fusion_ready": false,
+  "camera_lidar_extrinsics_measured": false,
+  "live_launch": {
+    "ros_domain_id": 1,
+    "launcher_pid_at_verification": 22970,
+    "bridge_pid_at_verification": 22996,
+    "device": "/dev/v4l/by-path/platform-a80aa10000.usb-usb-0:4.1.2.2:1.0-video-index0",
+    "calibration_file_launch_argument": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/front_camera_640x480_002.candidate.yaml"
+  },
+  "live_verification": {
+    "calibration_file": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/front_camera_640x480_002.candidate.yaml",
+    "calibration_sha256": "d7ece9347537bba5a11123e4d7f0763c5b4eb8a79b202aea3b32f855ee77ed0a",
+    "calibration_qualification": "candidate_unvalidated",
+    "ros_domain_id": "1",
+    "image_messages": 60,
+    "camera_info_messages": 59,
+    "pre_candidate_camera_info_ignored": 0,
+    "matching_candidate_camera_info_messages": 59,
+    "matching_image_info_headers": 59,
+    "verified_timing_warning_messages": 2,
+    "errors": [],
+    "sample_image": {
+      "stamp_sec": 1791403159,
+      "stamp_nanosec": 348117989,
+      "frame_id": "camera_front_optical_frame",
+      "width": 640,
+      "height": 480,
+      "encoding": "bgr8",
+      "step": 1920,
+      "data_bytes": 921600
+    },
+    "sample_camera_info": {
+      "stamp_sec": 1791403159,
+      "stamp_nanosec": 348117989,
+      "frame_id": "camera_front_optical_frame",
+      "width": 640,
+      "height": 480,
+      "distortion_model": "plumb_bob",
+      "k": [
+        904.886360419207,
+        0.0,
+        348.9028141306046,
+        0.0,
+        894.1895195899784,
+        239.2980665473161,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "d": [
+        -0.4079651180025769,
+        0.8080521177596051,
+        0.004596374114669609,
+        0.0009649587157795288,
+        -2.5422425595588662
+      ],
+      "r": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "p": [
+        904.886360419207,
+        0.0,
+        348.9028141306046,
+        0.0,
+        0.0,
+        894.1895195899784,
+        239.2980665473161,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "last_camera_diagnostic": {
+      "level": 1,
+      "message": "Host receipt stamps; exposure timing and sensor synchronization unverified",
+      "values": {
+        "source_mode": "camera",
+        "frames_published": "4937",
+        "read_or_conversion_failures": "0",
+        "calibrated": "true",
+        "timestamp_source": "host_receipt_after_read",
+        "exposure_timestamps_available": "false",
+        "clock_domain": "host_ros_system_time",
+        "synchronization_validated": "false",
+        "frame_id": "camera_front_optical_frame",
+        "actual_width": "640",
+        "actual_height": "480",
+        "requested_width": "640",
+        "requested_height": "480",
+        "requested_fps": "30.000000",
+        "requested_fourcc": "MJPG",
+        "receipt_age_s": "0.027957",
+        "mean_receipt_hz": "30.006367"
+      }
+    },
+    "elapsed_s": 2.011102,
+    "publisher_counts": {
+      "/camera/front/image_raw": 1,
+      "/camera/front/camera_info": 1
+    },
+    "checks_passed": true,
+    "checked_at_utc": "2026-10-07T19:59:19.387590+00:00"
+  },
+  "remaining_validation": [
+    "Independent numerical intrinsic accuracy and board geometry checks.",
+    "Camera-LiDAR and vehicle extrinsics.",
+    "Exposure timing and camera-LiDAR synchronization."
+  ]
+}

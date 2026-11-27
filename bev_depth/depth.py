@@ -6,7 +6,7 @@ from typing import Protocol
 import cv2
 import numpy as np
 
-from .config import DepthConfig
+from .config import DepthConfig, Intrinsics
 from .types import Detection
 
 
@@ -197,6 +197,70 @@ class TensorRTDepthBackend:
         return cv2.resize(depth, (w, h), interpolation=cv2.INTER_CUBIC)
 
 
+class TensorRTDA3Backend(TensorRTDepthBackend):
+    """Depth Anything 3 Metric engine from scripts/export_depth_anything3_metric_onnx.py.
+
+    The network output becomes meters only with the camera's focal length:
+    ``meters = raw * focal_px / 300``, with focal_px measured at the network
+    input size. Callers pass each camera's intrinsics to ``infer``.
+    """
+
+    uses_intrinsics = True
+    FOCAL_DIVISOR = 300.0
+
+    def __init__(self, model_path: str, input_size: int) -> None:
+        super().__init__(model_path, input_size)
+        if self.output_name != "depth":  # the engine also has a "sky" output
+            self.output_name = "depth"
+            self.output_shape = tuple(self.context.get_tensor_shape("depth"))
+            self.host_output = np.empty(int(np.prod(self.output_shape)), dtype=np.float32)
+        self.net_height, self.net_width = (int(v) for v in self.input_shape[-2:])
+
+    def focal_at_network_size(self, intrinsics: Intrinsics) -> float:
+        calibration_width = intrinsics.calibration_width or self.net_width
+        calibration_height = intrinsics.calibration_height or self.net_height
+        return 0.5 * (
+            intrinsics.fx * self.net_width / calibration_width
+            + intrinsics.fy * self.net_height / calibration_height
+        )
+
+    def infer(self, frame_bgr: np.ndarray, intrinsics: Intrinsics | None = None) -> np.ndarray:
+        if intrinsics is None:
+            raise ValueError("The DA3 metric backend needs the camera intrinsics")
+        h, w = frame_bgr.shape[:2]
+        rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+        upscale = self.net_width > w or self.net_height > h
+        resized = cv2.resize(
+            rgb,
+            (self.net_width, self.net_height),
+            interpolation=cv2.INTER_CUBIC if upscale else cv2.INTER_AREA,
+        )
+        mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+        std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
+        tensor = np.transpose((resized.astype(np.float32) / 255.0 - mean) / std, (2, 0, 1))
+        tensor = np.ascontiguousarray(tensor[None, ...])
+        self.cudart.cudaMemcpyAsync(
+            self.device_buffers[self.input_name],
+            tensor.ctypes.data,
+            tensor.nbytes,
+            self.cudart.cudaMemcpyKind.cudaMemcpyHostToDevice,
+            self.stream,
+        )
+        if not self.context.execute_async_v3(self.stream):
+            raise RuntimeError("TensorRT DA3 execution failed")
+        self.cudart.cudaMemcpyAsync(
+            self.host_output.ctypes.data,
+            self.device_buffers[self.output_name],
+            self.host_output.nbytes,
+            self.cudart.cudaMemcpyKind.cudaMemcpyDeviceToHost,
+            self.stream,
+        )
+        self.cudart.cudaStreamSynchronize(self.stream)
+        raw = self.host_output.reshape(self.output_shape).squeeze().astype(np.float32)
+        meters = raw * (self.focal_at_network_size(intrinsics) / self.FOCAL_DIVISOR)
+        return cv2.resize(meters, (w, h), interpolation=cv2.INTER_CUBIC)
+
+
 def _depth_preprocess(frame_bgr: np.ndarray, input_size: int) -> np.ndarray:
     rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
     resized = cv2.resize(rgb, (input_size, input_size), interpolation=cv2.INTER_AREA)
@@ -219,6 +283,8 @@ def create_depth_backend(config: DepthConfig) -> DepthBackend:
         return MidasTorchBackend(config.path, config.input_size)
     if backend == "tensorrt":
         return TensorRTDepthBackend(config.path, config.input_size)
+    if backend == "tensorrt_da3":
+        return TensorRTDA3Backend(config.path, config.input_size)
     raise ValueError(f"Unsupported depth backend: {config.backend}")
 
 

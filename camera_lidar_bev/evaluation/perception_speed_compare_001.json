@@ -1,0 +1,2661 @@
+{
+  "engines": {
+    "camera_3d": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_3d_001/smoke_fp16_raw.engine",
+    "lidar": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/lidar_objects_001/pointpillar_fp16.plan",
+    "yolo": "/home/agxthor/SingleCameraBev/camera_lidar_bev/models/camera_objects_001/yolo11n_fp16_raw.engine"
+  },
+  "kind": "recording_processing_speed_and_camera_lidar_matching",
+  "repeats_per_sample": 3,
+  "sample_count": 10,
+  "samples": [
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              1009.0150208394044,
+              279.1681954845108
+            ],
+            "native_xyxy_px": [
+              966.5757810984612,
+              248.72646396623327,
+              1024.0,
+              308.51916190300597
+            ],
+            "visible": true
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            928.8,
+            206.9,
+            1023.2,
+            273.1
+          ],
+          "score": 0.71826171875
+        },
+        {
+          "class": "truck",
+          "native_xyxy_px": [
+            0.8,
+            189.6,
+            225.6,
+            309.6
+          ],
+          "score": 0.55712890625
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573754449193673,
+      "input_points": 106771,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            29.92049789428711,
+            13.940909385681152,
+            -0.8253759741783142
+          ],
+          "score": 0.49881553649902344,
+          "size_lwh_m": [
+            3.2793221473693848,
+            1.5446330308914185,
+            1.4975385665893555
+          ],
+          "yaw_rad": 1.1893848180770874
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            44.08208084106445,
+            -13.495214462280273,
+            -0.17886722087860107
+          ],
+          "score": 0.41105177998542786,
+          "size_lwh_m": [
+            4.560118198394775,
+            1.7799246311187744,
+            1.7632935047149658
+          ],
+          "yaw_rad": -0.493896484375
+        }
+      ],
+      "lidar_stamp_ns": 1791573754465727106,
+      "matched_boxes": 0,
+      "pair_delta_ms": 16.533433,
+      "projectable_lidar_boxes": 1,
+      "sample_id": "000"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 3,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 4,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 5,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 6,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 7,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 8,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 9,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 10,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 11,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 12,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            440.4,
+            209.3,
+            501.2,
+            241.1
+          ],
+          "score": 0.418701171875
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573782478455825,
+      "input_points": 107643,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            11.801291465759277,
+            -15.521181106567383,
+            -1.346010684967041
+          ],
+          "score": 0.957277774810791,
+          "size_lwh_m": [
+            4.580202102661133,
+            1.7223215103149414,
+            1.3555169105529785
+          ],
+          "yaw_rad": -3.1009435653686523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            17.6536922454834,
+            -15.280547142028809,
+            -1.251367211341858
+          ],
+          "score": 0.9403530955314636,
+          "size_lwh_m": [
+            4.303226947784424,
+            1.6804739236831665,
+            1.5106201171875
+          ],
+          "yaw_rad": -3.1265172958374023
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            11.758573532104492,
+            -18.240354537963867,
+            -1.307924747467041
+          ],
+          "score": 0.8393393158912659,
+          "size_lwh_m": [
+            4.183833599090576,
+            1.6396182775497437,
+            1.5008784532546997
+          ],
+          "yaw_rad": 3.1159119606018066
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            29.956438064575195,
+            -19.86819076538086,
+            -1.226040005683899
+          ],
+          "score": 0.837221086025238,
+          "size_lwh_m": [
+            4.702001571655273,
+            1.7145599126815796,
+            1.4442617893218994
+          ],
+          "yaw_rad": -3.0824193954467773
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            30.061540603637695,
+            -14.413115501403809,
+            -1.2871679067611694
+          ],
+          "score": 0.7648916244506836,
+          "size_lwh_m": [
+            4.33512544631958,
+            1.7457109689712524,
+            1.3746799230575562
+          ],
+          "yaw_rad": -3.1353559494018555
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            11.289015769958496,
+            -20.699827194213867,
+            -1.5042577981948853
+          ],
+          "score": 0.6958549618721008,
+          "size_lwh_m": [
+            3.5207769870758057,
+            1.5792133808135986,
+            1.3997411727905273
+          ],
+          "yaw_rad": 3.023794651031494
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            49.722633361816406,
+            -18.802188873291016,
+            -0.9310168623924255
+          ],
+          "score": 0.6601723432540894,
+          "size_lwh_m": [
+            4.200721740722656,
+            1.7495508193969727,
+            1.7413681745529175
+          ],
+          "yaw_rad": -3.0999670028686523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            2.1455726623535156,
+            9.91053581237793,
+            -0.6421826481819153
+          ],
+          "score": 0.6141047477722168,
+          "size_lwh_m": [
+            3.9569151401519775,
+            1.6828861236572266,
+            1.6305809020996094
+          ],
+          "yaw_rad": 3.1308579444885254
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            12.298955917358398,
+            -26.128437042236328,
+            -1.4939745664596558
+          ],
+          "score": 0.4525056779384613,
+          "size_lwh_m": [
+            3.666731119155884,
+            1.6538149118423462,
+            1.4309250116348267
+          ],
+          "yaw_rad": 3.1404433250427246
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            35.03839111328125,
+            -20.486595153808594,
+            -1.2635546922683716
+          ],
+          "score": 0.4290107190608978,
+          "size_lwh_m": [
+            4.031912326812744,
+            1.637768030166626,
+            1.5100209712982178
+          ],
+          "yaw_rad": 1.8815234899520874
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            16.769237518310547,
+            -20.45604133605957,
+            -1.3572460412979126
+          ],
+          "score": 0.406744122505188,
+          "size_lwh_m": [
+            3.7158453464508057,
+            1.532612681388855,
+            1.3907994031906128
+          ],
+          "yaw_rad": 0.019713878631591797
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            29.531198501586914,
+            -29.723602294921875,
+            -0.9841110110282898
+          ],
+          "score": 0.38041365146636963,
+          "size_lwh_m": [
+            4.076203346252441,
+            1.6285475492477417,
+            1.5361073017120361
+          ],
+          "yaw_rad": 1.9374316930770874
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            0.3822089433670044,
+            -19.205270767211914,
+            -1.1606274843215942
+          ],
+          "score": 0.36342090368270874,
+          "size_lwh_m": [
+            3.423719644546509,
+            1.6135828495025635,
+            1.514173984527588
+          ],
+          "yaw_rad": -2.7192296981811523
+        }
+      ],
+      "lidar_stamp_ns": 1791573782465577456,
+      "matched_boxes": 0,
+      "pair_delta_ms": 12.878369,
+      "projectable_lidar_boxes": 0,
+      "sample_id": "001"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              738.6328272477326,
+              309.8357147433051
+            ],
+            "native_xyxy_px": [
+              680.1817114204387,
+              272.7197017782282,
+              805.5157105914283,
+              352.6213771991508
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 3,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 4,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 5,
+          "projection": {
+            "native_center_px": [
+              683.212096905564,
+              294.0414418532264
+            ],
+            "native_xyxy_px": [
+              655.5675504395109,
+              269.0935942576634,
+              710.5481772772852,
+              321.20709660445027
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 6,
+          "projection": {
+            "native_center_px": [
+              249.64248056211474,
+              270.53216376896563
+            ],
+            "native_xyxy_px": [
+              178.9907514198167,
+              245.54796697852547,
+              319.46958308802107,
+              296.4128166781815
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 7,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            636.8,
+            234.0,
+            763.2,
+            317.2
+          ],
+          "score": 0.8515625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            615.0,
+            226.4,
+            689.0,
+            284.0
+          ],
+          "score": 0.64208984375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            554.6,
+            224.1,
+            623.0,
+            267.1
+          ],
+          "score": 0.640625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            154.0,
+            215.7,
+            253.2,
+            248.3
+          ],
+          "score": 0.5830078125
+        },
+        {
+          "class": "truck",
+          "native_xyxy_px": [
+            877.2,
+            196.9,
+            1023.6,
+            448.7
+          ],
+          "score": 0.493408203125
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            51.8,
+            218.3,
+            140.8,
+            258.5
+          ],
+          "score": 0.449462890625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            52.975,
+            218.1,
+            139.825,
+            237.1
+          ],
+          "score": 0.381103515625
+        }
+      ],
+      "camera_3d_boxes": [
+        {
+          "camera_rotation_y_rad": -1.8474814133449793,
+          "camera_xyz_m": [
+            1.6563843804122225,
+            -1.2085202144085831,
+            15.7859375
+          ],
+          "class": "car",
+          "model_class_id": 0,
+          "score": 0.491943359375,
+          "size_lhw_m": [
+            4.3221169194631415,
+            1.9356728939038539,
+            1.709340424011556
+          ]
+        },
+        {
+          "camera_rotation_y_rad": -1.621006963117058,
+          "camera_xyz_m": [
+            1.900052840261671,
+            -2.6718010280701963,
+            29.718300781249997
+          ],
+          "class": "car",
+          "model_class_id": 0,
+          "score": 0.27587890625,
+          "size_lhw_m": [
+            4.162632362647324,
+            1.9748146504361577,
+            1.7210653982528648
+          ]
+        },
+        {
+          "camera_rotation_y_rad": 2.689578826120431,
+          "camera_xyz_m": [
+            2.0516768305893844,
+            -0.1014471933729573,
+            7.785312500000001
+          ],
+          "class": "person",
+          "model_class_id": 2,
+          "score": 0.25390625,
+          "size_lhw_m": [
+            0.8890698587718737,
+            1.7684333908722087,
+            0.6600959044653509
+          ]
+        }
+      ],
+      "image_stamp_ns": 1791573810536886633,
+      "input_points": 116856,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            9.275177955627441,
+            -14.2848482131958,
+            -1.0203521251678467
+          ],
+          "score": 0.9284088015556335,
+          "size_lwh_m": [
+            4.2567291259765625,
+            1.650033950805664,
+            1.4023065567016602
+          ],
+          "yaw_rad": 1.5927661657333374
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            28.964183807373047,
+            -3.045625686645508,
+            -1.0513207912445068
+          ],
+          "score": 0.9152045845985413,
+          "size_lwh_m": [
+            4.34731388092041,
+            1.7306461334228516,
+            1.4313616752624512
+          ],
+          "yaw_rad": 0.0819087028503418
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            26.735445022583008,
+            -29.03186798095703,
+            -1.449794888496399
+          ],
+          "score": 0.7013041377067566,
+          "size_lwh_m": [
+            3.6639347076416016,
+            1.5854910612106323,
+            1.4077950716018677
+          ],
+          "yaw_rad": 0.1153559684753418
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            14.844072341918945,
+            -29.034793853759766,
+            -1.2765039205551147
+          ],
+          "score": 0.602587878704071,
+          "size_lwh_m": [
+            3.415788173675537,
+            1.655380129814148,
+            1.4604839086532593
+          ],
+          "yaw_rad": -3.0686559677124023
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            4.116634368896484,
+            -14.239178657531738,
+            -1.1131151914596558
+          ],
+          "score": 0.5729019641876221,
+          "size_lwh_m": [
+            3.6332035064697266,
+            1.5768054723739624,
+            1.3726677894592285
+          ],
+          "yaw_rad": 1.5355457067489624
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            41.389156341552734,
+            -2.7426207065582275,
+            -0.9945370554924011
+          ],
+          "score": 0.5357967615127563,
+          "size_lwh_m": [
+            3.4162051677703857,
+            1.5012272596359253,
+            1.4164137840270996
+          ],
+          "yaw_rad": -0.0690922737121582
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            44.947818756103516,
+            10.96312427520752,
+            -0.5856249928474426
+          ],
+          "score": 0.4514171779155731,
+          "size_lwh_m": [
+            4.34731388092041,
+            1.635720133781433,
+            1.5954111814498901
+          ],
+          "yaw_rad": -1.5221848487854004
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            16.89853286743164,
+            -10.2708101272583,
+            -1.0493212938308716
+          ],
+          "score": 0.40250954031944275,
+          "size_lwh_m": [
+            3.4957242012023926,
+            1.502694010734558,
+            1.4256073236465454
+          ],
+          "yaw_rad": 0.028899669647216797
+        }
+      ],
+      "lidar_stamp_ns": 1791573810515044734,
+      "matched_boxes": 0,
+      "pair_delta_ms": 21.841899,
+      "projectable_lidar_boxes": 3,
+      "sample_id": "002"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 3,
+          "projection": {
+            "native_center_px": [
+              886.6764987903061,
+              256.60883496746993
+            ],
+            "native_xyxy_px": [
+              807.0677179491393,
+              223.248894640247,
+              967.6979373254895,
+              289.44237758379523
+            ],
+            "visible": true
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            913.6,
+            181.1,
+            1024.0,
+            266.1
+          ],
+          "score": 0.7802734375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            38.35,
+            202.0,
+            191.65,
+            265.2
+          ],
+          "score": 0.6728515625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            767.4,
+            149.2,
+            919.0,
+            230.0
+          ],
+          "score": 0.449462890625
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573838560828039,
+      "input_points": 101492,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            10.333747863769531,
+            12.4342622756958,
+            -1.116733431816101
+          ],
+          "score": 0.9252299070358276,
+          "size_lwh_m": [
+            4.018890380859375,
+            1.6846332550048828,
+            1.5032161474227905
+          ],
+          "yaw_rad": 1.4870532751083374
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            6.901127815246582,
+            -7.465539455413818,
+            -0.5121191740036011
+          ],
+          "score": 0.6245225667953491,
+          "size_lwh_m": [
+            4.457202911376953,
+            1.7228472232818604,
+            1.7277112007141113
+          ],
+          "yaw_rad": -2.4809484481811523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            24.984237670898438,
+            -8.146883964538574,
+            -0.11488284170627594
+          ],
+          "score": 0.6049241423606873,
+          "size_lwh_m": [
+            4.121987342834473,
+            1.722216248512268,
+            1.5807627439498901
+          ],
+          "yaw_rad": -3.0779333114624023
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            37.4029655456543,
+            -7.93001651763916,
+            0.2735936939716339
+          ],
+          "score": 0.4704933166503906,
+          "size_lwh_m": [
+            4.084671497344971,
+            1.6706053018569946,
+            1.5746721029281616
+          ],
+          "yaw_rad": 1.5483325719833374
+        }
+      ],
+      "lidar_stamp_ns": 1791573838565022753,
+      "matched_boxes": 0,
+      "pair_delta_ms": 4.194714,
+      "projectable_lidar_boxes": 1,
+      "sample_id": "003"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            569.4,
+            228.6,
+            598.6,
+            251.0
+          ],
+          "score": 0.7548828125
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            649.6,
+            222.2,
+            734.4,
+            253.0
+          ],
+          "score": 0.482421875
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            443.6,
+            218.1,
+            468.4,
+            244.3
+          ],
+          "score": 0.447509765625
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573866593885504,
+      "input_points": 92943,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            22.999345779418945,
+            -12.10431957244873,
+            -0.554394543170929
+          ],
+          "score": 0.5687751173973083,
+          "size_lwh_m": [
+            3.656339168548584,
+            1.5549908876419067,
+            1.449737548828125
+          ],
+          "yaw_rad": 1.8663867712020874
+        }
+      ],
+      "lidar_stamp_ns": 1791573866614306516,
+      "matched_boxes": 0,
+      "pair_delta_ms": 20.421012,
+      "projectable_lidar_boxes": 0,
+      "sample_id": "004"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              290.0952058945359,
+              271.60257056339384
+            ],
+            "native_xyxy_px": [
+              253.35401424289412,
+              246.59058225408694,
+              324.6895167654805,
+              297.4428369509823
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              195.5277973338081,
+              281.4899096396698
+            ],
+            "native_xyxy_px": [
+              145.1294383262744,
+              251.56933157001984,
+              241.7348139705882,
+              314.01702969611557
+            ],
+            "visible": true
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            205.4,
+            214.2,
+            273.8,
+            267.0
+          ],
+          "score": 0.87841796875
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            260.1,
+            214.5,
+            311.9,
+            255.9
+          ],
+          "score": 0.58154296875
+        },
+        {
+          "class": "truck",
+          "native_xyxy_px": [
+            5.4,
+            153.7,
+            211.2,
+            299.9
+          ],
+          "score": 0.5732421875
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            392.3,
+            209.8,
+            434.9,
+            243.8
+          ],
+          "score": 0.56787109375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            323.8,
+            214.3,
+            348.2,
+            244.9
+          ],
+          "score": 0.46875
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            537.2,
+            210.1,
+            575.6,
+            228.3
+          ],
+          "score": 0.443603515625
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573894659015858,
+      "input_points": 94845,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            2.5546762943267822,
+            4.720339775085449,
+            -1.1193041801452637
+          ],
+          "score": 0.7577943801879883,
+          "size_lwh_m": [
+            4.259068012237549,
+            1.7562912702560425,
+            1.7111300230026245
+          ],
+          "yaw_rad": 0.2524409294128418
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            52.076133728027344,
+            11.142327308654785,
+            -0.6665576100349426
+          ],
+          "score": 0.5190185308456421,
+          "size_lwh_m": [
+            3.995837926864624,
+            1.6221612691879272,
+            1.828952431678772
+          ],
+          "yaw_rad": 3.077444553375244
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            38.34273147583008,
+            10.90696907043457,
+            -0.8532739281654358
+          ],
+          "score": 0.3559987545013428,
+          "size_lwh_m": [
+            4.241945743560791,
+            1.6608957052230835,
+            1.6468336582183838
+          ],
+          "yaw_rad": -3.12283992767334
+        }
+      ],
+      "lidar_stamp_ns": 1791573894664208934,
+      "matched_boxes": 0,
+      "pair_delta_ms": 5.193076,
+      "projectable_lidar_boxes": 2,
+      "sample_id": "005"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              678.9666551357715,
+              272.8508950897832
+            ],
+            "native_xyxy_px": [
+              637.4462160905057,
+              239.5294826299136,
+              724.8724163501394,
+              307.27175990819705
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              419.16568705996724,
+              269.0717097254647
+            ],
+            "native_xyxy_px": [
+              366.9309941381266,
+              232.92363218008867,
+              465.55574152276006,
+              306.19804892044687
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 3,
+          "projection": {
+            "native_center_px": [
+              886.6206018022893,
+              276.15355239369785
+            ],
+            "native_xyxy_px": [
+              812.7993252400025,
+              240.6133855058039,
+              963.7180678270046,
+              313.9479704151973
+            ],
+            "visible": true
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            321.2,
+            196.9,
+            413.2,
+            271.9
+          ],
+          "score": 0.814453125
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            596.4,
+            208.0,
+            681.2,
+            272.0
+          ],
+          "score": 0.7646484375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            432.4,
+            197.0,
+            470.0,
+            229.4
+          ],
+          "score": 0.708984375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            697.2,
+            191.9,
+            743.6,
+            243.3
+          ],
+          "score": 0.449462890625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            541.0,
+            193.3,
+            569.4,
+            217.9
+          ],
+          "score": 0.363037109375
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573922692797286,
+      "input_points": 98182,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            34.478885650634766,
+            -2.1602048873901367,
+            -0.3525390923023224
+          ],
+          "score": 0.854520857334137,
+          "size_lwh_m": [
+            3.7372257709503174,
+            1.6245144605636597,
+            1.5136889219284058
+          ],
+          "yaw_rad": -3.0805578231811523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            33.27205276489258,
+            3.9872963428497314,
+            -0.404716819524765
+          ],
+          "score": 0.8190264105796814,
+          "size_lwh_m": [
+            4.290638446807861,
+            1.7512601613998413,
+            1.5931973457336426
+          ],
+          "yaw_rad": 3.1367859840393066
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            1.3599889278411865,
+            12.477234840393066,
+            -1.0544629096984863
+          ],
+          "score": 0.40686196088790894,
+          "size_lwh_m": [
+            4.279653549194336,
+            1.7721197605133057,
+            1.6146361827850342
+          ],
+          "yaw_rad": 1.5208972692489624
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            32.22113800048828,
+            -6.825326442718506,
+            -0.24970705807209015
+          ],
+          "score": 0.3642120361328125,
+          "size_lwh_m": [
+            3.48762583732605,
+            1.5708259344100952,
+            1.5555075407028198
+          ],
+          "yaw_rad": 0.5092768669128418
+        }
+      ],
+      "lidar_stamp_ns": 1791573922713701302,
+      "matched_boxes": 0,
+      "pair_delta_ms": 20.904016,
+      "projectable_lidar_boxes": 3,
+      "sample_id": "006"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              618.1633362356121,
+              277.5582120044459
+            ],
+            "native_xyxy_px": [
+              583.1494946679904,
+              244.01473032186047,
+              656.7373467825581,
+              312.8024776956936
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": 2,
+          "iou": 0.27230588661157523,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              584.3059761233061,
+              276.9402184971518
+            ],
+            "native_xyxy_px": [
+              535.4706103682008,
+              250.91766212124952,
+              629.8496628492846,
+              303.25743825743285
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 3,
+          "projection": {
+            "native_center_px": [
+              912.8637976660588,
+              297.42109225303477
+            ],
+            "native_xyxy_px": [
+              817.5439274754093,
+              248.52374410328653,
+              1019.1452040482405,
+              353.15486112656487
+            ],
+            "visible": true
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 4,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            1.0,
+            170.4,
+            338.0,
+            428.8
+          ],
+          "score": 0.6533203125
+        },
+        {
+          "class": "truck",
+          "native_xyxy_px": [
+            0.6,
+            169.8,
+            337.2,
+            428.6
+          ],
+          "score": 0.61083984375
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            521.6,
+            206.9,
+            634.4,
+            281.1
+          ],
+          "score": 0.52587890625
+        },
+        {
+          "class": "car",
+          "native_xyxy_px": [
+            322.0,
+            210.2,
+            382.0,
+            254.6
+          ],
+          "score": 0.45703125
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573950727018789,
+      "input_points": 100428,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            36.55820846557617,
+            -0.73557049036026,
+            -0.5269726514816284
+          ],
+          "score": 0.7727022171020508,
+          "size_lwh_m": [
+            4.532370567321777,
+            1.7291679382324219,
+            1.6194722652435303
+          ],
+          "yaw_rad": -0.0014119148254394531
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            16.114749908447266,
+            -11.238616943359375,
+            -0.3026465177536011
+          ],
+          "score": 0.6001883149147034,
+          "size_lwh_m": [
+            4.211246967315674,
+            1.619564414024353,
+            1.49826979637146
+          ],
+          "yaw_rad": 1.7156299352645874
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            42.30988311767578,
+            0.1492031365633011,
+            -0.5821973085403442
+          ],
+          "score": 0.43500128388404846,
+          "size_lwh_m": [
+            3.691319227218628,
+            1.5681675672531128,
+            1.4631606340408325
+          ],
+          "yaw_rad": -0.3554692268371582
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            21.850290298461914,
+            -5.023565769195557,
+            -0.5593457221984863
+          ],
+          "score": 0.4196479320526123,
+          "size_lwh_m": [
+            3.7595319747924805,
+            1.511755347251892,
+            1.4606621265411377
+          ],
+          "yaw_rad": -2.8674230575561523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            22.51176643371582,
+            -11.428647994995117,
+            -0.18039065599441528
+          ],
+          "score": 0.3608268201351166,
+          "size_lwh_m": [
+            4.160660266876221,
+            1.595574975013733,
+            1.4666476249694824
+          ],
+          "yaw_rad": -1.6047348976135254
+        }
+      ],
+      "lidar_stamp_ns": 1791573950713481156,
+      "matched_boxes": 1,
+      "pair_delta_ms": 13.537633,
+      "projectable_lidar_boxes": 3,
+      "sample_id": "007"
+    },
+    {
+      "associations": [],
+      "camera_2d_boxes": [],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791573978758381251,
+      "input_points": 110035,
+      "lidar_boxes": [],
+      "lidar_stamp_ns": 1791573978763024610,
+      "matched_boxes": 0,
+      "pair_delta_ms": 4.643359,
+      "projectable_lidar_boxes": 0,
+      "sample_id": "008"
+    },
+    {
+      "associations": [
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 0,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 1,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        },
+        {
+          "camera_index": -1,
+          "iou": 0.0,
+          "lidar_index": 2,
+          "projection": {
+            "native_center_px": [
+              0.0,
+              0.0
+            ],
+            "native_xyxy_px": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "visible": false
+          }
+        }
+      ],
+      "camera_2d_boxes": [
+        {
+          "class": "truck",
+          "native_xyxy_px": [
+            656.0,
+            176.3,
+            794.4,
+            284.5
+          ],
+          "score": 0.79296875
+        }
+      ],
+      "camera_3d_boxes": [],
+      "image_stamp_ns": 1791574006792524474,
+      "input_points": 107080,
+      "lidar_boxes": [
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            5.224410533905029,
+            15.94780445098877,
+            -1.5533885955810547
+          ],
+          "score": 0.47002196311950684,
+          "size_lwh_m": [
+            3.6974072456359863,
+            1.5822525024414063,
+            1.3580012321472168
+          ],
+          "yaw_rad": -3.0705480575561523
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            8.903582572937012,
+            -34.82882308959961,
+            0.0016601195093244314
+          ],
+          "score": 0.4089256823062897,
+          "size_lwh_m": [
+            4.105040073394775,
+            1.6807304620742798,
+            1.5422488451004028
+          ],
+          "yaw_rad": -1.6245408058166504
+        },
+        {
+          "class": "car",
+          "model_class_id": 0,
+          "os_sensor_xyz_m": [
+            3.992556095123291,
+            13.171475410461426,
+            -1.2877392768859863
+          ],
+          "score": 0.3544330596923828,
+          "size_lwh_m": [
+            3.4647116661071777,
+            1.5217069387435913,
+            1.5036290884017944
+          ],
+          "yaw_rad": 0.1584467887878418
+        }
+      ],
+      "lidar_stamp_ns": 1791574006812911441,
+      "matched_boxes": 0,
+      "pair_delta_ms": 20.386967,
+      "projectable_lidar_boxes": 0,
+      "sample_id": "009"
+    }
+  ],
+  "scope": "Sequential native core processing; excludes capture, disk reads, point-cloud extraction, ROS/DDS, output serialization and visualization. Matching is projected association, not ground-truth accuracy.",
+  "thresholds": {
+    "camera_2d_confidence": 0.35,
+    "camera_3d_confidence": 0.25,
+    "forward_range_m": 60,
+    "lidar_confidence": 0.35,
+    "matching_ambiguity_margin": 0.05,
+    "matching_iou": 0.2
+  },
+  "timing": {
+    "camera_2d_gpu": {
+      "count": 30,
+      "max_ms": 1.9251840114593506,
+      "mean_ms": 1.3555349310239155,
+      "median_ms": 1.3112639784812927,
+      "p95_ms": 1.6735424041748042,
+      "processing_capacity_hz": 762.6229473322381
+    },
+    "camera_2d_processing": {
+      "count": 30,
+      "max_ms": 10.31156,
+      "mean_ms": 9.877690266666667,
+      "median_ms": 9.891188,
+      "p95_ms": 10.1054485,
+      "processing_capacity_hz": 101.10009030260066
+    },
+    "camera_3d_gpu": {
+      "count": 30,
+      "max_ms": 27.216960906982422,
+      "mean_ms": 24.696675237019857,
+      "median_ms": 24.68081569671631,
+      "p95_ms": 26.01209716796875,
+      "processing_capacity_hz": 40.51729943970395
+    },
+    "camera_3d_processing": {
+      "count": 30,
+      "max_ms": 50.297042,
+      "mean_ms": 47.766282466666674,
+      "median_ms": 47.7657895,
+      "p95_ms": 49.929699899999996,
+      "processing_capacity_hz": 20.935485636639587
+    },
+    "lidar_camera_2d_matching_processing": {
+      "count": 30,
+      "max_ms": 16.657742,
+      "mean_ms": 15.496096466666664,
+      "median_ms": 15.5205765,
+      "p95_ms": 16.41596715,
+      "processing_capacity_hz": 64.43059637636527
+    },
+    "lidar_core": {
+      "count": 30,
+      "max_ms": 6.624553,
+      "mean_ms": 5.5050930666666655,
+      "median_ms": 5.483860999999999,
+      "p95_ms": 6.45727055,
+      "processing_capacity_hz": 182.35327263036027
+    },
+    "lidar_processing": {
+      "count": 30,
+      "max_ms": 6.627563,
+      "mean_ms": 5.507766066666666,
+      "median_ms": 5.486477,
+      "p95_ms": 6.4602105,
+      "processing_capacity_hz": 182.2663250023649
+    },
+    "matching": {
+      "count": 30,
+      "max_ms": 0.119898,
+      "mean_ms": 0.10549420000000002,
+      "median_ms": 0.104264,
+      "p95_ms": 0.11382389999999998,
+      "processing_capacity_hz": 9591.03813396762
+    }
+  },
+  "timing_runs": [
+    {
+      "camera_2d_boxes": 2,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.151935577392578,
+      "camera_3d_processing_ms": 44.200047,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 4.815968,
+      "lidar_processing_ms": 4.819264,
+      "lidar_yolo_matching_processing_ms": 14.540792,
+      "matches": 0,
+      "matching_ms": 0.102453,
+      "repeat": 0,
+      "sample_id": "000",
+      "yolo_gpu_ms": 1.2275199890136719,
+      "yolo_inference_transfer_ms": 1.584039,
+      "yolo_postprocess_ms": 3.534709,
+      "yolo_preprocess_ms": 4.492002,
+      "yolo_processing_ms": 9.615111
+    },
+    {
+      "camera_2d_boxes": 2,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 27.216960906982422,
+      "camera_3d_processing_ms": 50.230263,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 4.823598,
+      "lidar_processing_ms": 4.826829,
+      "lidar_yolo_matching_processing_ms": 15.105028,
+      "matches": 0,
+      "matching_ms": 0.103668,
+      "repeat": 1,
+      "sample_id": "000",
+      "yolo_gpu_ms": 1.7718080282211304,
+      "yolo_inference_transfer_ms": 1.90441,
+      "yolo_postprocess_ms": 3.795405,
+      "yolo_preprocess_ms": 4.465724,
+      "yolo_processing_ms": 10.170586
+    },
+    {
+      "camera_2d_boxes": 2,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 22.577184677124023,
+      "camera_3d_processing_ms": 45.585742,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 4.868885,
+      "lidar_processing_ms": 4.871162,
+      "lidar_yolo_matching_processing_ms": 14.305864,
+      "matches": 0,
+      "matching_ms": 0.104251,
+      "repeat": 2,
+      "sample_id": "000",
+      "yolo_gpu_ms": 1.3763519525527954,
+      "yolo_inference_transfer_ms": 1.520852,
+      "yolo_postprocess_ms": 3.798173,
+      "yolo_preprocess_ms": 4.002962,
+      "yolo_processing_ms": 9.326015
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.418336868286133,
+      "camera_3d_processing_ms": 47.425939,
+      "lidar_boxes": 13,
+      "lidar_core_ms": 6.357709,
+      "lidar_processing_ms": 6.361051,
+      "lidar_yolo_matching_processing_ms": 16.204914,
+      "matches": 0,
+      "matching_ms": 0.105769,
+      "repeat": 0,
+      "sample_id": "001",
+      "yolo_gpu_ms": 1.4858239889144897,
+      "yolo_inference_transfer_ms": 1.592687,
+      "yolo_postprocess_ms": 3.82022,
+      "yolo_preprocess_ms": 4.3129,
+      "yolo_processing_ms": 9.72951
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 22.713375091552734,
+      "camera_3d_processing_ms": 45.630954,
+      "lidar_boxes": 13,
+      "lidar_core_ms": 5.373232,
+      "lidar_processing_ms": 5.375944,
+      "lidar_yolo_matching_processing_ms": 15.161418,
+      "matches": 0,
+      "matching_ms": 0.105224,
+      "repeat": 1,
+      "sample_id": "001",
+      "yolo_gpu_ms": 1.3646719455718994,
+      "yolo_inference_transfer_ms": 1.56915,
+      "yolo_postprocess_ms": 3.8241,
+      "yolo_preprocess_ms": 4.277277,
+      "yolo_processing_ms": 9.673334
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 23.88479995727539,
+      "camera_3d_processing_ms": 46.803139,
+      "lidar_boxes": 13,
+      "lidar_core_ms": 5.478871,
+      "lidar_processing_ms": 5.48175,
+      "lidar_yolo_matching_processing_ms": 15.439928,
+      "matches": 0,
+      "matching_ms": 0.100825,
+      "repeat": 2,
+      "sample_id": "001",
+      "yolo_gpu_ms": 1.2434240579605103,
+      "yolo_inference_transfer_ms": 1.573668,
+      "yolo_postprocess_ms": 3.851156,
+      "yolo_preprocess_ms": 4.421696,
+      "yolo_processing_ms": 9.850066
+    },
+    {
+      "camera_2d_boxes": 7,
+      "camera_3d_boxes": 3,
+      "camera_3d_gpu_ms": 24.795167922973633,
+      "camera_3d_processing_ms": 48.823766,
+      "lidar_boxes": 8,
+      "lidar_core_ms": 5.597666,
+      "lidar_processing_ms": 5.599991,
+      "lidar_yolo_matching_processing_ms": 15.505614,
+      "matches": 0,
+      "matching_ms": 0.10851,
+      "repeat": 0,
+      "sample_id": "002",
+      "yolo_gpu_ms": 1.3229119777679443,
+      "yolo_inference_transfer_ms": 1.659095,
+      "yolo_postprocess_ms": 3.804646,
+      "yolo_preprocess_ms": 4.323658,
+      "yolo_processing_ms": 9.790075
+    },
+    {
+      "camera_2d_boxes": 7,
+      "camera_3d_boxes": 3,
+      "camera_3d_gpu_ms": 24.428607940673828,
+      "camera_3d_processing_ms": 47.614886,
+      "lidar_boxes": 8,
+      "lidar_core_ms": 5.871772,
+      "lidar_processing_ms": 5.874068,
+      "lidar_yolo_matching_processing_ms": 15.720403,
+      "matches": 0,
+      "matching_ms": 0.105733,
+      "repeat": 1,
+      "sample_id": "002",
+      "yolo_gpu_ms": 1.2993600368499756,
+      "yolo_inference_transfer_ms": 1.635168,
+      "yolo_postprocess_ms": 3.814609,
+      "yolo_preprocess_ms": 4.280417,
+      "yolo_processing_ms": 9.733066
+    },
+    {
+      "camera_2d_boxes": 7,
+      "camera_3d_boxes": 3,
+      "camera_3d_gpu_ms": 25.75369644165039,
+      "camera_3d_processing_ms": 49.562345,
+      "lidar_boxes": 8,
+      "lidar_core_ms": 5.715288,
+      "lidar_processing_ms": 5.718501,
+      "lidar_yolo_matching_processing_ms": 15.620782,
+      "matches": 0,
+      "matching_ms": 0.107853,
+      "repeat": 2,
+      "sample_id": "002",
+      "yolo_gpu_ms": 1.30239999294281,
+      "yolo_inference_transfer_ms": 1.651558,
+      "yolo_postprocess_ms": 3.8081,
+      "yolo_preprocess_ms": 4.32327,
+      "yolo_processing_ms": 9.786511
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.813600540161133,
+      "camera_3d_processing_ms": 47.651331,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 6.624553,
+      "lidar_processing_ms": 6.627563,
+      "lidar_yolo_matching_processing_ms": 16.588647,
+      "matches": 0,
+      "matching_ms": 0.119898,
+      "repeat": 0,
+      "sample_id": "003",
+      "yolo_gpu_ms": 1.3575680255889893,
+      "yolo_inference_transfer_ms": 1.611436,
+      "yolo_postprocess_ms": 3.769165,
+      "yolo_preprocess_ms": 4.451363,
+      "yolo_processing_ms": 9.835446
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.899967193603516,
+      "camera_3d_processing_ms": 48.968034,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.184415,
+      "lidar_processing_ms": 5.186748,
+      "lidar_yolo_matching_processing_ms": 15.213195,
+      "matches": 0,
+      "matching_ms": 0.10389,
+      "repeat": 1,
+      "sample_id": "003",
+      "yolo_gpu_ms": 1.445472002029419,
+      "yolo_inference_transfer_ms": 1.668233,
+      "yolo_postprocess_ms": 3.783285,
+      "yolo_preprocess_ms": 4.462234,
+      "yolo_processing_ms": 9.916752
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.87945556640625,
+      "camera_3d_processing_ms": 48.692679,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.566175,
+      "lidar_processing_ms": 5.568777,
+      "lidar_yolo_matching_processing_ms": 15.989579,
+      "matches": 0,
+      "matching_ms": 0.103566,
+      "repeat": 2,
+      "sample_id": "003",
+      "yolo_gpu_ms": 1.9251840114593506,
+      "yolo_inference_transfer_ms": 2.067384,
+      "yolo_postprocess_ms": 3.788275,
+      "yolo_preprocess_ms": 4.452123,
+      "yolo_processing_ms": 10.31156
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 23.520383834838867,
+      "camera_3d_processing_ms": 46.755694,
+      "lidar_boxes": 1,
+      "lidar_core_ms": 5.707345,
+      "lidar_processing_ms": 5.710529,
+      "lidar_yolo_matching_processing_ms": 15.843245,
+      "matches": 0,
+      "matching_ms": 0.102732,
+      "repeat": 0,
+      "sample_id": "004",
+      "yolo_gpu_ms": 1.553439974784851,
+      "yolo_inference_transfer_ms": 1.713039,
+      "yolo_postprocess_ms": 3.857257,
+      "yolo_preprocess_ms": 4.451891,
+      "yolo_processing_ms": 10.025836
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 23.124927520751953,
+      "camera_3d_processing_ms": 46.238728,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 5.485574,
+      "lidar_processing_ms": 5.48837,
+      "lidar_yolo_matching_processing_ms": 15.535539,
+      "matches": 0,
+      "matching_ms": 0.099787,
+      "repeat": 1,
+      "sample_id": "004",
+      "yolo_gpu_ms": 1.5083520412445068,
+      "yolo_inference_transfer_ms": 1.658474,
+      "yolo_postprocess_ms": 3.837193,
+      "yolo_preprocess_ms": 4.443502,
+      "yolo_processing_ms": 9.942993
+    },
+    {
+      "camera_2d_boxes": 3,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 23.118911743164063,
+      "camera_3d_processing_ms": 46.104394,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 5.004385,
+      "lidar_processing_ms": 5.007283,
+      "lidar_yolo_matching_processing_ms": 15.071277,
+      "matches": 0,
+      "matching_ms": 0.100315,
+      "repeat": 2,
+      "sample_id": "004",
+      "yolo_gpu_ms": 1.1201599836349487,
+      "yolo_inference_transfer_ms": 1.684595,
+      "yolo_postprocess_ms": 3.843563,
+      "yolo_preprocess_ms": 4.428205,
+      "yolo_processing_ms": 9.959753
+    },
+    {
+      "camera_2d_boxes": 6,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.566463470458984,
+      "camera_3d_processing_ms": 47.740126,
+      "lidar_boxes": 3,
+      "lidar_core_ms": 5.099738,
+      "lidar_processing_ms": 5.101969,
+      "lidar_yolo_matching_processing_ms": 15.21638,
+      "matches": 0,
+      "matching_ms": 0.104277,
+      "repeat": 0,
+      "sample_id": "005",
+      "yolo_gpu_ms": 1.2905280590057373,
+      "yolo_inference_transfer_ms": 1.618603,
+      "yolo_postprocess_ms": 3.881916,
+      "yolo_preprocess_ms": 4.500307,
+      "yolo_processing_ms": 10.004373
+    },
+    {
+      "camera_2d_boxes": 6,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.636991500854492,
+      "camera_3d_processing_ms": 50.297042,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.552982,
+      "lidar_processing_ms": 5.55574,
+      "lidar_yolo_matching_processing_ms": 15.672216,
+      "matches": 0,
+      "matching_ms": 0.109343,
+      "repeat": 1,
+      "sample_id": "005",
+      "yolo_gpu_ms": 1.3346240520477295,
+      "yolo_inference_transfer_ms": 1.679122,
+      "yolo_postprocess_ms": 3.878887,
+      "yolo_preprocess_ms": 4.43928,
+      "yolo_processing_ms": 10.000456
+    },
+    {
+      "camera_2d_boxes": 6,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.981504440307617,
+      "camera_3d_processing_ms": 48.024619,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.274314,
+      "lidar_processing_ms": 5.276685,
+      "lidar_yolo_matching_processing_ms": 15.177983,
+      "matches": 0,
+      "matching_ms": 0.105945,
+      "repeat": 2,
+      "sample_id": "005",
+      "yolo_gpu_ms": 1.3120959997177124,
+      "yolo_inference_transfer_ms": 1.642511,
+      "yolo_postprocess_ms": 3.855322,
+      "yolo_preprocess_ms": 4.287817,
+      "yolo_processing_ms": 9.789048
+    },
+    {
+      "camera_2d_boxes": 5,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.502336502075195,
+      "camera_3d_processing_ms": 47.369293,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.482148,
+      "lidar_processing_ms": 5.484584,
+      "lidar_yolo_matching_processing_ms": 15.551587,
+      "matches": 0,
+      "matching_ms": 0.103028,
+      "repeat": 0,
+      "sample_id": "006",
+      "yolo_gpu_ms": 1.3141119480133057,
+      "yolo_inference_transfer_ms": 1.66802,
+      "yolo_postprocess_ms": 3.820878,
+      "yolo_preprocess_ms": 4.465493,
+      "yolo_processing_ms": 9.958669
+    },
+    {
+      "camera_2d_boxes": 5,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.088319778442383,
+      "camera_3d_processing_ms": 48.286789,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 5.207609,
+      "lidar_processing_ms": 5.21,
+      "lidar_yolo_matching_processing_ms": 15.186834,
+      "matches": 0,
+      "matching_ms": 0.104149,
+      "repeat": 1,
+      "sample_id": "006",
+      "yolo_gpu_ms": 1.237056016921997,
+      "yolo_inference_transfer_ms": 1.576853,
+      "yolo_postprocess_ms": 3.839508,
+      "yolo_preprocess_ms": 4.448538,
+      "yolo_processing_ms": 9.867446
+    },
+    {
+      "camera_2d_boxes": 5,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.498655319213867,
+      "camera_3d_processing_ms": 48.485448,
+      "lidar_boxes": 4,
+      "lidar_core_ms": 6.106884,
+      "lidar_processing_ms": 6.108903,
+      "lidar_yolo_matching_processing_ms": 16.121794,
+      "matches": 0,
+      "matching_ms": 0.108566,
+      "repeat": 2,
+      "sample_id": "006",
+      "yolo_gpu_ms": 1.1734399795532227,
+      "yolo_inference_transfer_ms": 1.656873,
+      "yolo_postprocess_ms": 3.804554,
+      "yolo_preprocess_ms": 4.43377,
+      "yolo_processing_ms": 9.899048
+    },
+    {
+      "camera_2d_boxes": 4,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 26.103839874267578,
+      "camera_3d_processing_ms": 49.308833,
+      "lidar_boxes": 5,
+      "lidar_core_ms": 5.745771,
+      "lidar_processing_ms": 5.748187,
+      "lidar_yolo_matching_processing_ms": 15.777884,
+      "matches": 1,
+      "matching_ms": 0.106259,
+      "repeat": 0,
+      "sample_id": "007",
+      "yolo_gpu_ms": 1.3036479949951172,
+      "yolo_inference_transfer_ms": 1.631946,
+      "yolo_postprocess_ms": 3.81898,
+      "yolo_preprocess_ms": 4.462595,
+      "yolo_processing_ms": 9.917706
+    },
+    {
+      "camera_2d_boxes": 4,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.061439514160156,
+      "camera_3d_processing_ms": 47.986841,
+      "lidar_boxes": 5,
+      "lidar_core_ms": 5.431444,
+      "lidar_processing_ms": 5.434267,
+      "lidar_yolo_matching_processing_ms": 15.388371,
+      "matches": 1,
+      "matching_ms": 0.108001,
+      "repeat": 1,
+      "sample_id": "007",
+      "yolo_gpu_ms": 1.2614400386810303,
+      "yolo_inference_transfer_ms": 1.580187,
+      "yolo_postprocess_ms": 3.814506,
+      "yolo_preprocess_ms": 4.44091,
+      "yolo_processing_ms": 9.839038
+    },
+    {
+      "camera_2d_boxes": 4,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.445920944213867,
+      "camera_3d_processing_ms": 47.222382,
+      "lidar_boxes": 5,
+      "lidar_core_ms": 6.53873,
+      "lidar_processing_ms": 6.541341,
+      "lidar_yolo_matching_processing_ms": 16.657742,
+      "matches": 1,
+      "matching_ms": 0.109964,
+      "repeat": 2,
+      "sample_id": "007",
+      "yolo_gpu_ms": 1.3309439420700073,
+      "yolo_inference_transfer_ms": 1.689585,
+      "yolo_postprocess_ms": 3.8363679999999998,
+      "yolo_preprocess_ms": 4.469854,
+      "yolo_processing_ms": 10.000215
+    },
+    {
+      "camera_2d_boxes": 0,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.067167282104492,
+      "camera_3d_processing_ms": 47.052964,
+      "lidar_boxes": 0,
+      "lidar_core_ms": 5.036303,
+      "lidar_processing_ms": 5.038311,
+      "lidar_yolo_matching_processing_ms": 15.041591,
+      "matches": 0,
+      "matching_ms": 0.101751,
+      "repeat": 0,
+      "sample_id": "008",
+      "yolo_gpu_ms": 1.3068480491638184,
+      "yolo_inference_transfer_ms": 1.647789,
+      "yolo_postprocess_ms": 3.791461,
+      "yolo_preprocess_ms": 4.457965,
+      "yolo_processing_ms": 9.900761
+    },
+    {
+      "camera_2d_boxes": 0,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.786239624023438,
+      "camera_3d_processing_ms": 49.075663,
+      "lidar_boxes": 0,
+      "lidar_core_ms": 5.507287,
+      "lidar_processing_ms": 5.509907,
+      "lidar_yolo_matching_processing_ms": 15.591104,
+      "matches": 0,
+      "matching_ms": 0.098677,
+      "repeat": 1,
+      "sample_id": "008",
+      "yolo_gpu_ms": 1.3451839685440063,
+      "yolo_inference_transfer_ms": 1.682391,
+      "yolo_postprocess_ms": 3.804813,
+      "yolo_preprocess_ms": 4.489882,
+      "yolo_processing_ms": 9.981697
+    },
+    {
+      "camera_2d_boxes": 0,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.900672912597656,
+      "camera_3d_processing_ms": 48.158258,
+      "lidar_boxes": 0,
+      "lidar_core_ms": 4.703337,
+      "lidar_processing_ms": 4.70631,
+      "lidar_yolo_matching_processing_ms": 14.667923,
+      "matches": 0,
+      "matching_ms": 0.102047,
+      "repeat": 2,
+      "sample_id": "008",
+      "yolo_gpu_ms": 1.2878719568252563,
+      "yolo_inference_transfer_ms": 1.612881,
+      "yolo_postprocess_ms": 3.785775,
+      "yolo_preprocess_ms": 4.45703,
+      "yolo_processing_ms": 9.858788
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 25.186208724975586,
+      "camera_3d_processing_ms": 48.496336,
+      "lidar_boxes": 3,
+      "lidar_core_ms": 5.241803,
+      "lidar_processing_ms": 5.244646,
+      "lidar_yolo_matching_processing_ms": 15.239898,
+      "matches": 0,
+      "matching_ms": 0.103065,
+      "repeat": 0,
+      "sample_id": "009",
+      "yolo_gpu_ms": 1.310431957244873,
+      "yolo_inference_transfer_ms": 1.638057,
+      "yolo_postprocess_ms": 3.800239,
+      "yolo_preprocess_ms": 4.446178,
+      "yolo_processing_ms": 9.888401
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.456096649169922,
+      "camera_3d_processing_ms": 47.791453,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 5.819113,
+      "lidar_processing_ms": 5.821641,
+      "lidar_yolo_matching_processing_ms": 15.836004,
+      "matches": 0,
+      "matching_ms": 0.116982,
+      "repeat": 1,
+      "sample_id": "009",
+      "yolo_gpu_ms": 1.283743977546692,
+      "yolo_inference_transfer_ms": 1.618604,
+      "yolo_postprocess_ms": 3.79573,
+      "yolo_preprocess_ms": 4.475586,
+      "yolo_processing_ms": 9.893975
+    },
+    {
+      "camera_2d_boxes": 1,
+      "camera_3d_boxes": 0,
+      "camera_3d_gpu_ms": 24.321088790893555,
+      "camera_3d_processing_ms": 47.404486,
+      "lidar_boxes": 2,
+      "lidar_core_ms": 5.929893,
+      "lidar_processing_ms": 5.932661,
+      "lidar_yolo_matching_processing_ms": 15.909358,
+      "matches": 0,
+      "matching_ms": 0.108298,
+      "repeat": 2,
+      "sample_id": "009",
+      "yolo_gpu_ms": 1.2696319818496704,
+      "yolo_inference_transfer_ms": 1.587297,
+      "yolo_postprocess_ms": 3.813378,
+      "yolo_preprocess_ms": 4.461299,
+      "yolo_processing_ms": 9.864473
+    }
+  ],
+  "unique_sample_totals": {
+    "camera_2d_boxes": 32,
+    "camera_3d_car_boxes": 2,
+    "camera_3d_person_boxes": 1,
+    "lidar_car_boxes": 43,
+    "lidar_person_boxes": 0,
+    "matched_boxes": 1,
+    "matched_car_boxes": 1,
+    "matched_fraction_of_all_lidar_boxes": 0.023255813953488372,
+    "matched_fraction_of_projectable_lidar_boxes": 0.07692307692307693,
+    "matched_person_boxes": 0,
+    "projectable_lidar_boxes": 13
+  },
+  "warmup_per_model": 3
+}

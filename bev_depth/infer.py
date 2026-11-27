@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import atexit
 import sys
 import time
 from dataclasses import replace
@@ -11,10 +12,11 @@ import cv2
 from .config import load_config
 from .depth import create_depth_backend, sample_detection_depth
 from .detector import create_detector
-from .geometry import ego_to_bev_pixel, pixel_depth_to_ego
+from .geometry import ego_to_bev_pixel, pixel_depth_to_ego, scale_intrinsics
 from .io import ensure_output_dirs, iter_frames, save_bgr_image, write_jsonl_record
 from .profiler import Profiler
 from .render import draw_annotated_frame, render_bev, render_depth
+from .sensors import SensorRecordControls, SerialRecorder
 from .types import ProjectedDetection
 
 
@@ -32,6 +34,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--input-height", type=int, default=None, help="Override camera capture height")
     parser.add_argument("--input-fps", type=int, default=None, help="Override camera capture FPS")
     parser.add_argument("--input-fourcc", default=None, help="Override camera capture FOURCC, for example MJPG")
+    parser.add_argument(
+        "--gps-port",
+        default="auto",
+        help="GPS serial port or 'auto' (default: Septentrio USB1/ttyACM0)",
+    )
+    parser.add_argument(
+        "--imu-port",
+        default="auto",
+        help="IMU serial port or 'auto' (default: Xsens/ttyUSB0)",
+    )
+    parser.add_argument("--gps-baud", type=int, default=115200)
+    parser.add_argument("--imu-baud", type=int, default=115200)
     parser.add_argument("--profile", action="store_true", help="Print stage latency summary")
     return parser.parse_args(argv)
 
@@ -51,16 +65,35 @@ def main(argv: list[str] | None = None) -> int:
     if input_overrides:
         config = replace(config, input=replace(config.input, **input_overrides))
     dirs = ensure_output_dirs(args.save_dir)
-    detector = create_detector(config.detector)
+    detector = create_detector(config.detector, config.traffic_detector)
     depth_backend = create_depth_backend(config.depth)
     profiler = Profiler()
     latest_depth = None
     processed_frames = 0
     loop_start = time.perf_counter()
+    sensor_controls = None
+    if args.display or args.display_bev:
+        sensor_dir = dirs["root"] / "sensors"
+        sensor_controls = SensorRecordControls(
+            gps=SerialRecorder("gps", sensor_dir, args.gps_port, args.gps_baud),
+            imu=SerialRecorder("imu", sensor_dir, args.imu_port, args.imu_baud),
+        )
+        cv2.namedWindow("bev", cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback("bev", sensor_controls.mouse_callback)
+        atexit.register(sensor_controls.stop_all)
 
     jsonl_path = Path(args.save_dir) / "detections.jsonl"
     with jsonl_path.open("w", encoding="utf-8") as jsonl:
         for frame_id, timestamp, frame in iter_frames(args.source, config.input):
+            frame_wall_time_ns = time.time_ns()
+            frame_monotonic_ns = time.monotonic_ns()
+            frame_height, frame_width = frame.shape[:2]
+            frame_intrinsics = scale_intrinsics(
+                config.intrinsics, frame_width, frame_height
+            )
+            sensor_session = (
+                sensor_controls.active_session() if sensor_controls is not None else None
+            )
             max_frames = args.max_frames if args.max_frames is not None else config.runtime.max_frames
             if max_frames and frame_id >= max_frames:
                 break
@@ -89,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
                     u = (x1 + x2) * 0.5
                     v = y2
                     x_m, z_m = pixel_depth_to_ego(
-                        u, v, depth_m, config.intrinsics, config.extrinsics
+                        u, v, depth_m, frame_intrinsics, config.extrinsics
                     )
                     bev_xy = ego_to_bev_pixel(x_m, z_m, config.bev)
                     projected.append(
@@ -103,7 +136,22 @@ def main(argv: list[str] | None = None) -> int:
                         )
                     )
 
-            write_jsonl_record(jsonl, frame_id, timestamp, projected)
+            write_jsonl_record(
+                jsonl,
+                frame_id,
+                timestamp,
+                projected,
+                wall_time_ns=frame_wall_time_ns,
+                monotonic_ns=frame_monotonic_ns,
+                sensor_session_id=(
+                    sensor_session.session_id if sensor_session is not None else None
+                ),
+                sensor_elapsed_ns=(
+                    frame_monotonic_ns - sensor_session.start_monotonic_ns
+                    if sensor_session is not None
+                    else None
+                ),
+            )
 
             save_images = config.runtime.save_images and not args.no_save_images
             display_any = args.display or args.display_bev
@@ -116,6 +164,9 @@ def main(argv: list[str] | None = None) -> int:
                         annotated = draw_annotated_frame(frame, projected)
                         depth_vis = render_depth(latest_depth)
                     bev = render_bev(config.bev, projected)
+                    display_bev = (
+                        sensor_controls.draw(bev.copy()) if sensor_controls is not None else bev
+                    )
                 if save_images:
                     stem = f"{frame_id:06d}.jpg"
                     if not args.save_bev_only:
@@ -125,15 +176,18 @@ def main(argv: list[str] | None = None) -> int:
                 if args.display:
                     cv2.imshow("annotated", annotated)
                     cv2.imshow("depth", depth_vis)
-                    cv2.imshow("bev", bev)
+                    cv2.imshow("bev", display_bev)
                     if cv2.waitKey(1) == 27:
                         break
                 elif args.display_bev:
-                    cv2.imshow("bev", bev)
+                    cv2.imshow("bev", display_bev)
                     if cv2.waitKey(1) == 27:
                         break
             processed_frames += 1
 
+    if sensor_controls is not None:
+        sensor_controls.stop_all()
+        atexit.unregister(sensor_controls.stop_all)
     if args.display or args.display_bev:
         cv2.destroyAllWindows()
     if args.profile:

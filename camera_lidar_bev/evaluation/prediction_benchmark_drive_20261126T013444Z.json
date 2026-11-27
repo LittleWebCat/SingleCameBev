@@ -1,0 +1,1282 @@
+{
+ "source": "../datasets/prediction/drive_20261126T013444Z.npz",
+ "min_score": 0.35,
+ "quick": false,
+ "frames": 22210,
+ "minutes": 19.8,
+ "split": "dev = first half of the drive, test = second half",
+ "models": {
+  "cv": {
+   "dev": {
+    "vehicle": {
+     "all_ade": {
+      "n": 180,
+      "median": 1.58,
+      "mean": 3.56
+     },
+     "all_fde_1s": {
+      "n": 174,
+      "median": 0.64,
+      "mean": 1.24
+     },
+     "all_fde_3s": {
+      "n": 143,
+      "median": 2.55,
+      "mean": 4.36
+     },
+     "all_fde_4s": {
+      "n": 125,
+      "median": 3.62,
+      "mean": 6.56
+     },
+     "all_fde_5s": {
+      "n": 113,
+      "median": 4.58,
+      "mean": 8.9
+     },
+     "missed_motion": {
+      "n": 189,
+      "median": 0.0,
+      "mean": 0.06
+     },
+     "still_predicted_moving": {
+      "n": 1643,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 179,
+      "median": 1.58,
+      "mean": 3.55
+     },
+     "straight_fde_1s": {
+      "n": 173,
+      "median": 0.64,
+      "mean": 1.24
+     },
+     "straight_fde_3s": {
+      "n": 142,
+      "median": 2.47,
+      "mean": 4.35
+     },
+     "straight_fde_4s": {
+      "n": 124,
+      "median": 3.62,
+      "mean": 6.56
+     },
+     "straight_fde_5s": {
+      "n": 112,
+      "median": 4.52,
+      "mean": 8.9
+     },
+     "turning_ade": {
+      "n": 1,
+      "median": 4.37,
+      "mean": 4.37
+     },
+     "turning_fde_1s": {
+      "n": 1,
+      "median": 0.51,
+      "mean": 0.51
+     },
+     "turning_fde_3s": {
+      "n": 1,
+      "median": 4.86,
+      "mean": 4.86
+     },
+     "turning_fde_4s": {
+      "n": 1,
+      "median": 7.08,
+      "mean": 7.08
+     },
+     "turning_fde_5s": {
+      "n": 1,
+      "median": 9.11,
+      "mean": 9.11
+     }
+    },
+    "cyclist": {
+     "still_predicted_moving": {
+      "n": 1760,
+      "median": 0.0,
+      "mean": 0.01
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 6,
+      "median": 1.0,
+      "mean": 1.31
+     },
+     "all_fde_1s": {
+      "n": 5,
+      "median": 0.4,
+      "mean": 0.53
+     },
+     "all_fde_3s": {
+      "n": 5,
+      "median": 1.49,
+      "mean": 2.04
+     },
+     "all_fde_4s": {
+      "n": 5,
+      "median": 2.45,
+      "mean": 2.72
+     },
+     "missed_motion": {
+      "n": 7,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1248,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 2,
+      "median": 1.72,
+      "mean": 1.72
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 1.31,
+      "mean": 1.31
+     },
+     "straight_fde_3s": {
+      "n": 1,
+      "median": 3.98,
+      "mean": 3.98
+     },
+     "straight_fde_4s": {
+      "n": 1,
+      "median": 4.83,
+      "mean": 4.83
+     },
+     "turning_ade": {
+      "n": 4,
+      "median": 1.0,
+      "mean": 1.1
+     },
+     "turning_fde_1s": {
+      "n": 4,
+      "median": 0.35,
+      "mean": 0.33
+     },
+     "turning_fde_3s": {
+      "n": 4,
+      "median": 1.37,
+      "mean": 1.55
+     },
+     "turning_fde_4s": {
+      "n": 4,
+      "median": 2.14,
+      "mean": 2.2
+     }
+    }
+   },
+   "test": {
+    "vehicle": {
+     "all_ade": {
+      "n": 288,
+      "median": 1.77,
+      "mean": 3.39
+     },
+     "all_fde_1s": {
+      "n": 269,
+      "median": 0.73,
+      "mean": 1.29
+     },
+     "all_fde_3s": {
+      "n": 204,
+      "median": 3.1,
+      "mean": 5.22
+     },
+     "all_fde_4s": {
+      "n": 160,
+      "median": 4.11,
+      "mean": 7.1
+     },
+     "all_fde_5s": {
+      "n": 130,
+      "median": 4.62,
+      "mean": 8.37
+     },
+     "missed_motion": {
+      "n": 315,
+      "median": 0.0,
+      "mean": 0.05
+     },
+     "still_predicted_moving": {
+      "n": 1730,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 288,
+      "median": 1.77,
+      "mean": 3.39
+     },
+     "straight_fde_1s": {
+      "n": 269,
+      "median": 0.73,
+      "mean": 1.29
+     },
+     "straight_fde_3s": {
+      "n": 204,
+      "median": 3.1,
+      "mean": 5.22
+     },
+     "straight_fde_4s": {
+      "n": 160,
+      "median": 4.11,
+      "mean": 7.1
+     },
+     "straight_fde_5s": {
+      "n": 130,
+      "median": 4.62,
+      "mean": 8.37
+     }
+    },
+    "cyclist": {
+     "all_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "all_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     },
+     "missed_motion": {
+      "n": 6,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1173,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "all_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "all_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "all_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     },
+     "missed_motion": {
+      "n": 36,
+      "median": 0.0,
+      "mean": 0.03
+     },
+     "still_predicted_moving": {
+      "n": 1196,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "straight_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "straight_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "straight_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     }
+    }
+   }
+  },
+  "imm": {
+   "dev": {
+    "vehicle": {
+     "all_ade": {
+      "n": 179,
+      "median": 1.61,
+      "mean": 3.4
+     },
+     "all_fde_1s": {
+      "n": 173,
+      "median": 0.63,
+      "mean": 1.16
+     },
+     "all_fde_3s": {
+      "n": 142,
+      "median": 2.64,
+      "mean": 4.15
+     },
+     "all_fde_4s": {
+      "n": 125,
+      "median": 3.68,
+      "mean": 6.37
+     },
+     "all_fde_5s": {
+      "n": 113,
+      "median": 4.97,
+      "mean": 8.67
+     },
+     "missed_motion": {
+      "n": 187,
+      "median": 0.0,
+      "mean": 0.06
+     },
+     "still_predicted_moving": {
+      "n": 1658,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 178,
+      "median": 1.6,
+      "mean": 3.4
+     },
+     "straight_fde_1s": {
+      "n": 172,
+      "median": 0.63,
+      "mean": 1.17
+     },
+     "straight_fde_3s": {
+      "n": 141,
+      "median": 2.64,
+      "mean": 4.15
+     },
+     "straight_fde_4s": {
+      "n": 124,
+      "median": 3.66,
+      "mean": 6.37
+     },
+     "straight_fde_5s": {
+      "n": 112,
+      "median": 4.91,
+      "mean": 8.68
+     },
+     "turning_ade": {
+      "n": 1,
+      "median": 3.68,
+      "mean": 3.68
+     },
+     "turning_fde_1s": {
+      "n": 1,
+      "median": 0.64,
+      "mean": 0.64
+     },
+     "turning_fde_3s": {
+      "n": 1,
+      "median": 3.95,
+      "mean": 3.95
+     },
+     "turning_fde_4s": {
+      "n": 1,
+      "median": 5.93,
+      "mean": 5.93
+     },
+     "turning_fde_5s": {
+      "n": 1,
+      "median": 7.77,
+      "mean": 7.77
+     }
+    },
+    "cyclist": {
+     "still_predicted_moving": {
+      "n": 1760,
+      "median": 0.0,
+      "mean": 0.01
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 6,
+      "median": 1.0,
+      "mean": 1.31
+     },
+     "all_fde_1s": {
+      "n": 5,
+      "median": 0.4,
+      "mean": 0.53
+     },
+     "all_fde_3s": {
+      "n": 5,
+      "median": 1.49,
+      "mean": 2.04
+     },
+     "all_fde_4s": {
+      "n": 5,
+      "median": 2.45,
+      "mean": 2.72
+     },
+     "missed_motion": {
+      "n": 7,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1248,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 2,
+      "median": 1.72,
+      "mean": 1.72
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 1.31,
+      "mean": 1.31
+     },
+     "straight_fde_3s": {
+      "n": 1,
+      "median": 3.98,
+      "mean": 3.98
+     },
+     "straight_fde_4s": {
+      "n": 1,
+      "median": 4.83,
+      "mean": 4.83
+     },
+     "turning_ade": {
+      "n": 4,
+      "median": 1.0,
+      "mean": 1.1
+     },
+     "turning_fde_1s": {
+      "n": 4,
+      "median": 0.35,
+      "mean": 0.33
+     },
+     "turning_fde_3s": {
+      "n": 4,
+      "median": 1.37,
+      "mean": 1.55
+     },
+     "turning_fde_4s": {
+      "n": 4,
+      "median": 2.14,
+      "mean": 2.2
+     }
+    }
+   },
+   "test": {
+    "vehicle": {
+     "all_ade": {
+      "n": 296,
+      "median": 1.8,
+      "mean": 3.19
+     },
+     "all_fde_1s": {
+      "n": 280,
+      "median": 0.66,
+      "mean": 1.19
+     },
+     "all_fde_3s": {
+      "n": 211,
+      "median": 3.07,
+      "mean": 4.87
+     },
+     "all_fde_4s": {
+      "n": 168,
+      "median": 3.81,
+      "mean": 6.58
+     },
+     "all_fde_5s": {
+      "n": 136,
+      "median": 4.69,
+      "mean": 8.3
+     },
+     "missed_motion": {
+      "n": 322,
+      "median": 0.0,
+      "mean": 0.05
+     },
+     "still_predicted_moving": {
+      "n": 1754,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 296,
+      "median": 1.8,
+      "mean": 3.19
+     },
+     "straight_fde_1s": {
+      "n": 280,
+      "median": 0.66,
+      "mean": 1.19
+     },
+     "straight_fde_3s": {
+      "n": 211,
+      "median": 3.07,
+      "mean": 4.87
+     },
+     "straight_fde_4s": {
+      "n": 168,
+      "median": 3.81,
+      "mean": 6.58
+     },
+     "straight_fde_5s": {
+      "n": 136,
+      "median": 4.69,
+      "mean": 8.3
+     }
+    },
+    "cyclist": {
+     "all_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "all_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     },
+     "missed_motion": {
+      "n": 6,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1173,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "all_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "all_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "all_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     },
+     "missed_motion": {
+      "n": 36,
+      "median": 0.0,
+      "mean": 0.03
+     },
+     "still_predicted_moving": {
+      "n": 1196,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "straight_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "straight_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "straight_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     }
+    }
+   }
+  },
+  "imm+map": {
+   "dev": {
+    "vehicle": {
+     "all_ade": {
+      "n": 179,
+      "median": 2.0,
+      "mean": 3.6
+     },
+     "all_fde_1s": {
+      "n": 173,
+      "median": 0.64,
+      "mean": 1.28
+     },
+     "all_fde_3s": {
+      "n": 142,
+      "median": 2.62,
+      "mean": 4.33
+     },
+     "all_fde_4s": {
+      "n": 125,
+      "median": 4.11,
+      "mean": 6.56
+     },
+     "all_fde_5s": {
+      "n": 113,
+      "median": 5.17,
+      "mean": 8.97
+     },
+     "missed_motion": {
+      "n": 187,
+      "median": 0.0,
+      "mean": 0.06
+     },
+     "still_predicted_moving": {
+      "n": 1658,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 178,
+      "median": 1.98,
+      "mean": 3.6
+     },
+     "straight_fde_1s": {
+      "n": 172,
+      "median": 0.64,
+      "mean": 1.29
+     },
+     "straight_fde_3s": {
+      "n": 141,
+      "median": 2.61,
+      "mean": 4.33
+     },
+     "straight_fde_4s": {
+      "n": 124,
+      "median": 3.95,
+      "mean": 6.56
+     },
+     "straight_fde_5s": {
+      "n": 112,
+      "median": 5.15,
+      "mean": 8.98
+     },
+     "turning_ade": {
+      "n": 1,
+      "median": 3.68,
+      "mean": 3.68
+     },
+     "turning_fde_1s": {
+      "n": 1,
+      "median": 0.64,
+      "mean": 0.64
+     },
+     "turning_fde_3s": {
+      "n": 1,
+      "median": 3.95,
+      "mean": 3.95
+     },
+     "turning_fde_4s": {
+      "n": 1,
+      "median": 5.93,
+      "mean": 5.93
+     },
+     "turning_fde_5s": {
+      "n": 1,
+      "median": 7.77,
+      "mean": 7.77
+     }
+    },
+    "cyclist": {
+     "still_predicted_moving": {
+      "n": 1760,
+      "median": 0.0,
+      "mean": 0.01
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 6,
+      "median": 1.0,
+      "mean": 1.31
+     },
+     "all_fde_1s": {
+      "n": 5,
+      "median": 0.4,
+      "mean": 0.53
+     },
+     "all_fde_3s": {
+      "n": 5,
+      "median": 1.49,
+      "mean": 2.04
+     },
+     "all_fde_4s": {
+      "n": 5,
+      "median": 2.45,
+      "mean": 2.72
+     },
+     "missed_motion": {
+      "n": 7,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1248,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 2,
+      "median": 1.72,
+      "mean": 1.72
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 1.31,
+      "mean": 1.31
+     },
+     "straight_fde_3s": {
+      "n": 1,
+      "median": 3.98,
+      "mean": 3.98
+     },
+     "straight_fde_4s": {
+      "n": 1,
+      "median": 4.83,
+      "mean": 4.83
+     },
+     "turning_ade": {
+      "n": 4,
+      "median": 1.0,
+      "mean": 1.1
+     },
+     "turning_fde_1s": {
+      "n": 4,
+      "median": 0.35,
+      "mean": 0.33
+     },
+     "turning_fde_3s": {
+      "n": 4,
+      "median": 1.37,
+      "mean": 1.55
+     },
+     "turning_fde_4s": {
+      "n": 4,
+      "median": 2.14,
+      "mean": 2.2
+     }
+    }
+   },
+   "test": {
+    "vehicle": {
+     "all_ade": {
+      "n": 296,
+      "median": 2.15,
+      "mean": 3.9
+     },
+     "all_fde_1s": {
+      "n": 280,
+      "median": 0.8,
+      "mean": 1.49
+     },
+     "all_fde_3s": {
+      "n": 211,
+      "median": 3.21,
+      "mean": 5.69
+     },
+     "all_fde_4s": {
+      "n": 168,
+      "median": 4.22,
+      "mean": 7.28
+     },
+     "all_fde_5s": {
+      "n": 136,
+      "median": 5.6,
+      "mean": 8.72
+     },
+     "missed_motion": {
+      "n": 322,
+      "median": 0.0,
+      "mean": 0.05
+     },
+     "still_predicted_moving": {
+      "n": 1754,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 296,
+      "median": 2.15,
+      "mean": 3.9
+     },
+     "straight_fde_1s": {
+      "n": 280,
+      "median": 0.8,
+      "mean": 1.49
+     },
+     "straight_fde_3s": {
+      "n": 211,
+      "median": 3.21,
+      "mean": 5.69
+     },
+     "straight_fde_4s": {
+      "n": 168,
+      "median": 4.22,
+      "mean": 7.28
+     },
+     "straight_fde_5s": {
+      "n": 136,
+      "median": 5.6,
+      "mean": 8.72
+     }
+    },
+    "cyclist": {
+     "all_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "all_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     },
+     "missed_motion": {
+      "n": 6,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1173,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "all_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "all_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "all_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     },
+     "missed_motion": {
+      "n": 36,
+      "median": 0.0,
+      "mean": 0.03
+     },
+     "still_predicted_moving": {
+      "n": 1196,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "straight_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "straight_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "straight_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     }
+    }
+   }
+  },
+  "imm+hd": {
+   "dev": {
+    "vehicle": {
+     "all_ade": {
+      "n": 179,
+      "median": 1.64,
+      "mean": 3.52
+     },
+     "all_fde_1s": {
+      "n": 173,
+      "median": 0.65,
+      "mean": 1.22
+     },
+     "all_fde_3s": {
+      "n": 142,
+      "median": 2.65,
+      "mean": 4.36
+     },
+     "all_fde_4s": {
+      "n": 125,
+      "median": 4.14,
+      "mean": 6.62
+     },
+     "all_fde_5s": {
+      "n": 113,
+      "median": 5.04,
+      "mean": 8.74
+     },
+     "missed_motion": {
+      "n": 187,
+      "median": 0.0,
+      "mean": 0.06
+     },
+     "still_predicted_moving": {
+      "n": 1658,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 178,
+      "median": 1.6,
+      "mean": 3.52
+     },
+     "straight_fde_1s": {
+      "n": 172,
+      "median": 0.65,
+      "mean": 1.22
+     },
+     "straight_fde_3s": {
+      "n": 141,
+      "median": 2.64,
+      "mean": 4.37
+     },
+     "straight_fde_4s": {
+      "n": 124,
+      "median": 4.13,
+      "mean": 6.62
+     },
+     "straight_fde_5s": {
+      "n": 112,
+      "median": 5.02,
+      "mean": 8.74
+     },
+     "turning_ade": {
+      "n": 1,
+      "median": 3.68,
+      "mean": 3.68
+     },
+     "turning_fde_1s": {
+      "n": 1,
+      "median": 0.64,
+      "mean": 0.64
+     },
+     "turning_fde_3s": {
+      "n": 1,
+      "median": 3.95,
+      "mean": 3.95
+     },
+     "turning_fde_4s": {
+      "n": 1,
+      "median": 5.93,
+      "mean": 5.93
+     },
+     "turning_fde_5s": {
+      "n": 1,
+      "median": 7.77,
+      "mean": 7.77
+     }
+    },
+    "cyclist": {
+     "still_predicted_moving": {
+      "n": 1760,
+      "median": 0.0,
+      "mean": 0.01
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 6,
+      "median": 1.0,
+      "mean": 1.31
+     },
+     "all_fde_1s": {
+      "n": 5,
+      "median": 0.4,
+      "mean": 0.53
+     },
+     "all_fde_3s": {
+      "n": 5,
+      "median": 1.49,
+      "mean": 2.04
+     },
+     "all_fde_4s": {
+      "n": 5,
+      "median": 2.45,
+      "mean": 2.72
+     },
+     "missed_motion": {
+      "n": 7,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1248,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 2,
+      "median": 1.72,
+      "mean": 1.72
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 1.31,
+      "mean": 1.31
+     },
+     "straight_fde_3s": {
+      "n": 1,
+      "median": 3.98,
+      "mean": 3.98
+     },
+     "straight_fde_4s": {
+      "n": 1,
+      "median": 4.83,
+      "mean": 4.83
+     },
+     "turning_ade": {
+      "n": 4,
+      "median": 1.0,
+      "mean": 1.1
+     },
+     "turning_fde_1s": {
+      "n": 4,
+      "median": 0.35,
+      "mean": 0.33
+     },
+     "turning_fde_3s": {
+      "n": 4,
+      "median": 1.37,
+      "mean": 1.55
+     },
+     "turning_fde_4s": {
+      "n": 4,
+      "median": 2.14,
+      "mean": 2.2
+     }
+    }
+   },
+   "test": {
+    "vehicle": {
+     "all_ade": {
+      "n": 296,
+      "median": 1.98,
+      "mean": 3.06
+     },
+     "all_fde_1s": {
+      "n": 280,
+      "median": 0.76,
+      "mean": 1.32
+     },
+     "all_fde_3s": {
+      "n": 211,
+      "median": 2.91,
+      "mean": 4.66
+     },
+     "all_fde_4s": {
+      "n": 168,
+      "median": 3.61,
+      "mean": 5.84
+     },
+     "all_fde_5s": {
+      "n": 136,
+      "median": 4.16,
+      "mean": 6.94
+     },
+     "missed_motion": {
+      "n": 322,
+      "median": 0.0,
+      "mean": 0.05
+     },
+     "still_predicted_moving": {
+      "n": 1754,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 296,
+      "median": 1.98,
+      "mean": 3.06
+     },
+     "straight_fde_1s": {
+      "n": 280,
+      "median": 0.76,
+      "mean": 1.32
+     },
+     "straight_fde_3s": {
+      "n": 211,
+      "median": 2.91,
+      "mean": 4.66
+     },
+     "straight_fde_4s": {
+      "n": 168,
+      "median": 3.61,
+      "mean": 5.84
+     },
+     "straight_fde_5s": {
+      "n": 136,
+      "median": 4.16,
+      "mean": 6.94
+     }
+    },
+    "cyclist": {
+     "all_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "all_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     },
+     "missed_motion": {
+      "n": 6,
+      "median": 0.0,
+      "mean": 0.0
+     },
+     "still_predicted_moving": {
+      "n": 1173,
+      "median": 0.0,
+      "mean": 0.01
+     },
+     "straight_ade": {
+      "n": 3,
+      "median": 0.5,
+      "mean": 0.47
+     },
+     "straight_fde_1s": {
+      "n": 1,
+      "median": 0.42,
+      "mean": 0.42
+     }
+    },
+    "pedestrian": {
+     "all_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "all_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "all_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "all_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     },
+     "missed_motion": {
+      "n": 36,
+      "median": 0.0,
+      "mean": 0.03
+     },
+     "still_predicted_moving": {
+      "n": 1196,
+      "median": 0.0,
+      "mean": 0.02
+     },
+     "straight_ade": {
+      "n": 32,
+      "median": 0.31,
+      "mean": 0.32
+     },
+     "straight_fde_1s": {
+      "n": 30,
+      "median": 0.15,
+      "mean": 0.16
+     },
+     "straight_fde_3s": {
+      "n": 23,
+      "median": 0.43,
+      "mean": 0.47
+     },
+     "straight_fde_4s": {
+      "n": 19,
+      "median": 0.66,
+      "mean": 0.71
+     }
+    }
+   }
+  }
+ }
+}

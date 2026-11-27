@@ -1,0 +1,356 @@
+{
+ "eval": "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/traffic_light_eval_20261124T205501Z",
+ "rig": "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/rig_20261125",
+ "signal_head_height_m": 1.49,
+ "matched_boxes": 417,
+ "measured_wide": [
+  {
+   "height_px_at_model": 3.3,
+   "rate": 0.0,
+   "n": 389
+  },
+  {
+   "height_px_at_model": 3.9,
+   "rate": 0.009,
+   "n": 229
+  },
+  {
+   "height_px_at_model": 4.5,
+   "rate": 0.02,
+   "n": 538
+  },
+  {
+   "height_px_at_model": 5.3,
+   "rate": 0.027,
+   "n": 408
+  },
+  {
+   "height_px_at_model": 6.2,
+   "rate": 0.285,
+   "n": 499
+  },
+  {
+   "height_px_at_model": 6.9,
+   "rate": 0.368,
+   "n": 144
+  },
+  {
+   "height_px_at_model": 7.8,
+   "rate": 0.315,
+   "n": 124
+  },
+  {
+   "height_px_at_model": 9.0,
+   "rate": 0.277,
+   "n": 119
+  },
+  {
+   "height_px_at_model": 10.7,
+   "rate": 0.26,
+   "n": 127
+  },
+  {
+   "height_px_at_model": 13.0,
+   "rate": 0.552,
+   "n": 105
+  },
+  {
+   "height_px_at_model": 16.8,
+   "rate": 0.984,
+   "n": 64
+  },
+  {
+   "height_px_at_model": 23.5,
+   "rate": 0.806,
+   "n": 36
+  },
+  {
+   "height_px_at_model": 58.6,
+   "rate": 0.7,
+   "n": 20
+  }
+ ],
+ "cameras": {
+  "wide": {
+   "fx": 590.2,
+   "width": 1920,
+   "hfov_deg": 116.8,
+   "vfov_deg": 85.0,
+   "fx_at_model_input": 196.7
+  },
+  "narrow": {
+   "fx": 1439.2,
+   "width": 1024,
+   "hfov_deg": 39.2,
+   "vfov_deg": 29.9,
+   "fx_at_model_input": 899.5
+  }
+ },
+ "needed_decision_distance_m": {
+  "10 mph": 8.9,
+  "20 mph": 31.1,
+  "25 mph": 47.3
+ },
+ "signals": {
+  "1": {
+   "lights": [
+    2,
+    3
+   ],
+   "line_route_s": 263.2,
+   "wide": {
+    "reliable_from_m": 27.0,
+    "rate_at_m": {
+     "0": 0.94,
+     "5": 0.71,
+     "10": 0.6,
+     "20": 0.6,
+     "30": 0.36,
+     "40": 0.05,
+     "50": 0.03,
+     "60": 0.01,
+     "80": 0.0,
+     "100": 0.0
+    },
+    "enough_for": [
+     "10 mph"
+    ]
+   },
+   "narrow": {
+    "reliable_from_m": 115.0,
+    "rate_at_m": {
+     "0": 1.0,
+     "5": 1.0,
+     "10": 1.0,
+     "20": 1.0,
+     "30": 1.0,
+     "40": 1.0,
+     "50": 1.0,
+     "60": 1.0,
+     "80": 0.84,
+     "100": 0.65
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   },
+   "both": {
+    "reliable_from_m": 115.0,
+    "rate_at_m": {
+     "0": 1.0,
+     "5": 1.0,
+     "10": 1.0,
+     "20": 1.0,
+     "30": 1.0,
+     "40": 1.0,
+     "50": 1.0,
+     "60": 1.0,
+     "80": 0.84,
+     "100": 0.65
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   }
+  },
+  "2": {
+   "lights": [
+    24,
+    25
+   ],
+   "line_route_s": 400.0,
+   "wide": {
+    "reliable_from_m": 9.0,
+    "rate_at_m": {
+     "0": 0.6,
+     "5": 0.6,
+     "10": 0.48,
+     "20": 0.05,
+     "30": 0.03,
+     "40": 0.01,
+     "50": 0.0,
+     "60": 0.0,
+     "80": 0.0,
+     "100": 0.0
+    },
+    "enough_for": [
+     "10 mph"
+    ]
+   },
+   "narrow": {
+    "reliable_from_m": 120.0,
+    "rate_at_m": {
+     "0": 1.0,
+     "5": 1.0,
+     "10": 1.0,
+     "20": 1.0,
+     "30": 1.0,
+     "40": 1.0,
+     "50": 0.96,
+     "60": 0.86,
+     "80": 0.67,
+     "100": 0.6
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   },
+   "both": {
+    "reliable_from_m": 120.0,
+    "rate_at_m": {
+     "0": 1.0,
+     "5": 1.0,
+     "10": 1.0,
+     "20": 1.0,
+     "30": 1.0,
+     "40": 1.0,
+     "50": 0.96,
+     "60": 0.86,
+     "80": 0.67,
+     "100": 0.6
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   }
+  },
+  "3": {
+   "lights": [
+    33
+   ],
+   "line_route_s": 624.8,
+   "wide": {
+    "reliable_from_m": 0.0,
+    "rate_at_m": {
+     "0": 0.4,
+     "5": 0.37,
+     "10": 0.37,
+     "20": 0.3,
+     "30": 0.03,
+     "40": 0.02,
+     "50": 0.01,
+     "60": 0.0,
+     "80": 0.0,
+     "100": 0.0
+    },
+    "enough_for": []
+   },
+   "narrow": {
+    "reliable_from_m": 81.0,
+    "rate_at_m": {
+     "0": 0.98,
+     "5": 0.98,
+     "10": 0.98,
+     "20": 0.98,
+     "30": 0.98,
+     "40": 0.98,
+     "50": 0.98,
+     "60": 0.83,
+     "80": 0.52,
+     "100": 0.37
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   },
+   "both": {
+    "reliable_from_m": 81.0,
+    "rate_at_m": {
+     "0": 0.99,
+     "5": 0.99,
+     "10": 0.99,
+     "20": 0.99,
+     "30": 0.98,
+     "40": 0.98,
+     "50": 0.98,
+     "60": 0.83,
+     "80": 0.52,
+     "100": 0.37
+    },
+    "enough_for": [
+     "10 mph",
+     "20 mph",
+     "25 mph"
+    ]
+   }
+  }
+ },
+ "measured_pair": {
+  "wide": {
+   "0-20 m": {
+    "frames": 120,
+    "rate": 0.883
+   },
+   "20-40 m": {
+    "frames": 475,
+    "rate": 0.343
+   },
+   "40-60 m": {
+    "frames": 1051,
+    "rate": 0.196
+   },
+   "60-80 m": {
+    "frames": 767,
+    "rate": 0.017
+   },
+   "80-120 m": {
+    "frames": 389,
+    "rate": 0.0
+   }
+  },
+  "narrow": {
+   "0-20 m": {
+    "frames": 120,
+    "rate": 0.883
+   },
+   "20-40 m": {
+    "frames": 475,
+    "rate": 0.343
+   },
+   "40-60 m": {
+    "frames": 1051,
+    "rate": 0.196
+   },
+   "60-80 m": {
+    "frames": 767,
+    "rate": 0.017
+   },
+   "80-120 m": {
+    "frames": 389,
+    "rate": 0.0
+   }
+  },
+  "both": {
+   "0-20 m": {
+    "frames": 240,
+    "rate": 0.883
+   },
+   "20-40 m": {
+    "frames": 950,
+    "rate": 0.343
+   },
+   "40-60 m": {
+    "frames": 2102,
+    "rate": 0.196
+   },
+   "60-80 m": {
+    "frames": 1534,
+    "rate": 0.017
+   },
+   "80-120 m": {
+    "frames": 778,
+    "rate": 0.0
+   }
+  }
+ }
+}

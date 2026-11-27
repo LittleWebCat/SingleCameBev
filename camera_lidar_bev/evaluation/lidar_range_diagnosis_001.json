@@ -1,0 +1,57 @@
+{
+  "checked_at_utc": "2026-10-08T19:03:25.355030+00:00",
+  "live_scan_checked": false,
+  "live_check_limitation": "ROS processes stopped after reboot; 16MiB socket prerequisite currently reset to212992 bytes. Sensor active config read succeeded.",
+  "source": "previously saved full native sensor geometry, preserves unfiltered ranges",
+  "fixture": "data/geometry/ground_baseline_001",
+  "max_radial_range_m": 88.71040344238281,
+  "max_forward_x_m": 83.72122192382812,
+  "bins_m": [
+    0,
+    20,
+    30,
+    40,
+    60,
+    100,
+    200,
+    10000
+  ],
+  "front_half_counts": [
+    64665,
+    278,
+    118,
+    109,
+    303,
+    0,
+    0
+  ],
+  "configured_rviz": {
+    "scale_pixels_per_meter": 18.0,
+    "center_forward_m": 7.0,
+    "example_viewport_height_pixels": 860,
+    "example_forward_top_m": 30.88888888888889
+  },
+  "software_bounds": {
+    "ground_classification_evidence_range_m": 60,
+    "fusion_optical_depth_m": 60,
+    "occupancy_forward_m": 40
+  },
+  "sensor_active_config_read": {
+    "lidar_mode": "1024x20",
+    "operating_mode": "NORMAL",
+    "signal_multiplier": 1,
+    "min_range_threshold_cm": 50,
+    "azimuth_window_millidegrees": [
+      0,
+      360000
+    ]
+  },
+  "individual_far_vehicle_loss_confirmed": false,
+  "possible_causes": [
+    "viewport crops longer-distance points",
+    "sparse distant vehicle returns",
+    "sensor/camera parallax and foreground occlusion",
+    "low target reflectivity"
+  ],
+  "sensor_range_30m_limit_found": false
+}

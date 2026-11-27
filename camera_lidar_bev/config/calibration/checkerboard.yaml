@@ -1,0 +1,13 @@
+# Physical target dimensions supplied by the user.
+pattern: checkerboard
+squares_columns: 6
+squares_rows: 5
+inner_corners_columns: 5
+inner_corners_rows: 4
+square_size_mm: 65.0
+square_size_source: user_provided
+corner_detection_verified: true
+detected_inner_corner_count: 20
+verification_image_width_px: 640
+verification_image_height_px: 480
+# This confirms target detection only; camera calibration remains unmeasured.

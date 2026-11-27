@@ -1,0 +1,11 @@
+# The existing rig's front-middle camera; persistent USB port rather than videoN.
+# Intrinsics are deliberately absent. Supply calibration_file after measuring.
+/**:
+  ros__parameters:
+    frame_id: camera_front_optical_frame
+    image_topic: /camera/front/image_raw
+    camera_info_topic: /camera/front/camera_info
+    max_frames: 0
+    stale_after_s: 1.0
+# Launch arguments define device, dimensions, FPS, fourcc and calibration_file.
+# Image headers are host ROS time after read returns, not exposure timestamps.

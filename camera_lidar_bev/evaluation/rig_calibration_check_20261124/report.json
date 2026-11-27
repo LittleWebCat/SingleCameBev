@@ -1,0 +1,65 @@
+{
+  "points": 128500,
+  "cameras": {
+    "front_narrow": {
+      "points_in_image": 8018,
+      "overlay": "front_narrow_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 29.16259002685547,
+        "if frame were os_lidar": 25.785049438476562,
+        "calibration +3 deg yaw": 28.650054931640625
+      },
+      "depth_edge_samples": 8018
+    },
+    "front_left": {
+      "points_in_image": 19493,
+      "overlay": "front_left_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 16.502431640625,
+        "if frame were os_lidar": 17.378779296875,
+        "calibration +3 deg yaw": 16.502431640625
+      },
+      "depth_edge_samples": 18832
+    },
+    "front_right": {
+      "points_in_image": 18743,
+      "overlay": "front_right_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 12.08462890625,
+        "if frame were os_lidar": 12.489169921875,
+        "calibration +3 deg yaw": 12.835224609375
+      },
+      "depth_edge_samples": 18449
+    },
+    "back_left": {
+      "points_in_image": 25684,
+      "overlay": "back_left_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 12.003720703125,
+        "if frame were os_lidar": 12.2240234375,
+        "calibration +3 deg yaw": 11.612822265625
+      },
+      "depth_edge_samples": 24511
+    },
+    "back_right": {
+      "points_in_image": 27436,
+      "overlay": "back_right_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 17.98998046875,
+        "if frame were os_lidar": 19.5584375,
+        "calibration +3 deg yaw": 18.33603515625
+      },
+      "depth_edge_samples": 25244
+    },
+    "back": {
+      "points_in_image": 26499,
+      "overlay": "back_overlay.jpg",
+      "edge_distance_px_per_1024": {
+        "calibration (os_sensor)": 139.242431640625,
+        "if frame were os_lidar": 113.05274251302083,
+        "calibration +3 deg yaw": 138.49020182291667
+      },
+      "depth_edge_samples": 20723
+    }
+  }
+}

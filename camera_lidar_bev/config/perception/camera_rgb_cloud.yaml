@@ -1,0 +1,12 @@
+# Diagnostic color association for the user-selected B calibration.
+# Camera/LiDAR exposure synchronization and calibration accuracy are provisional.
+/**:
+  ros__parameters:
+    image_topic: /camera/front/image_raw
+    camera_info_topic: /camera/front/camera_info
+    points_topic: /points
+    output_topic: /camera_lidar_bev/points_rgb
+    camera_frame: camera_front_optical_frame
+    max_pair_delta_s: 0.15
+    stale_after_s: 1.0
+    max_publish_hz: 20.0

@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-08T18:20:03.852667+00:00",
+  "purpose": "CPU-only nonempty object fusion core benchmark after bounded direct source-ID lookup optimization",
+  "input_provenance": "Recorded native os_sensor background plus inserted synthetic person, bicycle and car surfaces; source return identities preserved.",
+  "live_hardware_used": false,
+  "ros_transport_included": false,
+  "gpu_inference_included": false,
+  "pointcloud_decode_included": false,
+  "ground_classification_timed": false,
+  "real_detection_accuracy_validated": false,
+  "physical_calibration_accuracy_validated": false,
+  "full_pipeline_throughput_validated": false,
+  "worst_case_claimed": false,
+  "timed_scope": "Complete fuse_camera_objects call: source-ID matching, native distorted projection, full-background visibility, component selection and observed extent assembly.",
+  "warmup_runs": 5,
+  "timed_runs": 30,
+  "percentile_method": "p95 nearest-rank sample 29 of 30; median average of sorted samples 15 and 16",
+  "machine": {
+    "architecture": "aarch64",
+    "system": "Linux"
+  },
+  "ground_classification": {
+    "core": "bev_geometry",
+    "once_before_timer": true,
+    "height_prior_m": 1.8,
+    "self_mask_enabled": true,
+    "self_bounds_m": {
+      "x": [
+        -2.131,
+        2.35
+      ],
+      "y": [
+        -0.905,
+        0.885
+      ],
+      "z": [
+        -1.8,
+        0.0
+      ]
+    }
+  },
+  "synthetic_objects": [
+    {
+      "class_name": "person",
+      "x_m": 4.0,
+      "y_center_m": 0.0,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    },
+    {
+      "class_name": "bicycle",
+      "x_m": 5.0,
+      "y_center_m": -0.8,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    },
+    {
+      "class_name": "car",
+      "x_m": 6.0,
+      "y_center_m": 0.9,
+      "y_half_extent_m": 0.16,
+      "z_range_m": [
+        -0.3,
+        0.3
+      ],
+      "return_count": 117,
+      "classification": 3,
+      "positive_height_evidence": "z + 1.8 m approximate height prior"
+    }
+  ],
+  "camera": {
+    "native_image_size": [
+      1024,
+      768
+    ],
+    "projection": "native raw plumb_bob K/D and provisional T_camera_from_os_sensor",
+    "rois": "Bounds of independently projected inserted surfaces, padded 2 native pixels and clipped to image"
+  },
+  "source_sha256": {
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/geometry/ground_baseline_001/input_points_rgb.bin": "47a08b7efde26dc2661e8414abfdad5d429b36fefbe1010b5a5d89c6ff87bdd4",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/data/geometry/ground_baseline_001/input_metadata.json": "93d28ffb643b082ebb3e33b88cd9f679c6a526c4adfb01cb000d71d73b3a3dbf",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/front_camera_1024x768.candidate.yaml": "4e258e0b0959b9b624b726dffb26303421112f186c53dddb8e6689ceec8133db",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml": "7473945aaaeb04b64c002ef65038b9a38f0cdec80c025365358494feea32dce6",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/build/bev_geometry/libbev_geometry.a": "e39b69b7b4e8e044bf374216520d695f222f28487a33f4410b479818ca4ce5b9",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/build/bev_core/libbev_core.a": "8b2b0a2b80e0661ef8fac4109608adb47ad0c0da58914f950e3f2ccc776ac25a",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/src/bev_visualization/src/object_fusion.cpp": "30c6ae614e4a999b76993712fca6093f4be5c1040bf315176fdb4360de25bdfa",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/src/bev_visualization/src/rgb_projection.cpp": "62f8689737022baf57964cef13ab5724ab6d8bfe7b63eb347d945e2aca8beee9",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/src/bev_visualization/include/bev_visualization/object_fusion.hpp": "f9cf3a021fc2ef0868335215b3b5cf6f0b5b0d851c1eb20978f5db23be52e0a9",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/src/bev_visualization/include/bev_visualization/rgb_projection.hpp": "1dd51808a199aa319902a5c9fc126d627f1827186245bc8d3f8c8b7f9f625853",
+    "/home/agxthor/SingleCameraBev/camera_lidar_bev/src/bev_visualization/test/object_fusion_tests.cpp": "8a9ba8d6d72e7520c21667bfeea462e2128bd960c11edb0551c9d789b5dc5ad9"
+  },
+  "benchmark_source_path": "/tmp/object_fusion_benchmark.cpp",
+  "benchmark_source_sha256": "e74a970ed1039fd40586a859e0a1af56f5a7a10d2c8bb7437cc552cff4ff3988",
+  "benchmark_executable_sha256": "690f4b8b6e177c6c968727ebdc79f88cea424b4915fd97c16391db6ef61d2b3a",
+  "compile": "g++ -std=c++17 -O3 -Wall -Wextra -Wpedantic; current object_fusion.cpp and rgb_projection.cpp compiled directly, existing bev_geometry/bev_core static libraries, yaml-cpp and OpenCV core",
+  "metrics": {
+    "recorded_input_points": 129442,
+    "inserted_synthetic_points": 351,
+    "full_geometry_points": 129793,
+    "classified_points": 122814,
+    "camera_detections": 3,
+    "warmup_runs": 5,
+    "timed_runs": 30,
+    "ground_plane_valid": true,
+    "ground_plane_c_m": -1.86938,
+    "accepted_candidates_min": 3,
+    "accepted_candidates_max": 3,
+    "visible_geometry_points": 9534,
+    "supported_obstacle_points": 4303,
+    "wall_ms": {
+      "min": 6.27243,
+      "median": 6.5897,
+      "p95": 7.00474,
+      "max": 7.06236
+    },
+    "candidate_support": [
+      {
+        "class_name": "person",
+        "visible_support": 117
+      },
+      {
+        "class_name": "bicycle",
+        "visible_support": 117
+      },
+      {
+        "class_name": "car",
+        "visible_support": 117
+      }
+    ],
+    "sorted_samples_ms": [
+      6.27243,
+      6.29969,
+      6.30225,
+      6.36093,
+      6.37281,
+      6.38576,
+      6.4407,
+      6.4648,
+      6.50371,
+      6.50876,
+      6.5145,
+      6.53591,
+      6.56437,
+      6.57937,
+      6.58824,
+      6.59116,
+      6.61302,
+      6.61579,
+      6.62333,
+      6.63013,
+      6.68105,
+      6.72958,
+      6.78177,
+      6.78977,
+      6.86636,
+      6.92345,
+      6.92455,
+      6.96214,
+      7.00474,
+      7.06236
+    ]
+  },
+  "passed": true,
+  "source_id_lookup": "Compact UINT32 span <= max(1024, 2*N) uses bounded vector indexing with minimum-ID offset; wide sparse IDs use unordered fallback. Classified rows join directly through full scan row indices.",
+  "compiled_fusion_sources_directly": true,
+  "stale_fusion_static_library_used": false,
+  "baseline_comparison": {
+    "report": "/home/agxthor/SingleCameraBev/camera_lidar_bev/evaluation/object_fusion_benchmark_001.json",
+    "baseline_report_sha256": "87ad1be247e36d0f1188b1c7ebeb210b42ff68de14465f09dfa1183ccac2f966",
+    "same_inputs_visibility_candidates_and_support": true,
+    "baseline_median_ms": 14.3269,
+    "median_saved_ms": 7.7372000000000005,
+    "median_reduction_percent": 54.00470443710782,
+    "baseline_p95_ms": 15.0569,
+    "p95_saved_ms": 8.05216,
+    "comparison_scope": "Same recorded background and inserted synthetic objects; independent short CPU runs. Full-pipeline performance remains separate."
+  },
+  "core_tests_passed": true,
+  "additional_identity_cases": [
+    "nonzero compact minimum",
+    "compact range ending at UINT32_MAX",
+    "wide sparse range containing 0 and UINT32_MAX",
+    "dense holes",
+    "duplicate IDs in both lookup paths",
+    "matching-coordinate validation",
+    "empty ranges"
+  ]
+}

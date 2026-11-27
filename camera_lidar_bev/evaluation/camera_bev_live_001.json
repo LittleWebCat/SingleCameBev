@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-08T15:43:58.756151+00:00",
+  "purpose": "Bounded observation of live colored-cloud transport, not physical accuracy validation.",
+  "calibration_status": "external_candidate_unvalidated",
+  "ros_domain_id": 1,
+  "tf_published_by_colorizer": false,
+  "independent_accuracy_validated": false,
+  "cloud_messages": 11,
+  "errors": [],
+  "last_cloud": {
+    "frame_id": "os_sensor",
+    "valid_point_count": 260063,
+    "camera_colored_point_count": 18211,
+    "white_fallback_verified": true,
+    "field_layout_verified": true,
+    "stamp_sec": 1791474242,
+    "stamp_nanosec": 183097647
+  },
+  "last_diagnostic": {
+    "level": 1,
+    "message": "Camera RGB preview active; B geometry and sensor synchronization are provisional",
+    "values": {
+      "calibration_status": "external_candidate_unvalidated",
+      "source_frame_selection": "user_visual_B_os_sensor",
+      "accuracy_validated": "false",
+      "synchronization_validated": "false",
+      "tf_published": "false",
+      "output_frame": "os_sensor",
+      "driver_tf_observed": "true",
+      "publishing_fresh_cloud": "true",
+      "published_clouds": "230",
+      "stale_outputs_cleared": "0",
+      "input_points": "262144",
+      "valid_points": "259999",
+      "colored_points": "18223",
+      "radial_domain_excluded_points": "87203",
+      "header_delta_s": "0.010255",
+      "image_header_ns": "1791474241793797362",
+      "cloud_header_ns": "1791474241783542795",
+      "last_output_receipt_age_s": "0.263281"
+    }
+  },
+  "observed_header_rate_hz": 2.941386772461022,
+  "checks_passed": true,
+  "elapsed_s": 4.232771764000063
+}

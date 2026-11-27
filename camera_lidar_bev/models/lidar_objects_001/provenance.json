@@ -1,0 +1,152 @@
+{
+  "upstream_repo": "https://github.com/NVIDIA-AI-IOT/CUDA-PointPillars",
+  "upstream_commit": "ce7e2bd694c90207435c8751d61cdb38d48a9f4c",
+  "onnx_file": "pointpillar.onnx",
+  "onnx_sha256": "b48eada794191301b1255a327542b772152fd9a9364b2c7c184e11e58bcbf517",
+  "engine_file": "pointpillar_fp16.plan",
+  "engine_sha256": "787bb815e61006db56916b4e3479476c0c6d9a2e716fbe2c824da32fcb967738",
+  "engine_build_complete": true,
+  "classes": [
+    "Car",
+    "Pedestrian",
+    "Cyclist"
+  ],
+  "class_ids": [
+    0,
+    1,
+    2
+  ],
+  "coordinate_convention": "x forward, y left, z up; meters; center-based 3D boxes",
+  "model_point_cloud_range": [
+    0,
+    -39.68,
+    -3,
+    69.12,
+    39.68,
+    1
+  ],
+  "voxel_size": [
+    0.16,
+    0.16,
+    4
+  ],
+  "max_points": 300000,
+  "max_pillars": 10000,
+  "max_points_per_pillar": 32,
+  "engine_input_contract": {
+    "voxels": {
+      "dtype": "float16",
+      "shape": [
+        10000,
+        32,
+        10
+      ]
+    },
+    "voxel_idxs": {
+      "dtype": "int32",
+      "shape": [
+        10000,
+        4
+      ]
+    },
+    "voxel_num": {
+      "dtype": "int32",
+      "shape": [
+        1
+      ]
+    }
+  },
+  "engine_output_contract": {
+    "cls_preds": {
+      "dtype": "float32",
+      "shape": [
+        1,
+        248,
+        216,
+        18
+      ]
+    },
+    "box_preds": {
+      "dtype": "float32",
+      "shape": [
+        1,
+        248,
+        216,
+        42
+      ]
+    },
+    "dir_cls_preds": {
+      "dtype": "float32",
+      "shape": [
+        1,
+        248,
+        216,
+        12
+      ]
+    }
+  },
+  "runtime": {
+    "cuda": "13.0",
+    "tensorrt": "10.13.3.9",
+    "cuda_architecture": "sm_110",
+    "precision": "FP16"
+  },
+  "licenses": [
+    "Apache-2.0",
+    "MIT"
+  ],
+  "license_files": [
+    "../../third_party/CUDA-PointPillars/LICENSE",
+    "../../third_party/CUDA-PointPillars/NOTICE"
+  ],
+  "pretrained_dataset": "KITTI",
+  "ouster_input_intensity": "reflectivity / 255, provisional mapping; not equivalent to calibrated KITTI Velodyne intensity",
+  "ouster_accuracy_validated": false,
+  "metric_size_accuracy_validated": false,
+  "scope": "Pretrained Car dimensions and yaw; Car class is not a validated bus/truck detector",
+  "port_changes": [
+    "TensorRT10 tensor-name APIs/enqueueV3",
+    "CUDA13 C++17 and sm110",
+    "fixed-input 10000-pillar overflow guard",
+    "NMS prelimit4096 and bounded device/host mask",
+    "zero detections guard",
+    "plugin serialization size correction",
+    "strict engine contract checks"
+  ],
+  "reference_scan_file": "kitti_reference_000000.bin",
+  "reference_scan_sha256": "26d9ca482b2bc36c731094965166598b11095e03961c486cbf49cd78486fb34a",
+  "engine_bytes": 14153572,
+  "engine_build_log": "build_engine.log",
+  "engine_build_seconds": 147.158,
+  "additional_car_reference_scan": {
+    "file": "kitti_reference_000003.bin",
+    "sha256": "7362600e3ea495a853e784f0d165b1b7692f258f0be4159f0aec9e6970e0030a"
+  },
+  "reference_benchmark": "../../evaluation/lidar_pointpillars_kitti_benchmark_001.json",
+  "ouster_benchmark": "../../evaluation/lidar_pointpillars_ouster_benchmark_001.json",
+  "benchmark_scope": "Recorded scans, 5 warmup +30 timed runs; excludes ROS decode/publish, not sustained live/worst-case performance or physical accuracy",
+  "engine_build_command": [
+    "/usr/src/tensorrt/bin/trtexec",
+    "--onnx=pointpillar.onnx",
+    "--fp16",
+    "--inputIOFormats=fp16:chw,int32:chw,int32:chw",
+    "--staticPlugins=libpointpillars_core.so",
+    "--saveEngine=pointpillar_fp16.plan",
+    "--skipInference",
+    "--memPoolSize=workspace:2048"
+  ],
+  "car_reference_benchmark": "../../evaluation/lidar_pointpillars_kitti_car_benchmark_001.json",
+  "cuda_memcheck": {
+    "log": "../../evaluation/lidar_pointpillars_cuda_memcheck_001.log",
+    "error_count": 0,
+    "scope": "Recorded Ouster scan with 10865 input pillars, exercising the 10000-pillar overflow guard; sanitizer timings are not performance results"
+  },
+  "ros_integration_check": "../../evaluation/lidar_vehicle_detector_replay_004.json",
+  "live_measurement": "../../evaluation/lidar_vehicle_live_001.json",
+  "live_measurement_scope": "10-second read-only run: about20Hz freshpredictions; 1Hz diagnostic timing samples; not sustained/worstcase orphysical accuracy",
+  "combined_camera_lidar_live_measurement": "../../evaluation/camera_lidar_boxes_live_001.json",
+  "combined_camera_lidar_strict_live_measurement": "../../evaluation/camera_lidar_boxes_live_002.json",
+  "combined_association_replay": "../../evaluation/camera_lidar_boxes_replay_003.json",
+  "combined_legacy_association_replay": "../../evaluation/camera_lidar_boxes_replay_002.json",
+  "physical_association_accuracy_validated": false
+}

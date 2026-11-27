@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-08T15:21:40.951419+00:00",
+  "user_response": "B",
+  "selected_hypothesis": "B",
+  "selected_source_frame": "os_sensor",
+  "selection_basis": "User visual preference in the live A/B projection comparison.",
+  "original_source_json_names_lidar_frame": false,
+  "frame_mapping_status": "user_visually_selected_hypothesis",
+  "calibration_status": "external_candidate_unvalidated",
+  "independent_accuracy_validated": false,
+  "extrinsic_tf_published": false,
+  "fusion_ready": false,
+  "source_files": {
+    "intrinsics": {
+      "preserved_file": "front.json",
+      "sha256": "ab27f407449f2b81a0e7e48c41e61cd8a06b17757c4da77a89d7f011fa590b2d"
+    },
+    "extrinsics": {
+      "preserved_file": "front_external.json",
+      "sha256": "628cc06ecc8d8b992dfbee734a6246c64a3ef8023885cdfc436423382d3f2191"
+    }
+  },
+  "comparison_report": "evaluation/imported_projection_001.json",
+  "comparison_report_sha256": "2557256762e65ae1c9b7911814b0aace19e50de58d6952fff19f4d4d5fd206ef",
+  "observed_driver_tf": {
+    "parent_frame": "os_sensor",
+    "child_frame": "os_lidar",
+    "header": {
+      "frame_id": "os_sensor",
+      "stamp_sec": 1791472083,
+      "stamp_nanosec": 545496441
+    },
+    "translation_m": [
+      0.0,
+      0.0,
+      0.038195
+    ],
+    "quaternion_xyzw": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "source_topic": "/tf_static"
+  },
+  "composition": "T_camera_from_os_lidar = T_camera_from_os_sensor @ T_os_sensor_from_os_lidar",
+  "candidate_transform_file": "config/calibration/imported_front_001/T_B_os_sensor.candidate.yaml",
+  "pending_checks": [
+    "Stationary board or object-boundary alignment at multiple image positions and distances.",
+    "Independent accuracy measurement and unique-correspondence refit before fusion."
+  ]
+}

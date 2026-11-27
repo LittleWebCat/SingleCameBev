@@ -1,0 +1,41 @@
+digraph CameraBEV {
+  graph [rankdir=TB, bgcolor="#ffffff", pad=0.35, nodesep=0.38, ranksep=0.55,
+         fontname="DejaVu Sans", fontsize=24, fontcolor="#0f172a", labelloc=t,
+         label="Camera-to-BEV System\n", dpi=150];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12,
+        color="#6366f1", fillcolor="#e0e7ff", fontcolor="#0f172a", margin="0.18,0.14", penwidth=1.3];
+  edge [color="#64748b", arrowsize=0.7, penwidth=1.3, fontname="DejaVu Sans", fontsize=10, fontcolor="#475569"];
+
+  cameras [label="CAMERA FRAMES\nSingle camera or\nleft / middle / right", fillcolor="#e0f2fe", color="#0284c7"];
+  detect [label="OBJECT DETECTION\nYOLO: road users, signs,\ntraffic-light color"];
+  depth [label="METRIC DEPTH\nDepth Anything\nEstimated distance in meters"];
+  calibration [label="CAMERA CALIBRATION\nLens parameters\nand mounting pose", fillcolor="#e0f2fe", color="#0284c7"];
+  project [label="GEOMETRIC PROJECTION\nDetections + depth + calibration\nObject positions relative to vehicle"];
+  bev [label="BIRD'S-EYE MAP\nMerge overlapping observations\nBuild semantic object grid", penwidth=2.2];
+  track [label="OPTIONAL TRACKING\nKalman filter: stable IDs and motion\nNominal target speed", fillcolor="#fef3c7", color="#d97706"];
+  display [label="LIVE VISUALIZATION\nCamera / depth / BEV\nRaw vs. tracked map", fillcolor="#dcfce7", color="#16a34a"];
+  sensors [label="OPTIONAL GPS + IMU\nVehicle speed, orientation,\nangular rate", fillcolor="#e0f2fe", color="#0284c7"];
+  logs [label="RECORDED OUTPUTS\nDetections, matrices, images\nFrame-associated sensor records", fillcolor="#dcfce7", color="#16a34a"];
+  safety [label="OPTIONAL SAFETY CONSUMER\nPair raw map + sensors by frame ID\nOwn tracker / target speed / safety filter", fillcolor="#fef3c7", color="#d97706"];
+  result [label="SAFETY DISPLAY + CSV\nFiltered target speed\nand safety zones", fillcolor="#dcfce7", color="#16a34a"];
+
+  cameras -> detect;
+  cameras -> depth;
+  detect -> project;
+  depth -> project;
+  calibration -> project;
+  project -> bev;
+  bev -> track [style=dashed];
+  bev -> display;
+  bev -> logs;
+  track -> display;
+  track -> logs;
+  sensors -> display [style=dashed];
+  sensors -> logs [style=dashed];
+  logs -> safety [style=dashed, label="raw matrices +\nsensor JSONL"];
+  safety -> result;
+
+  { rank=same; detect; depth; calibration; }
+  { rank=same; track; sensors; }
+  { rank=same; display; logs; }
+}

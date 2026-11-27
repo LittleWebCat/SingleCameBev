@@ -1,0 +1,47 @@
+/**:
+  ros__parameters:
+    frames:
+      map_frame: map
+      body_frame: lio_imu
+    common:
+      lid_topic: /camera_lidar_bev/mapping/input/points
+      imu_topic: /camera_lidar_bev/mapping/input/imu
+      latest_scan_only: true
+      time_sync_en: false
+      time_offset_lidar_to_imu: 0.0
+    preprocess:
+      lidar_type: 3
+      scan_line: 128
+      timestamp_unit: 3
+      scan_rate: 10
+      blind: 3.5
+    feature_extract_enable: false
+    point_filter_num: 4
+    max_iteration: 4
+    filter_size_surf: 0.3
+    filter_size_map: 0.3
+    cube_side_length: 300.0
+    runtime_pos_log_enable: false
+    mapping:
+      det_range: 80.0
+      fov_degree: 360.0
+      gyr_cov: 0.1
+      acc_cov: 0.1
+      b_gyr_cov: 0.0001
+      b_acc_cov: 0.0001
+      extrinsic_est_en: false
+      # T_imu_from_lidar = inverse(T_sensor_from_imu) * T_sensor_from_lidar.
+      # Factory translations are converted from millimetres to metres.
+      extrinsic_T: [0.002441, 0.009725, 0.030662]
+      extrinsic_R: [-1.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0]
+    publish:
+      tf_en: false
+      path_en: true
+      map_en: false
+      effect_map_en: false
+      scan_publish_en: true
+      dense_publish_en: false
+      scan_bodyframe_pub_en: true
+    pcd_save:
+      pcd_save_en: false
+      interval: -1
