@@ -224,7 +224,9 @@ class Side:
 def bridge_command(args):
     cmd = [sys.executable, str(ROOT/'bev_dbw_bridge.py'),
            '--topic', args.topic, '--status-topic', args.status_topic,
-           '--engage-topic', args.engage_topic, '--max-speed-mph', str(args.max_speed_mph)]
+           '--engage-topic', args.engage_topic]
+    if args.max_speed_mph is not None:
+        cmd += ['--max-speed-mph', str(args.max_speed_mph)]
     if args.actuate:
         cmd += ['--actuate', '--hardware-config', str(args.hardware_config)]
     else:
@@ -242,7 +244,8 @@ def main():
     parser.add_argument('--topic', default='/camera_lidar_bev/path_tracking/status')
     parser.add_argument('--engage-topic', default='/bev_dbw/engage')
     parser.add_argument('--status-topic', default='/bev_dbw/bridge_status')
-    parser.add_argument('--max-speed-mph', type=float, default=6.)
+    parser.add_argument('--max-speed-mph', type=float, default=None,
+                        help='optional operator speed cap in mph (max 10); omitted = follow the planner')
     parser.add_argument('--preflight-only', action='store_true', help='checks only; no ROS, no bridge')
     parser.add_argument('--source-seconds', type=float, default=5., help='how long to watch his topic')
     parser.add_argument('--serial-seconds', type=float, default=3.5)

@@ -159,11 +159,16 @@ class ConfigurationTests(unittest.TestCase):
     def test_default_is_dry_run(self):
         self.assertTrue(parse_args([]).dry_run)
 
-    def test_default_speed_and_cli_boundary(self):
-        self.assertEqual(parse_args([]).max_speed_mph,6.)
+    def test_default_follows_the_planner(self):
+        # No CLI cap means the bridge passes the planner's target through; the planner's own
+        # pure_pursuit.yaml ceiling (4.4704 m/s = 10 mph) and the wire bound govern instead.
+        self.assertIsNone(parse_args([]).max_speed_mph)
+
+    def test_optional_operator_cap_and_cli_boundary(self):
         self.assertEqual(parse_args(['--max-speed-mph','10']).max_speed_mph,10.)
         self.assertEqual(parse_args(['--max-speed-mph','1']).max_speed_mph,1.)
         self.rejects(['--max-speed-mph','10.01'])
+        self.rejects(['--max-speed-mph','-1'])
 
     def test_hardware_requires_real_configuration(self):
         self.rejects(['--actuate'])

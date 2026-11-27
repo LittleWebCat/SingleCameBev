@@ -23,14 +23,16 @@ def main(argv=None):
     mode.add_argument('--actuate',action='store_true',help='hardware connection with verified config; no auto-engagement')
     parser.add_argument('--hardware-config',type=Path)
     parser.add_argument('--map',type=Path,default=BEV/'maps/local_gps_recording_002')
-    parser.add_argument('--max-speed-mph',type=float,default=6.,help='speed ceiling in mph (default: 6; maximum: 10)')
+    parser.add_argument('--max-speed-mph',type=float,default=None,
+                        help='optional operator speed cap in mph (max 10); omitted = follow the planner')
     parser.add_argument('--duration',type=float,help='optional positive wall-duration limit')
     parser.add_argument('--output',type=Path)
     parser.add_argument('--print-only',action='store_true',help='validate and print commands, start/write nothing')
     args=parser.parse_args(argv)
     if args.duration is not None and (not math.isfinite(args.duration) or args.duration<=0):
         parser.error('duration must be positive and finite')
-    options=['--actuate' if args.actuate else '--dry-run','--max-speed-mph',str(args.max_speed_mph)]
+    options=['--actuate' if args.actuate else '--dry-run']
+    if args.max_speed_mph is not None:options+=['--max-speed-mph',str(args.max_speed_mph)]
     if args.hardware_config:options+=['--hardware-config',str(args.hardware_config.resolve())]
     # Fail before opening hardware, starting sensors or creating session files.
     bridge_args(options)

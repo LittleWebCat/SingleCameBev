@@ -80,7 +80,17 @@ This supervises live sensors/localization/BEV plus a dry-run bridge. It does not
 
 The bridge requires valid live targets; GPS and localization must be ready. In live localization the path tracker reads accepted localizer poses directly from `/camera_lidar_bev/localization/odometry`; it no longer depends on the combined viewer's render loop. **Closing the viewer window still stops the whole `run_all` stack** ("view exited (0); stopping the owned stack").
 
-`--max-speed-mph` defaults to **6 mph** (9.656 km/h, 2.68224 m/s) for both the launcher and standalone bridge. Validation and serial transport allow up to **10 mph** (16.093 km/h, 4.4704 m/s); larger values are rejected. The tracking YAML uses a 4.4704 m/s ceiling. The bridge sends the lower of its CLI cap and the tracker target. Curvature and endpoint limits can request lower speeds. Restart the stack to load changed settings; an existing process keeps its startup limits and hardware configuration.
+**Speed follows the planner.** `--max-speed-mph` is now optional: omitted, the bridge passes the
+tracker's `target_speed_mps` through faithfully rather than imposing a second, tighter ceiling of its
+own. The planner already limits itself — `pure_pursuit.yaml` caps at `preview_speed_mps` 4.4704 m/s
+(exactly 10 mph) and lowers that for curvature (`sqrt(a_lat/kappa)`) and for the run-in to the
+endpoint — so pass-through is bounded by **his** limit, which is the one that should govern.
+
+Supplying `--max-speed-mph` adds an operator cap on top, for a first run or a confined space. Two
+backstops are unconditional either way: `dbw_serial.command` rejects anything above **10 mph** at the
+wire, and the measured-`overspeed` trip stays armed, referencing the operator cap when one is set and
+the 10 mph wire bound when it is not. Restart the stack to load changed settings; an existing process
+keeps its startup limits and hardware configuration.
 
 ## Explicit release and engagement
 

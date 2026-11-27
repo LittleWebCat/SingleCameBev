@@ -99,6 +99,10 @@ python3 bev_bridge/mila_run.py --actuate --engage  # the real thing
 5. **Engage** — only with `--engage`, and only after you type `drive` at the prompt. It publishes the
    explicit release, then the heartbeat at 10 Hz.
 
+**Speed follows Hanchen's planner.** The bridge no longer imposes a cap of its own — his
+`pure_pursuit.yaml` already limits itself to 10 mph and slows for curvature and the endpoint. Add
+`--max-speed-mph N` only if you want a tighter operator cap for a particular run.
+
 It never engages on its own, and `--preflight-only` exits nonzero on a bad board so you can gate on
 it. Ctrl-C releases, terminates the bridge (whose own shutdown brakes to a stop), and leaves the
 firmware watchdog holding the board safe.
@@ -113,7 +117,7 @@ fixing it. The causes to expect:
 | latched cause | what it means |
 |---|---|
 | `speed_hold_not_responding` | speed commanded, car stationary — check the `0x284` counter |
-| `overspeed` | measured above 6 + 2 mph; the firmware has no overspeed trip of its own |
+| `overspeed` | measured above the trip reference + 2 mph (the operator cap if set, else the 10 mph wire bound); the firmware has no overspeed trip of its own |
 | `telemetry_lost` | board or adapter stopped echoing `0x741` |
 | `steering_not_tracking` | measured wheel far from commanded for 2 s |
 
@@ -129,7 +133,7 @@ plus the bridge together. Its engage topic is `/bev_dbw/hardware_engage`, not `/
 
 ```bash
 bash bev_bridge/run_all.sh --dry-run
-bash bev_bridge/run_all.sh --actuate --hardware-config bev_bridge/hardware.json --max-speed-mph 6
+bash bev_bridge/run_all.sh --actuate --hardware-config bev_bridge/hardware.json
 ```
 
 Do not run this and `mila_run.py` at the same time — that is two bridges and two stacks.

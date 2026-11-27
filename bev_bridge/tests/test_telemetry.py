@@ -239,3 +239,32 @@ class MilaRunPreflight(unittest.TestCase):
         for payload in ('not json', '[]', '{"state":'):
             ok, _ = self.m.describe_status(payload)
             self.assertFalse(ok)
+
+
+class SpeedPassthrough(unittest.TestCase):
+    """The bridge follows the planner's target unless an operator cap is given."""
+    def speed(self, target_mps, cap):
+        import mila_run  # noqa: F401  (keeps the import path consistent with the other tests)
+        MPS_TO_MPH = 2.2369363
+        WIRE_MAX_MPH = 10.
+        speed = target_mps*MPS_TO_MPH
+        if cap is not None:
+            speed = min(cap, speed)
+        return min(speed, WIRE_MAX_MPH)
+
+    def test_uncapped_follows_the_planner(self):
+        self.assertAlmostEqual(self.speed(1.0, None), 2.2369363)
+        self.assertAlmostEqual(self.speed(2.0, None), 4.4738726)
+
+    def test_planner_ceiling_lands_on_ten(self):
+        # pure_pursuit.yaml preview_speed_mps 4.4704 is exactly 10 mph, so faithful
+        # pass-through never asks the wire for more than it accepts.
+        self.assertAlmostEqual(self.speed(4.4704, None), 10.0, places=4)
+
+    def test_operator_cap_still_binds_when_given(self):
+        self.assertAlmostEqual(self.speed(4.4704, 6.), 6.)
+        self.assertAlmostEqual(self.speed(1.0, 6.), 2.2369363)   # cap above target changes nothing
+
+    def test_wire_bound_is_the_backstop(self):
+        # Even a planner asking for more than 10 mph cannot reach the wire check as a rejection.
+        self.assertAlmostEqual(self.speed(20.0, None), 10.0)

@@ -20,6 +20,9 @@ from dbw_serial import DBW
 
 ROOT=Path(__file__).resolve().parent
 MPS_TO_MPH=2.2369363
+# dbw_serial.command rejects anything above this at the wire, independently of any CLI value.
+# It is the backstop, and the reference for the overspeed trip when no CLI cap is set.
+WIRE_MAX_MPH=10.
 
 
 def parse_args(argv=None):
@@ -34,7 +37,11 @@ def parse_args(argv=None):
     parser.add_argument('--status-topic',default='/bev_dbw/bridge_status')
     parser.add_argument('--source',choices=('steering_rad','curvature'),default='steering_rad')
     parser.add_argument('--wheelbase',type=float,default=2.70)
-    parser.add_argument('--max-speed-mph',type=float,default=6.,help='speed ceiling in mph (default: 6; maximum: 10)')
+    # Default: follow the planner. His pure_pursuit.yaml already caps itself at preview_speed_mps
+    # 4.4704 m/s (= 10 mph) and lowers that for curvature and the endpoint, so passing his target
+    # through faithfully is bounded by HIS limit. A CLI value is an extra, tighter operator cap.
+    parser.add_argument('--max-speed-mph',type=float,default=None,
+                        help='optional operator speed cap in mph (max 10); omitted = follow the planner')
     parser.add_argument('--lon-mode',choices=('speed_hold','pedal'),default='speed_hold')
     parser.add_argument('--rate',type=float,default=50.)
     parser.add_argument('--cmd-timeout',type=float,default=.3)
@@ -59,10 +66,13 @@ def parse_args(argv=None):
     try:
         for key in ('wheelbase','rate','cmd_timeout','engage_timeout','source_timeout','max_road_angle','max_road_rate'):
             if number(getattr(args,key))<=0:raise ValueError(key+' must be positive')
-        for key in ('max_speed_mph','kp','ki'):
+        for key in ('kp','ki'):
             if number(getattr(args,key))<0:raise ValueError(key+' must be nonnegative')
+        if args.max_speed_mph is not None and number(args.max_speed_mph)<0:
+            raise ValueError('max_speed_mph must be nonnegative')
         if not 10<=args.rate<=100:raise ValueError('rate must be 10..100 Hz')
-        if args.max_speed_mph>10:raise ValueError('software speed cap is 10 mph')
+        if args.max_speed_mph is not None and args.max_speed_mph>WIRE_MAX_MPH:
+            raise ValueError('software speed cap is 10 mph')
         if args.max_road_angle>math.pi/2:raise ValueError('invalid road-wheel angle bound')
         for key in ('telemetry_timeout','overspeed_margin_mph','no_motion_grace','steer_tol_deg','steer_grace'):
             if number(getattr(args,key))<=0:raise ValueError(key+' must be positive')
@@ -82,7 +92,8 @@ def parse_args(argv=None):
             if external:
                 if not isinstance(hardware.get('external_safety_report'),str) or not hardware['external_safety_report'].strip():
                     raise ValueError('operator-managed mode requires the external safety responsibility report')
-                if args.max_speed_mph>10:raise ValueError('operator-managed speed cap is 10 mph')
+                if args.max_speed_mph is not None and args.max_speed_mph>WIRE_MAX_MPH:
+                    raise ValueError('operator-managed speed cap is 10 mph')
             else:
                 for key in ('protocol_verified','steering_calibration_verified','speed_feedback_verified',
                             'zero_speed_braking_verified','timeout_braking_verified','hardware_estop_verified'):
@@ -129,7 +140,10 @@ class BevDbwBridge(Node):
         self.dbw=None
         self.gate=InputGate(args.cmd_timeout,args.engage_timeout,args.source_timeout,args.source,args.wheelbase)
         self.pi=PedalPI(args.kp,args.ki,args.max_pedal,args.stop_brake)
-        self.monitor=ResponseMonitor(args.max_speed_mph,args.overspeed_margin_mph,args.telemetry_timeout,
+        # Uncapped means the planner governs, so the measured-overspeed trip references the wire
+        # bound instead -- it must stay armed whether or not an operator cap is set.
+        self.speed_ref=args.max_speed_mph if args.max_speed_mph is not None else WIRE_MAX_MPH
+        self.monitor=ResponseMonitor(self.speed_ref,args.overspeed_margin_mph,args.telemetry_timeout,
                                      args.no_motion_grace,args.steer_tol_deg,args.steer_grace)
         self.last_tick=None
         self.last_sent_steer=0.
@@ -274,7 +288,10 @@ class BevDbwBridge(Node):
             step=min(self.hardware['max_steering_wheel_rate_deg_s'],
                      math.degrees(self.a.max_road_rate)*self.hardware['steer_ratio'])*dt
             steering=max(self.last_sent_steer-step,min(self.last_sent_steer+step,requested))
-            speed=min(self.a.max_speed_mph,target.speed_mps*MPS_TO_MPH)
+            speed=target.speed_mps*MPS_TO_MPH          # follow the planner faithfully
+            if self.a.max_speed_mph is not None:
+                speed=min(self.a.max_speed_mph,speed)  # optional, tighter operator cap
+            speed=min(speed,WIRE_MAX_MPH)              # never offer the wire more than it accepts
             command=dict(deg=steering,speed_mph=speed,pedal=0.,mode=0)
             if self.a.lon_mode=='pedal':
                 command.update(speed_mph=0.,pedal=self.pi.update(speed/MPS_TO_MPH,target.feedback_mps,dt),mode=1)
@@ -297,6 +314,7 @@ class BevDbwBridge(Node):
             status=dict(dry_run=self.a.dry_run,ready=ready and not self.transport_fault,
                         state=state,stop_latched=self.stop_latched,stop_reason=self.stop_reason,
                         transport_fault=self.transport_fault,
+                        speed_cap_mph=self.a.max_speed_mph,speed_trip_ref_mph=self.speed_ref,
                         safety_mode=self.hardware.get('safety_mode','verified_configuration' if self.a.actuate else 'dry_run'),
                         firmware_verified=self.hardware.get('protocol_verified') is True and self.hardware.get('timeout_braking_verified') is True,
                         release_required=self.gate.release_required,source_stamp_ns=self.gate.last_stamp_ns,
