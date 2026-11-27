@@ -69,10 +69,31 @@ Same for the DBW board over Bluetooth — power it from the **car's** USB port, 
 
 ## Step 2 — run the BEV bridge
 
-On the Thor. Sensors, localization, BEV and a dry-run bridge come up together:
+All on the Thor. One launcher brings up sensors, localization, BEV and the bridge together.
+
+**First, get this branch and prove the checkout is sane (10 s, no hardware):**
 
 ```bash
 cd /home/agxthor/SingleCameraBev
+git fetch && git checkout bridge-actuation
+bash bev_bridge/tests/run_offline.sh
+```
+
+**Check the adapter is the device `hardware.json` names.** The adapter and the DBW board are
+both CP2102 serial `0001`, so they share a `/dev/serial/by-id/` alias that points at whichever
+enumerated last. Confirm it is the adapter before actuating:
+
+```bash
+ls -l /dev/serial/by-id/
+python3 -c "import serial,time; s=serial.Serial('/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0',115200,timeout=.2); time.sleep(3); print(s.read(4000).decode('ascii','replace')); s.close()"
+```
+
+You want `ADAPTER: ready. ... 0x740 v2 @ 50Hz.` If you get `DBW-FULL:` lines instead, the alias is
+pointing at the wrong board — unplug and replug so the adapter enumerates last, then re-check.
+
+**Dry run — proves the BEV side is producing live targets, touches nothing:**
+
+```bash
 bash bev_bridge/run_all.sh --dry-run
 ```
 
@@ -83,42 +104,45 @@ source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=1 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export CYCLONEDDS_URI=file:///home/agxthor/SingleCameraBev/camera_lidar_bev/config/transport/cyclonedds_large_clouds.xml
 
-ros2 topic echo /bev_dbw/bridge_status --once     # state should reach "ready"
+ros2 topic echo /bev_dbw/bridge_status --once
 ```
 
-Then hardware, wheels-up for the first run, **e-stop in hand**:
+`state` must reach `ready`. Anything else names what is missing (localization, GPS, stale targets).
+
+**Hardware — wheels-up for the first run, e-stop in hand:**
 
 ```bash
-python3 bev_bridge/bev_dbw_bridge.py --actuate \
+bash bev_bridge/run_all.sh --actuate \
   --hardware-config bev_bridge/hardware.json --max-speed-mph 6
 ```
 
-Engage is a heartbeat, and an explicit release must come first:
+Engage is a heartbeat on `/bev_dbw/hardware_engage` (the launcher's topic — a standalone
+`bev_dbw_bridge.py` uses `/bev_dbw/engage` instead), and an explicit release must come first:
 
 ```bash
-ros2 topic pub --once /bev_dbw/engage std_msgs/msg/Bool '{data: false}'
-ros2 topic pub -r 10  /bev_dbw/engage std_msgs/msg/Bool '{data: true}'
+ros2 topic pub --once /bev_dbw/hardware_engage std_msgs/msg/Bool '{data: false}'
+ros2 topic pub -r 10  /bev_dbw/hardware_engage std_msgs/msg/Bool '{data: true}'
 ```
 
-Stop driving = stop publishing `true`. The firmware's 500 ms command watchdog drops it to safe.
+Stop driving = Ctrl-C that publisher. The firmware's 500 ms command watchdog drops it to safe.
 
 ### What to watch
 
 `/bev_dbw/bridge_status` now carries a `telemetry` block — `meas_deg`, `meas_mph`,
 `firmware_engaged`, `age_s`. **Measured, not commanded.** If `age_s` is null or climbing, the board
-is not talking and the bridge will latch `telemetry_lost` within a second.
+is not echoing `0x741` and the bridge latches `telemetry_lost` within a second.
 
 A latched stop prints its cause and does not resume on a new `true`; restart the bridge after
 fixing the fault. The causes to expect:
 
 | latched cause | what it means |
 |---|---|
-| `speed_hold_not_responding` | speed commanded, car stationary — **check the `0x284` counter** |
+| `speed_hold_not_responding` | speed commanded, car stationary — check the `0x284` counter |
 | `overspeed` | measured above 6 + 2 mph; the firmware has no overspeed trip of its own |
 | `telemetry_lost` | board or adapter stopped echoing `0x741` |
 | `steering_not_tracking` | measured wheel far from commanded for 2 s |
 
-Afterwards, the per-tick telemetry is in the printed session directory, `events.jsonl` — that is the
+Afterwards the per-tick telemetry is in the printed session directory, `events.jsonl` — that is the
 record that settles the October speed question.
 
 **The hardware e-stop / JD-VCC relay cut is the stop at any point.** None of the above replaces it.
