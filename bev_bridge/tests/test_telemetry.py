@@ -8,7 +8,12 @@ edited. The firmware line shape is dbw_esp_full's 0x741 echo via adapter_esp:
 
     T,<ms>,<angle_deg>,<mph>,<engaged>,<setpoint_deg>,<blinkL>,<blinkR>
 """
+import contextlib
+import json
+import os
 import sys
+import threading
+import time
 import unittest
 from pathlib import Path
 
@@ -147,3 +152,90 @@ class Trips(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class MilaRunPreflight(unittest.TestCase):
+    """mila_run's checks, exercised without ROS: it imports rclpy and pyserial lazily."""
+    def setUp(self):
+        import mila_run
+        self.m = mila_run
+
+    @contextlib.contextmanager
+    def fake_board(self, banner):
+        """A pty that prints like a board. The writer is joined BEFORE the fds close: a daemon
+        thread still writing to a closed fd will hit the number after it is reassigned to the
+        next test's pty, and silently feed it this banner."""
+        import pty
+        master, slave = pty.openpty()
+        stop = threading.Event()
+        def talk():
+            while not stop.is_set():
+                try:
+                    os.write(master, banner)
+                except OSError:
+                    return
+                time.sleep(.05)
+        writer = threading.Thread(target=talk)
+        writer.start()
+        try:
+            yield os.ttyname(slave)
+        finally:
+            stop.set()
+            writer.join(timeout=2)
+            os.close(master)
+            os.close(slave)
+
+    def test_recognises_the_adapter(self):
+        with self.fake_board(b'ADAPTER fresh steer=+12.0 mph=+0.00 cnt=7\n') as name:
+            ok, detail = self.m.preflight_serial(name, seconds=.5)
+        self.assertTrue(ok, detail)
+        self.assertIn('ADAPTER', detail)
+
+    def test_rejects_the_dbw_board(self):
+        with self.fake_board(b'DBW-FULL: ready (steer angle + speed hold).\n') as name:
+            ok, detail = self.m.preflight_serial(name, seconds=.5)
+        self.assertFalse(ok)
+        self.assertIn('DBW BOARD', detail)
+
+    def test_rejects_a_silent_port(self):
+        import pty
+        master, slave = pty.openpty()
+        try:
+            ok, detail = self.m.preflight_serial(os.ttyname(slave), seconds=.4)
+        finally:
+            os.close(master); os.close(slave)
+        self.assertFalse(ok)
+        self.assertIn('silent', detail)
+
+    def test_rejects_a_missing_device(self):
+        ok, detail = self.m.preflight_serial('/dev/does-not-exist')
+        self.assertFalse(ok)
+        self.assertIn('does not exist', detail)
+
+    def good_status(self, **changes):
+        fields = dict(frame='enu', pose_reference='rear_axle', source_mode='live_localization',
+                      diagnostic_only=True, tracking_valid=True, targets_valid=True,
+                      vehicle_transform_verified=True, state='tracking', source_stamp_ns=10**10,
+                      steering_rad=.1, target_speed_mps=1.)
+        fields.update(changes)
+        return json.dumps(fields)
+
+    def test_accepts_a_live_target(self):
+        ok, why = self.m.describe_status(self.good_status())
+        self.assertTrue(ok, why)
+
+    def test_names_a_replay_run(self):
+        ok, why = self.m.describe_status(self.good_status(source_mode='recorded'))
+        self.assertFalse(ok)
+        self.assertIn('source_mode', why)
+
+    def test_names_every_failed_flag(self):
+        ok, why = self.m.describe_status(self.good_status(tracking_valid=False, targets_valid=None))
+        self.assertFalse(ok)
+        self.assertIn('tracking_valid', why)
+        self.assertIn('targets_valid', why)
+
+    def test_survives_garbage(self):
+        for payload in ('not json', '[]', '{"state":'):
+            ok, _ = self.m.describe_status(payload)
+            self.assertFalse(ok)

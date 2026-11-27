@@ -67,73 +67,48 @@ Same for the DBW board over Bluetooth — power it from the **car's** USB port, 
 
 ---
 
-## Step 2 — run the BEV bridge
+## Step 2 — run your side
 
-All on the Thor. One launcher brings up sensors, localization, BEV and the bridge together.
-
-**First, get this branch and prove the checkout is sane (10 s, no hardware):**
+Hanchen runs his usual BEV stack and changes nothing. Everything on our side is one script:
 
 ```bash
 cd /home/agxthor/SingleCameraBev
 git fetch && git checkout bridge-actuation
-bash bev_bridge/tests/run_offline.sh
-```
-
-**Check the adapter is the device `hardware.json` names.** The adapter and the DBW board are
-both CP2102 serial `0001`, so they share a `/dev/serial/by-id/` alias that points at whichever
-enumerated last. Confirm it is the adapter before actuating:
-
-```bash
-ls -l /dev/serial/by-id/
-python3 -c "import serial,time; s=serial.Serial('/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0',115200,timeout=.2); time.sleep(3); print(s.read(4000).decode('ascii','replace')); s.close()"
-```
-
-You want `ADAPTER: ready. ... 0x740 v2 @ 50Hz.` If you get `DBW-FULL:` lines instead, the alias is
-pointing at the wrong board — unplug and replug so the adapter enumerates last, then re-check.
-
-**Dry run — proves the BEV side is producing live targets, touches nothing:**
-
-```bash
-bash bev_bridge/run_all.sh --dry-run
-```
-
-Second terminal, same ROS environment:
-
-```bash
 source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=1 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-export CYCLONEDDS_URI=file:///home/agxthor/SingleCameraBev/camera_lidar_bev/config/transport/cyclonedds_large_clouds.xml
+export CYCLONEDDS_URI=file://$PWD/camera_lidar_bev/config/transport/cyclonedds_large_clouds.xml
 
-ros2 topic echo /bev_dbw/bridge_status --once
+python3 bev_bridge/mila_run.py --preflight-only    # checks only, no ROS, no bridge
+python3 bev_bridge/mila_run.py                     # + dry-run bridge + live status
+python3 bev_bridge/mila_run.py --actuate --engage  # the real thing
 ```
 
-`state` must reach `ready`. Anything else names what is missing (localization, GPS, stale targets).
+`mila_run.py` does five things in order and stops at the first that fails:
 
-**Hardware — wheels-up for the first run, e-stop in hand:**
+1. **Serial preflight** — confirms the device in `hardware.json` is the **adapter**. Both boards are
+   CP2102 serial `0001`, so the `/dev/serial/by-id` alias follows whichever enumerated last, and
+   opening the DBW board instead would command nothing. Read-only, DTR/RTS held low so it does not
+   reset the board, and it only counts **fresh** output so stale buffered bytes cannot pass the check.
+2. **Topic preflight** — watches his `/camera_lidar_bev/path_tracking/status` and reports the rate
+   plus every field the bridge gates on. A replay run, a missing `vehicle_transform_verified`, a
+   stale stamp: it names which one, before the car is involved.
+3. **Bridge** — starts `bev_dbw_bridge.py` as a child (dry-run unless `--actuate`). Deliberately not
+   `run_all.sh`, which would launch a second copy of Hanchen's stack on top of his.
+4. **Status** — one live line: gate state, commanded steer/speed, and the `0x741` telemetry coming
+   back (measured angle, measured mph, engaged, age).
+5. **Engage** — only with `--engage`, and only after you type `drive` at the prompt. It publishes the
+   explicit release, then the heartbeat at 10 Hz.
 
-```bash
-bash bev_bridge/run_all.sh --actuate \
-  --hardware-config bev_bridge/hardware.json --max-speed-mph 6
-```
-
-Engage is a heartbeat on `/bev_dbw/hardware_engage` (the launcher's topic — a standalone
-`bev_dbw_bridge.py` uses `/bev_dbw/engage` instead), and an explicit release must come first:
-
-```bash
-ros2 topic pub --once /bev_dbw/hardware_engage std_msgs/msg/Bool '{data: false}'
-ros2 topic pub -r 10  /bev_dbw/hardware_engage std_msgs/msg/Bool '{data: true}'
-```
-
-Stop driving = Ctrl-C that publisher. The firmware's 500 ms command watchdog drops it to safe.
+It never engages on its own, and `--preflight-only` exits nonzero on a bad board so you can gate on
+it. Ctrl-C releases, terminates the bridge (whose own shutdown brakes to a stop), and leaves the
+firmware watchdog holding the board safe.
 
 ### What to watch
 
-`/bev_dbw/bridge_status` now carries a `telemetry` block — `meas_deg`, `meas_mph`,
-`firmware_engaged`, `age_s`. **Measured, not commanded.** If `age_s` is null or climbing, the board
-is not echoing `0x741` and the bridge latches `telemetry_lost` within a second.
-
-A latched stop prints its cause and does not resume on a new `true`; restart the bridge after
-fixing the fault. The causes to expect:
+The status line carries the telemetry **measured** off the car, not what we commanded. If `age`
+shows `none` or climbs, the board is not echoing `0x741` and the bridge latches `telemetry_lost`
+within a second. A latched stop names its cause and does not resume on a new engage; restart after
+fixing it. The causes to expect:
 
 | latched cause | what it means |
 |---|---|
@@ -142,7 +117,19 @@ fixing the fault. The causes to expect:
 | `telemetry_lost` | board or adapter stopped echoing `0x741` |
 | `steering_not_tracking` | measured wheel far from commanded for 2 s |
 
-Afterwards the per-tick telemetry is in the printed session directory, `events.jsonl` — that is the
+Afterwards the per-tick telemetry is in the bridge's session directory, `events.jsonl` — that is the
 record that settles the October speed question.
 
-**The hardware e-stop / JD-VCC relay cut is the stop at any point.** None of the above replaces it.
+**The hardware e-stop / JD-VCC relay cut is the stop at any point.** Nothing here replaces it.
+
+### If you need to drive the whole stack yourself
+
+When Hanchen is *not* running his stack, `run_all.sh` brings up his sensors, localization and BEV
+plus the bridge together. Its engage topic is `/bev_dbw/hardware_engage`, not `/bev_dbw/engage`:
+
+```bash
+bash bev_bridge/run_all.sh --dry-run
+bash bev_bridge/run_all.sh --actuate --hardware-config bev_bridge/hardware.json --max-speed-mph 6
+```
+
+Do not run this and `mila_run.py` at the same time — that is two bridges and two stacks.
