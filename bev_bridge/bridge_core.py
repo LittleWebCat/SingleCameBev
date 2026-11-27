@@ -16,6 +16,13 @@ def number(value):
     return float(value)
 
 
+def optional_number(value):
+    """A finite number, or None. Never raises: these fields are advisory, not gating."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value) if math.isfinite(value) else None
+
+
 def unique_object(pairs):
     result = {}
     for key, value in pairs:
@@ -32,6 +39,11 @@ class Target:
     speed_mps: float
     feedback_mps: float
     received_mono: float
+    # Advisory, for StartGate only. The planner publishes all three; they never gate acceptance,
+    # so a planner that omits them is still driven, it just cannot be start-checked.
+    lateral_error_m: float = None
+    heading_error_rad: float = None
+    saturated: bool = False
 
 
 class InputGate:
@@ -102,7 +114,10 @@ class InputGate:
                 raise ValueError('target_or_feedback_out_of_range')
             if state == 'endpoint' and speed > .05:
                 raise ValueError('endpoint_must_request_stop')
-            self.target = Target(stamp, angle, speed, feedback, mono)
+            self.target = Target(stamp, angle, speed, feedback, mono,
+                                 optional_number(fields.get('lateral_error_m')),
+                                 optional_number(fields.get('heading_error_rad')),
+                                 fields.get('steering_saturated') is True)
             self.last_stamp_ns = stamp
             self.reason = 'ready' if self.engage_rx is not None else 'waiting_for_release_then_engage'
             return True
@@ -136,6 +151,64 @@ class InputGate:
         if not 0 <= mono-self.engage_rx <= self.engage_timeout:
             return self.invalidate('deadman_expired_release_required')
         return not self.release_required
+
+
+class StartGate:
+    """Refuse to engage while the planner is already saturated or badly off its path, and trip if it
+    saturates for `sat_grace` while driving.
+
+    The planner's own validity gate is loose: pure_pursuit.yaml allows max_path_distance_m 5.0 and
+    max_heading_error_rad 1.047 (60 deg), and at 60 deg of heading error pure pursuit demands full
+    lock while still reporting tracking_valid. Worse, its rate limiter is skipped on the first tick
+    after any invalid period -- pure_pursuit.cpp applies the slew clamp only `if (steering_previous_)`
+    and clears that flag whenever targets are invalid -- so the first command after engage can be a
+    full +/-max_steering step with no ramp. Through this bridge that became 0 -> 280 deg of steering
+    wheel in one second on the first on-car engage.
+
+    This is the bridge-side equivalent of the "park on the route facing along it" refusal in
+    JetsonCAN pure_pursuit.py and mila-av drive.py. It needs nothing the planner does not already
+    publish, so it requires no change on the planner's side.
+    """
+    def __init__(self, max_steer_deg=90., max_cte_m=1.5, max_heading_rad=.35, sat_grace=1.5):
+        for value in (max_steer_deg, max_cte_m, max_heading_rad, sat_grace):
+            if number(value) <= 0:
+                raise ValueError('start-gate thresholds must be positive')
+        self.max_steer_deg, self.max_cte_m = max_steer_deg, max_cte_m
+        self.max_heading_rad, self.sat_grace = max_heading_rad, sat_grace
+        self.sat_since = None
+
+    def blocks_engage(self, steer_deg, target):
+        """Why the FIRST engage is refused, or None. Checked on the transition into engaged only --
+        once driving, the runtime saturation trip takes over. Fails closed: a planner that does not
+        report its errors cannot be start-checked, so it is not started."""
+        if target is None:
+            return 'no live target yet'
+        if target.saturated:
+            return 'planner steering is saturated -- it is asking for full lock, so the car is not positioned to start'
+        if target.lateral_error_m is None:
+            return 'planner did not report lateral_error_m'
+        if abs(target.lateral_error_m) > self.max_cte_m:
+            return (f'cross-track {target.lateral_error_m:+.2f} m exceeds {self.max_cte_m:.2f} m '
+                    '-- park on the route')
+        if target.heading_error_rad is None:
+            return 'planner did not report heading_error_rad'
+        if abs(target.heading_error_rad) > self.max_heading_rad:
+            return (f'heading error {math.degrees(target.heading_error_rad):+.1f} deg exceeds '
+                    f'{math.degrees(self.max_heading_rad):.1f} deg -- face along the route')
+        if abs(steer_deg) > self.max_steer_deg:
+            return (f'opening demand {steer_deg:+.0f} deg exceeds {self.max_steer_deg:.0f} deg '
+                    '-- the planner would slam the wheel on engage')
+        return None
+
+    def runtime(self, now, target):
+        """'planner_saturated' once the planner has been saturated for sat_grace, else None."""
+        if target is None or not target.saturated:
+            self.sat_since = None
+            return None
+        if self.sat_since is None:
+            self.sat_since = now
+            return None
+        return 'planner_saturated' if now-self.sat_since > self.sat_grace else None
 
 
 class ResponseMonitor:

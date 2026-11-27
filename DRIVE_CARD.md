@@ -99,6 +99,12 @@ python3 bev_bridge/mila_run.py --actuate --engage  # the real thing
 5. **Engage** — only with `--engage`, and only after you type `drive` at the prompt. It publishes the
    explicit release, then the heartbeat at 10 Hz.
 
+**Engage is gated.** The bridge refuses to engage while the planner is saturated, more than 1.5 m
+off its path, more than 20 degrees misaligned, or opening with more than 90 degrees of steering
+demand — the first on-car engage slammed 0 to 280 degrees in one second because his rate limiter is
+skipped on its first tick. The refusal reason prints and appears as `start_gate_block` in the status
+line. Reposition and engage again; `--no-start-gate` disables it.
+
 **Speed follows Hanchen's planner.** The bridge no longer imposes a cap of its own — his
 `pure_pursuit.yaml` already limits itself to 10 mph and slows for curvature and the endpoint. Add
 `--max-speed-mph N` only if you want a tighter operator cap for a particular run.
@@ -120,6 +126,7 @@ fixing it. The causes to expect:
 | `overspeed` | measured above the trip reference + 2 mph (the operator cap if set, else the 10 mph wire bound); the firmware has no overspeed trip of its own |
 | `telemetry_lost` | board or adapter stopped echoing `0x741` |
 | `steering_not_tracking` | measured wheel far from commanded for 2 s |
+| `planner_saturated` | the planner has been asking for full lock for 1.5 s — it has lost the path |
 
 Afterwards the per-tick telemetry is in the bridge's session directory, `events.jsonl` — that is the
 record that settles the October speed question.

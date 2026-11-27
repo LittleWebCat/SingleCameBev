@@ -268,3 +268,101 @@ class SpeedPassthrough(unittest.TestCase):
     def test_wire_bound_is_the_backstop(self):
         # Even a planner asking for more than 10 mph cannot reach the wire check as a rejection.
         self.assertAlmostEqual(self.speed(20.0, None), 10.0)
+
+
+class StartGateTests(unittest.TestCase):
+    """The engage-time refusal and the runtime saturation trip (bridge_core.StartGate)."""
+    def target(self, **changes):
+        from bridge_core import Target
+        fields = dict(stamp_ns=10**10, steering_rad=.05, speed_mps=1., feedback_mps=1.,
+                      received_mono=10., lateral_error_m=.2, heading_error_rad=.05, saturated=False)
+        fields.update(changes)
+        return Target(**fields)
+
+    def gate(self, **kw):
+        from bridge_core import StartGate
+        return StartGate(**kw)
+
+    def test_allows_a_clean_start(self):
+        self.assertIsNone(self.gate().blocks_engage(20., self.target()))
+
+    def test_refuses_a_saturated_planner(self):
+        # The on-car case: engage, and pure pursuit is already asking for full lock.
+        why = self.gate().blocks_engage(280., self.target(saturated=True))
+        self.assertIn('saturated', why)
+
+    def test_refuses_a_big_opening_demand(self):
+        why = self.gate(max_steer_deg=90.).blocks_engage(280., self.target())
+        self.assertIn('280', why)
+
+    def test_refuses_when_off_the_path(self):
+        why = self.gate(max_cte_m=1.5).blocks_engage(10., self.target(lateral_error_m=-3.2))
+        self.assertIn('cross-track', why)
+
+    def test_refuses_when_misaligned(self):
+        # His own gate allows 60 deg of heading error and still reports tracking_valid.
+        why = self.gate(max_heading_rad=.35).blocks_engage(10., self.target(heading_error_rad=1.0))
+        self.assertIn('heading error', why)
+
+    def test_fails_closed_without_error_fields(self):
+        self.assertIn('lateral_error_m', self.gate().blocks_engage(10., self.target(lateral_error_m=None)))
+        self.assertIn('heading_error_rad', self.gate().blocks_engage(10., self.target(heading_error_rad=None)))
+
+    def test_refuses_with_no_target(self):
+        self.assertIsNotNone(self.gate().blocks_engage(0., None))
+
+    def test_runtime_trips_only_after_the_grace(self):
+        gate = self.gate(sat_grace=1.5)
+        saturated = self.target(saturated=True)
+        self.assertIsNone(gate.runtime(100., saturated))
+        self.assertIsNone(gate.runtime(101., saturated))
+        self.assertEqual(gate.runtime(102., saturated), 'planner_saturated')
+
+    def test_runtime_clears_when_saturation_ends(self):
+        gate = self.gate(sat_grace=1.5)
+        gate.runtime(100., self.target(saturated=True))
+        gate.runtime(100.5, self.target(saturated=False))
+        self.assertIsNone(gate.runtime(103., self.target(saturated=True)))
+
+    def test_rejects_nonsense_thresholds(self):
+        from bridge_core import StartGate
+        with self.assertRaises(ValueError):
+            StartGate(max_cte_m=0.)
+
+
+class AdvisoryFieldParsing(unittest.TestCase):
+    """InputGate must carry the planner's error fields without ever gating acceptance on them."""
+    def message(self, **changes):
+        fields = dict(frame='enu', pose_reference='rear_axle', source_mode='live_localization',
+                      diagnostic_only=True, tracking_valid=True, targets_valid=True,
+                      vehicle_transform_verified=True, state='tracking', source_stamp_ns=10**10,
+                      steering_rad=.1, curvature_per_m=.04, target_speed_mps=1.,
+                      estimated_speed_mps=1., lateral_error_m=-.4, heading_error_rad=.08,
+                      steering_saturated=False)
+        fields.update(changes)
+        return json.dumps(fields)
+
+    def accept(self, payload):
+        from bridge_core import InputGate
+        gate = InputGate()
+        ok = gate.receive(payload, 10., 10**10)
+        return ok, gate.target
+
+    def test_carries_the_fields(self):
+        ok, target = self.accept(self.message())
+        self.assertTrue(ok)
+        self.assertAlmostEqual(target.lateral_error_m, -.4)
+        self.assertAlmostEqual(target.heading_error_rad, .08)
+        self.assertFalse(target.saturated)
+
+    def test_saturation_flag_is_carried_not_rejected(self):
+        ok, target = self.accept(self.message(steering_saturated=True))
+        self.assertTrue(ok, 'saturation must not change acceptance -- the start gate decides')
+        self.assertTrue(target.saturated)
+
+    def test_missing_or_null_fields_do_not_reject(self):
+        for payload in (self.message(lateral_error_m=None), self.message(heading_error_rad=None)):
+            ok, target = self.accept(payload)
+            self.assertTrue(ok, 'advisory fields must never gate acceptance')
+        ok, target = self.accept(self.message(lateral_error_m=None))
+        self.assertIsNone(target.lateral_error_m)

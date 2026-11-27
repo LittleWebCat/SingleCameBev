@@ -15,7 +15,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile,ReliabilityPolicy,DurabilityPolicy
 from std_msgs.msg import String,Bool
 
-from bridge_core import InputGate,PedalPI,ResponseMonitor,number
+from bridge_core import InputGate,PedalPI,ResponseMonitor,StartGate,number
 from dbw_serial import DBW
 
 ROOT=Path(__file__).resolve().parent
@@ -62,6 +62,13 @@ def parse_args(argv=None):
     parser.add_argument('--no-motion-grace',type=float,default=3.,help='s of commanded speed with no measured motion before tripping')
     parser.add_argument('--steer-tol-deg',type=float,default=60.,help='measured-vs-commanded wheel error before tripping')
     parser.add_argument('--steer-grace',type=float,default=2.,help='s of steering error before tripping')
+    # Start gate: the planner's rate limiter is skipped on its first tick after engage, so refuse
+    # to start while it is saturated or badly off-path (see bridge_core.StartGate).
+    parser.add_argument('--no-start-gate',action='store_true',help='disable the engage-time start checks')
+    parser.add_argument('--max-engage-steer-deg',type=float,default=90.,help='opening demand allowed at engage')
+    parser.add_argument('--max-engage-cte-m',type=float,default=1.5,help='cross-track allowed at engage')
+    parser.add_argument('--max-engage-heading-rad',type=float,default=.35,help='heading error allowed at engage')
+    parser.add_argument('--sat-grace',type=float,default=1.5,help='s of planner saturation before tripping')
     args=parser.parse_args(argv)
     try:
         for key in ('wheelbase','rate','cmd_timeout','engage_timeout','source_timeout','max_road_angle','max_road_rate'):
@@ -76,6 +83,9 @@ def parse_args(argv=None):
         if args.max_road_angle>math.pi/2:raise ValueError('invalid road-wheel angle bound')
         for key in ('telemetry_timeout','overspeed_margin_mph','no_motion_grace','steer_tol_deg','steer_grace'):
             if number(getattr(args,key))<=0:raise ValueError(key+' must be positive')
+        for key in ('max_engage_steer_deg','max_engage_cte_m','max_engage_heading_rad','sat_grace'):
+            if number(getattr(args,key))<=0:raise ValueError(key+' must be positive')
+        if args.max_engage_steer_deg>640:raise ValueError('engage steering limit must not exceed 640 degrees')
         if args.telemetry_timeout>2:raise ValueError('telemetry timeout must not exceed 2 seconds')
         if args.steer_tol_deg>180:raise ValueError('steering tolerance must not exceed 180 degrees')
         for key in ('max_pedal','stop_brake'):
@@ -130,6 +140,9 @@ class BevDbwBridge(Node):
     # built with object.__new__ in the tests. __init__ overwrites every one of them.
     telem=None
     telem_seen=False
+    start=None
+    start_block=None
+    seeded=False
     first_cmd_mono=None
     last_cmd_speed=0.
     monitor=None
@@ -145,6 +158,10 @@ class BevDbwBridge(Node):
         self.speed_ref=args.max_speed_mph if args.max_speed_mph is not None else WIRE_MAX_MPH
         self.monitor=ResponseMonitor(self.speed_ref,args.overspeed_margin_mph,args.telemetry_timeout,
                                      args.no_motion_grace,args.steer_tol_deg,args.steer_grace)
+        self.start=None if args.no_start_gate else StartGate(
+            args.max_engage_steer_deg,args.max_engage_cte_m,args.max_engage_heading_rad,args.sat_grace)
+        self.start_block=None
+        self.seeded=False
         self.last_tick=None
         self.last_sent_steer=0.
         self.sent_any=False
@@ -220,7 +237,36 @@ class BevDbwBridge(Node):
             self.pi.reset()
             if self.sent_any:self.latch_stop('target_rejected')
 
+    def measured_deg(self,now):
+        """Measured wheel angle, if telemetry is fresh and numeric. None otherwise -- a dry run has
+        no board, and a half-built node in the tests has no monitor."""
+        if self.dbw is None or self.monitor is None:return None
+        deg=getattr(self.dbw,'meas_deg',None)
+        if isinstance(deg,bool) or not isinstance(deg,(int,float)):return None
+        age=self.dbw.meas_age(now)
+        if isinstance(age,bool) or not isinstance(age,(int,float)):return None
+        return float(deg) if age<=self.a.telemetry_timeout else None
+
+    def wheel_deg(self,road_rad):
+        """Planner road-wheel angle -> steering-wheel degrees, before the rate limit."""
+        road=max(-self.a.max_road_angle,min(self.a.max_road_angle,road_rad))
+        bound=self.hardware['max_steering_wheel_deg']
+        return max(-bound,min(bound,self.hardware['steer_sign']*math.degrees(road)*self.hardware['steer_ratio']))
+
     def on_engage(self,message):
+        # Gate the TRANSITION into engaged only; once driving, the saturation trip takes over.
+        if (message.data is True and self.start is not None and self.gate.engage_rx is None
+                and not self.gate.release_required):
+            target=self.gate.target
+            demand=self.wheel_deg(target.steering_rad) if target is not None else 0.
+            blocked=self.start.blocks_engage(demand,target)
+            if blocked:
+                if blocked!=self.start_block:
+                    self.get_logger().warning('ENGAGE REFUSED: '+blocked)
+                    self.event('engage_refused',reason=blocked,demand_deg=round(demand,2))
+                self.start_block=blocked
+                return                       # never reaches gate.engage(): nothing arms
+            self.start_block=None
         self.gate.engage(message.data,time.monotonic())
         if message.data is True:self.last_engage_mono=time.monotonic()
         if message.data is False:
@@ -253,6 +299,13 @@ class BevDbwBridge(Node):
                                  self.last_cmd_speed,self.last_sent_steer,self.first_cmd_mono)
         if trip:self.latch_stop(trip)
 
+    def check_planner(self,now):
+        """Runtime half of the start gate: a planner stuck at full lock is the cross-track abort
+        case, and is a stop whether or not we have board telemetry."""
+        if self.start is None or self.stop_latched or not self.sent_any:return
+        trip=self.start.runtime(now,self.gate.target)
+        if trip:self.latch_stop(trip)
+
     def stop_command(self,now):
         # Hold the last transmitted steering; no automatic centering during a stop.
         command=dict(deg=self.last_sent_steer,speed_mph=0.,pedal=0.,mode=0)
@@ -268,6 +321,7 @@ class BevDbwBridge(Node):
             self.dbw.poll(now)
             self.telem=self.dbw.telemetry()
         self.check_response(now)
+        self.check_planner(now)
         if self.get_parameter('use_sim_time').value and self.a.actuate:
             self.gate.clock_fault=True
         ready=self.gate.ready(now,ros_ns)
@@ -281,10 +335,13 @@ class BevDbwBridge(Node):
             ready=False
         elif ready:
             target=self.gate.target
-            road=max(-self.a.max_road_angle,min(self.a.max_road_angle,target.steering_rad))
-            requested=self.hardware['steer_sign']*math.degrees(road)*self.hardware['steer_ratio']
-            bound=self.hardware['max_steering_wheel_deg']
-            requested=max(-bound,min(bound,requested))
+            # Bumpless start: slew from where the wheel actually IS, not from an assumed zero.
+            measured=self.measured_deg(now)
+            if not self.seeded and measured is not None:
+                self.last_sent_steer=measured
+                self.event('seeded_from_measured',deg=measured)
+                self.seeded=True
+            requested=self.wheel_deg(target.steering_rad)
             step=min(self.hardware['max_steering_wheel_rate_deg_s'],
                      math.degrees(self.a.max_road_rate)*self.hardware['steer_ratio'])*dt
             steering=max(self.last_sent_steer-step,min(self.last_sent_steer+step,requested))
@@ -315,6 +372,7 @@ class BevDbwBridge(Node):
                         state=state,stop_latched=self.stop_latched,stop_reason=self.stop_reason,
                         transport_fault=self.transport_fault,
                         speed_cap_mph=self.a.max_speed_mph,speed_trip_ref_mph=self.speed_ref,
+                        start_gate_block=self.start_block,
                         safety_mode=self.hardware.get('safety_mode','verified_configuration' if self.a.actuate else 'dry_run'),
                         firmware_verified=self.hardware.get('protocol_verified') is True and self.hardware.get('timeout_braking_verified') is True,
                         release_required=self.gate.release_required,source_stamp_ns=self.gate.last_stamp_ns,

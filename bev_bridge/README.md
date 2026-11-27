@@ -45,6 +45,41 @@ while telemetry is stale (a stale reading is never used as evidence either way).
 `--no-response-checks` disables them for diagnostics. The telemetry snapshot is written into every
 `command` event in `events.jsonl`, into `stop_latched`, and into `/bev_dbw/bridge_status`.
 
+## Start gate
+
+On the first on-car engage the steering went **0 to 280 degrees in one second**. Two things compound:
+
+1. **The planner's rate limiter is skipped on its first tick after engage.** `pure_pursuit.cpp`
+   applies the slew clamp only `if (steering_previous_)`, and clears that flag on any invalid tick,
+   so the first command after engage can be a full `±max_steering` (0.5 rad) step with no ramp.
+2. **Its validity gate is loose.** `max_path_distance_m` 5.0 and `max_heading_error_rad` 1.047
+   (60 degrees) still report `tracking_valid: true` — and at 60 degrees of heading error pure
+   pursuit demands full lock. 0.5 rad is 28.6 degrees of road wheel, ×17 = 487 degrees of steering
+   wheel, clamped to the configured 280, which the bridge's 280 deg/s limiter reaches in exactly 1.0 s.
+
+`bridge_core.StartGate` refuses the **transition into engaged** while any of these hold, using only
+fields the planner already publishes (`steering_saturated`, `lateral_error_m`, `heading_error_rad`):
+
+| refusal | default |
+|---|---|
+| planner reports `steering_saturated` | always refused |
+| cross-track error | `--max-engage-cte-m` 1.5 m |
+| heading error | `--max-engage-heading-rad` 0.35 rad (20°) |
+| opening steering demand | `--max-engage-steer-deg` 90° |
+| the planner does not report its errors | refused — fails closed |
+
+This is the bridge-side equivalent of the "park on the route facing along it" refusal in JetsonCAN's
+`pure_pursuit.py` and mila-av's `drive.py`, and it needs **no change to the planner**. The refusal
+is logged as `engage_refused` with the reason, published as `start_gate_block` in
+`/bev_dbw/bridge_status`, and nothing arms until it clears — reposition the car and engage again.
+
+Once driving, saturation becomes a trip instead: sustained `steering_saturated` for `--sat-grace`
+(1.5 s) latches `planner_saturated`, which is the runtime counterpart of mila-av's `|cte| > 2.5 m`
+abort. `--no-start-gate` disables both.
+
+**Bumpless start.** The first command after engage now slews from the **measured** wheel angle read
+off `0x741`, not from an assumed zero, so re-engaging with the wheel already turned does not step.
+
 ## Test it without a car
 
 Both run on a laptop — no ROS, no Jetson, no ESP:
