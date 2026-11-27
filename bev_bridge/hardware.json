@@ -13,5 +13,17 @@
   "zero_speed_braking_verified": true,
   "timeout_braking_verified": true,
   "hardware_estop_verified": true,
-  "verification_notes": "2026-10-14: operator confirmed all six checks (protocol, steering sign/ratio, 0x284 speed feedback, zero-speed braking, serial-timeout braking, hardware e-stop) were performed on the car. Firmware limits 450 deg / 200 deg/s / 0.5 s heartbeat supplied by the operator from dbw_esp_full; steering capped at the operator-chosen 280 deg / 280 deg/s (rate set above the reported 200 deg/s firmware limit at operator request). Baud 115200 as observed on the CP2102 adapter."
+  "verification_notes": "2026-10-14: operator confirmed all six checks (protocol, steering sign/ratio, 0x284 speed feedback, zero-speed braking, serial-timeout braking, hardware e-stop) on the car. 2026-11-27: limits re-read from the dbw_esp_full source. The earlier note recorded \"450 deg / 200 deg/s\" from a second-hand report; the source says MAX_TARGET_DEG 640 deg and a 300 deg/s setpoint slew (SETPOINT_SLEW_DPT 3.0 * CTRL_HZ 100), with a 500 ms command-stale watchdog. The operator-chosen 280 deg / 280 deg/s caps are therefore BELOW both firmware limits; the previous \"rate set above the reported firmware limit\" concern does not apply. Baud 115200 as observed on the CP2102 adapter.",
+  "firmware_source": "MiLa Mila_Develop/firmware/dbw_esp_full (not vendored in this repo)",
+  "firmware_limits": {
+    "max_target_deg": 640.0,
+    "setpoint_slew_deg_s": 300.0,
+    "cmd_stale_ms": 500,
+    "speed_feedback_timeout_ms": 300,
+    "control_hz": 100,
+    "out_sat_accel": 0.2,
+    "out_sat_brake": 0.35,
+    "brake_hold": 0.15,
+    "note": "Read directly from the dbw_esp_full source by the MiLa side on 2026-11-27, not reported second-hand. setpoint_slew_deg_s = SETPOINT_SLEW_DPT 3.0 deg/tick * CTRL_HZ 100. The firmware has NO overspeed trip: the e-stop / JD-VCC relay cut is the stop."
+  }
 }

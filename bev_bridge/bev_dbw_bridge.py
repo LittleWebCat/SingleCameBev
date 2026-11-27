@@ -15,7 +15,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile,ReliabilityPolicy,DurabilityPolicy
 from std_msgs.msg import String,Bool
 
-from bridge_core import InputGate,PedalPI,number
+from bridge_core import InputGate,PedalPI,ResponseMonitor,number
 from dbw_serial import DBW
 
 ROOT=Path(__file__).resolve().parent
@@ -47,6 +47,14 @@ def parse_args(argv=None):
     parser.add_argument('--max-pedal',type=float,default=.5)
     parser.add_argument('--stop-brake',type=float,default=.2)
     parser.add_argument('--log-dir',type=Path)
+    # Closed-loop response checks against 0x741 telemetry (hardware mode only; see check_response).
+    parser.add_argument('--no-response-checks',action='store_true',
+                        help='disable the 0x741 measured-response trips (diagnostic use only)')
+    parser.add_argument('--telemetry-timeout',type=float,default=1.,help='max age of 0x741 telemetry (s)')
+    parser.add_argument('--overspeed-margin-mph',type=float,default=2.,help='measured mph over the cap before tripping')
+    parser.add_argument('--no-motion-grace',type=float,default=3.,help='s of commanded speed with no measured motion before tripping')
+    parser.add_argument('--steer-tol-deg',type=float,default=60.,help='measured-vs-commanded wheel error before tripping')
+    parser.add_argument('--steer-grace',type=float,default=2.,help='s of steering error before tripping')
     args=parser.parse_args(argv)
     try:
         for key in ('wheelbase','rate','cmd_timeout','engage_timeout','source_timeout','max_road_angle','max_road_rate'):
@@ -56,6 +64,10 @@ def parse_args(argv=None):
         if not 10<=args.rate<=100:raise ValueError('rate must be 10..100 Hz')
         if args.max_speed_mph>10:raise ValueError('software speed cap is 10 mph')
         if args.max_road_angle>math.pi/2:raise ValueError('invalid road-wheel angle bound')
+        for key in ('telemetry_timeout','overspeed_margin_mph','no_motion_grace','steer_tol_deg','steer_grace'):
+            if number(getattr(args,key))<=0:raise ValueError(key+' must be positive')
+        if args.telemetry_timeout>2:raise ValueError('telemetry timeout must not exceed 2 seconds')
+        if args.steer_tol_deg>180:raise ValueError('steering tolerance must not exceed 180 degrees')
         for key in ('max_pedal','stop_brake'):
             if not 0<number(getattr(args,key))<=1:raise ValueError(key+' must be in (0,1]')
         if not 0<args.cmd_timeout<=.5 or not 0<args.engage_timeout<=.5 or not 0<args.source_timeout<=.5:
@@ -103,12 +115,22 @@ def parse_args(argv=None):
 
 
 class BevDbwBridge(Node):
+    # Class-level defaults so the measured-response state is always present, including on instances
+    # built with object.__new__ in the tests. __init__ overwrites every one of them.
+    telem=None
+    telem_seen=False
+    first_cmd_mono=None
+    last_cmd_speed=0.
+    monitor=None
+
     def __init__(self,args):
         super().__init__('bev_dbw_bridge')
         self.a=args
         self.dbw=None
         self.gate=InputGate(args.cmd_timeout,args.engage_timeout,args.source_timeout,args.source,args.wheelbase)
         self.pi=PedalPI(args.kp,args.ki,args.max_pedal,args.stop_brake)
+        self.monitor=ResponseMonitor(args.max_speed_mph,args.overspeed_margin_mph,args.telemetry_timeout,
+                                     args.no_motion_grace,args.steer_tol_deg,args.steer_grace)
         self.last_tick=None
         self.last_sent_steer=0.
         self.sent_any=False
@@ -121,6 +143,10 @@ class BevDbwBridge(Node):
         self.last_dry_log=0.
         self.last_output=None
         self.log_failed=False
+        self.telem=None              # newest 0x741 snapshot (None in dry-run)
+        self.telem_seen=False
+        self.first_cmd_mono=None
+        self.last_cmd_speed=0.
         self.hardware=args.hardware or dict(steer_ratio=17.,steer_sign=-1,
             max_steering_wheel_deg=640.,max_steering_wheel_rate_deg_s=math.degrees(args.max_road_rate)*17.)
         if args.actuate and self.get_parameter('use_sim_time').value:
@@ -164,7 +190,8 @@ class BevDbwBridge(Node):
             source_age_s=round((ros_ns-self.gate.last_stamp_ns)/1e9,4) if self.gate.last_stamp_ns else None,
             engage_true_age_s=age(self.last_engage_mono),
             cmd_timeout_s=self.a.cmd_timeout,source_timeout_s=self.a.source_timeout,
-            engage_timeout_s=self.a.engage_timeout,last_output=self.last_output)
+            engage_timeout_s=self.a.engage_timeout,last_output=self.last_output,
+            telemetry=getattr(self,'telem',None))
         self.event('stop_latched',**self.stop_reason)
         self.get_logger().warning('STOP LATCHED: '+json.dumps(self.stop_reason))
 
@@ -203,9 +230,19 @@ class BevDbwBridge(Node):
             self.get_logger().error('Serial write failed; latched fault, no reconnect/retry. Hardware watchdog/operator stop required.')
         return ok
 
+    def check_response(self,now):
+        """Hardware-mode only: compare 0x741 telemetry against what we commanded (ResponseMonitor)."""
+        if self.monitor is None or self.dbw is None:return
+        if self.a.dry_run or self.a.no_response_checks:return
+        if not self.sent_any or self.stop_latched or self.transport_fault:return
+        trip=self.monitor.update(now,self.dbw.meas_age(now),self.dbw.meas_mph,self.dbw.meas_deg,
+                                 self.last_cmd_speed,self.last_sent_steer,self.first_cmd_mono)
+        if trip:self.latch_stop(trip)
+
     def stop_command(self,now):
         # Hold the last transmitted steering; no automatic centering during a stop.
         command=dict(deg=self.last_sent_steer,speed_mph=0.,pedal=0.,mode=0)
+        self.last_cmd_speed=0.
         self.write(command,now+.02)
         self.event('stop_intent',command=command,transport_fault=self.transport_fault)
 
@@ -213,6 +250,10 @@ class BevDbwBridge(Node):
         now=time.monotonic();ros_ns=self.get_clock().now().nanoseconds
         dt=1/self.a.rate if self.last_tick is None else now-self.last_tick
         self.last_tick=now
+        if self.dbw is not None and self.monitor is not None and not self.transport_fault:
+            self.dbw.poll(now)
+            self.telem=self.dbw.telemetry()
+        self.check_response(now)
         if self.get_parameter('use_sim_time').value and self.a.actuate:
             self.gate.clock_fault=True
         ready=self.gate.ready(now,ros_ns)
@@ -243,7 +284,10 @@ class BevDbwBridge(Node):
             if self.write(command,deadline):
                 self.sent_any=True
                 self.last_sent_steer=steering
-                self.event('command',source_stamp_ns=target.stamp_ns,command=command,dry_run=self.a.dry_run)
+                self.last_cmd_speed=speed
+                if self.first_cmd_mono is None:self.first_cmd_mono=now
+                self.event('command',source_stamp_ns=target.stamp_ns,command=command,dry_run=self.a.dry_run,
+                           telemetry=self.telem)
                 if self.a.dry_run and now-self.last_dry_log>=.2:
                     self.get_logger().info(f'[dry-run] steer={steering:+.2f}deg speed={speed:.2f}mph mode={command["mode"]}')
                     self.last_dry_log=now
@@ -256,7 +300,8 @@ class BevDbwBridge(Node):
                         safety_mode=self.hardware.get('safety_mode','verified_configuration' if self.a.actuate else 'dry_run'),
                         firmware_verified=self.hardware.get('protocol_verified') is True and self.hardware.get('timeout_braking_verified') is True,
                         release_required=self.gate.release_required,source_stamp_ns=self.gate.last_stamp_ns,
-                        last_output=self.last_output)
+                        last_output=self.last_output,telemetry=self.telem,
+                        response_checks=not (self.a.dry_run or self.a.no_response_checks))
             self.status_pub.publish(String(data=json.dumps(status,allow_nan=False)))
             self.last_status=now
 

@@ -195,16 +195,31 @@ class ConfigurationTests(unittest.TestCase):
                     path.write_text(json.dumps({**hardware,key:False}))
                     self.rejects(['--actuate','--hardware-config',str(path)])
 
-    def test_operator_managed_external_mode_keeps_unknown_checks_explicit(self):
+    def test_operator_managed_external_file_is_rejected_by_the_caps(self):
+        # The shipped hardware.external.json asks for 300 deg / 80 deg/s, above the
+        # operator_managed_external limit of 90/90. README.md documents this rejection as intended;
+        # this test previously asserted the file parsed, and had been failing since the caps were
+        # tightened. Assert the shipped behaviour instead.
         path=Path(__file__).resolve().parents[1]/'hardware.external.json'
-        with patch('bev_dbw_bridge.DBW') as constructor:
-            args=parse_args(['--actuate','--hardware-config',str(path),'--max-speed-mph','10'])
-            self.assertEqual(args.max_speed_mph,10.)
-            self.assertEqual(args.hardware['safety_mode'],'operator_managed_external')
-            self.assertIs(args.hardware['protocol_verified'],False)
-            self.assertIsNone(args.hardware['firmware_heartbeat_timeout_s'])
-            constructor.assert_not_called()
-        self.rejects(['--actuate','--hardware-config',str(path),'--max-speed-mph','10.01'])
+        self.rejects(['--actuate','--hardware-config',str(path),'--max-speed-mph','10'])
+
+    def test_operator_managed_external_mode_keeps_unknown_checks_explicit(self):
+        # Same mode, within the caps: the unverified checks must stay explicitly False/None rather
+        # than being quietly treated as verified.
+        source=Path(__file__).resolve().parents[1]/'hardware.external.json'
+        hardware=json.loads(source.read_text())
+        hardware.update(max_steering_wheel_deg=90.,max_steering_wheel_rate_deg_s=90.)
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'external_in_caps.json'
+            path.write_text(json.dumps(hardware))
+            with patch('bev_dbw_bridge.DBW') as constructor:
+                args=parse_args(['--actuate','--hardware-config',str(path),'--max-speed-mph','10'])
+                self.assertEqual(args.max_speed_mph,10.)
+                self.assertEqual(args.hardware['safety_mode'],'operator_managed_external')
+                self.assertIs(args.hardware['protocol_verified'],False)
+                self.assertIsNone(args.hardware['firmware_heartbeat_timeout_s'])
+                constructor.assert_not_called()
+            self.rejects(['--actuate','--hardware-config',str(path),'--max-speed-mph','10.01'])
 
     def test_no_creep_without_feedback(self):
         controller=PedalPI()

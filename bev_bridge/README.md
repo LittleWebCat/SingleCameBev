@@ -11,7 +11,61 @@ The software fixes do not certify vehicle safety. The ESP firmware source was no
 - **Hardware profile in use:** `hardware.json` (verified-configuration mode). The operator confirmed all six firmware/vehicle checks on 2026-10-14; the file records baud **115200**, sign **−1**, ratio **17:1**, firmware heartbeat timeout **0.5 s**, and steering caps **±280 steering-wheel degrees / 280 degrees/s**. The rate is above the **200 degrees/s** firmware limit the operator reported; this is recorded in its `verification_notes`. `hardware.json` is not covered by `.gitignore` (only `hardware.local.json` is).
 - **`hardware.external.json` is rejected at preflight.** It requests ±300 degrees / 80 degrees/s, but the `operator_managed_external` mode allows at most ±90 degrees / 90 degrees/s regardless of the file. At ±90 degrees the minimum turning radius is about 29 m, which cannot follow this route's corners.
 - **Measured input latency:** tracker targets reach the bridge about **213 ms** (median; 235 ms maximum) after the LiDAR scan end, against the bridge's 0.5 s source limit. See [pipeline latency](#pipeline-latency).
-- **Open vehicle issue:** in hardware runs the measured vehicle speed did not follow the commanded speed in either direction (up to 17.6 mph against a 7 mph command; stationary for over 10 s while 5–7 mph was commanded). Localization agreed with GPS during those intervals, so the speeds were real motion. Firmware speed-hold, wheel-speed (`0x284`) delivery or operator pedal input has not been ruled out. See [hardware sessions](#hardware-sessions-2026-10-1415).
+- **Open vehicle issue (now instrumented, 2026-11-27):** in hardware runs the measured vehicle speed did not follow the commanded speed in either direction (up to 17.6 mph against a 7 mph command; stationary for over 10 s while 5–7 mph was commanded). Localization agreed with GPS during those intervals, so the speeds were real motion. The bridge could not see any of this, because it never read the board's `0x741` telemetry. It now does — see [measured-response checks](#measured-response-checks). The leading hypothesis for the stationary intervals is `dbw_esp_full`'s **300 ms `0x284` wheel-speed timeout**: when wheel speed goes stale the firmware rests the pedals silently, which looks exactly like "commanded 6 mph, car did not move". The `speed_hold_not_responding` trip now catches it and the per-tick telemetry in `events.jsonl` should confirm or refute it on the next drive.
+
+## Measured-response checks
+
+The bridge reads `dbw_esp_full`'s `0x741` echo (`T,<ms>,<angle>,<mph>,<engaged>,<setpoint>,<blinkL>,<blinkR>`,
+~20 Hz) through `dbw_serial.py::poll()` and compares **measured** against **commanded** every tick.
+`bridge_core.ResponseMonitor` owns the decision and latches a stop through the existing path.
+
+The firmware is the MiLa `dbw_esp_full` sketch (held in the MiLa repos, not here). The two sides of
+its interface are:
+
+| direction | wire |
+|---|---|
+| command | `"<steer_deg> <speed_mph> <pedal> <mode>\n"` over USB → adapter ESP → CAN `0x740` (steer deg are **steering-wheel** degrees, **+ = RIGHT**) |
+| telemetry | CAN `0x741` → adapter → USB, ~20 Hz, as `T,<ms>,<angle_deg>,<mph>,<engaged>,<setpoint_deg>,<blinkL>,<blinkR>` |
+
+Limits that matter to the bridge, recorded in `hardware.json` under `firmware_limits`: 640° command
+clamp, 300 °/s setpoint slew, a 500 ms `0x740` watchdog, and — the important one — a **300 ms `0x284`
+wheel-speed timeout, after which the firmware rests the pedals silently**. There is no overspeed trip
+in the firmware; the bridge owns that.
+
+| trip | fires when | why it exists |
+|---|---|---|
+| `telemetry_never_arrived` / `telemetry_lost` | no `0x741` newer than `--telemetry-timeout` (1 s) once commanding has started | the board or adapter stopped talking; every other check below would silently pass |
+| `overspeed` | measured mph > `--max-speed-mph` + `--overspeed-margin-mph` (2 mph) | **the firmware has no overspeed trip of its own** |
+| `speed_hold_not_responding` | > 1 mph commanded and < 0.5 mph measured for `--no-motion-grace` (3 s) | the stale-`0x284` case — the firmware rests the pedals and nothing in the command path shows it |
+| `steering_not_tracking` | \|measured − commanded\| > `--steer-tol-deg` (60°) for `--steer-grace` (2 s) | a stuck, saturated or disengaged wheel |
+
+All four are **hardware-mode only**, armed only after the first successful command, and suspended
+while telemetry is stale (a stale reading is never used as evidence either way). Implausible lines
+(|angle| > 720°, mph outside −5..120, non-0/1 engaged flag) are counted and discarded, never believed.
+`--no-response-checks` disables them for diagnostics. The telemetry snapshot is written into every
+`command` event in `events.jsonl`, into `stop_latched`, and into `/bev_dbw/bridge_status`.
+
+## Test it without a car
+
+Both run on a laptop — no ROS, no Jetson, no ESP:
+
+```bash
+python3 -m unittest discover -s bev_bridge/tests -p 'test_telemetry.py' -v   # 17 unit tests
+python3 bev_bridge/tests/check_loopback.py                                   # end-to-end over a pty
+```
+
+`check_loopback.py` runs the real `DBW` class over a real pseudo-terminal against a simulated
+`dbw_esp_full`, and reproduces each October failure mode on demand:
+
+```
+PASS  healthy           expected=None                        got=None
+PASS  stale_wheelspeed  expected=speed_hold_not_responding   got=speed_hold_not_responding
+PASS  runaway           expected=overspeed                   got=overspeed
+PASS  silent            expected=telemetry_lost              got=telemetry_lost
+PASS  stuck_wheel       expected=steering_not_tracking       got=steering_not_tracking
+```
+
+`tests/test_bridge.py` imports the rclpy node, so it still only runs on the Jetson.
 
 ## Run the whole software stack
 
@@ -162,3 +216,12 @@ For the original camera/LiDAR replay rejection check, also source the BEV worksp
 The **2026-10-15** unit run completed **32 tests: 31 passed, one configuration error**. The error is the external profile's 300-degree steering request exceeding its mode's 90-degree limit; it is not a serial or moving-vehicle test. The suite covers the 10 mph boundary, lower/zero target preservation, serial rejection above the cap and preservation of the first stop cause. Earlier checks passed 24 isolated ROS checks and rejected 47 actual recorded-replay targets with zero bridge commands. The isolated ROS check explicitly retains its 1 mph diagnostic limit. No vehicle actuation is performed by these tests.
 
 See [PID signal summary](../camera_lidar_bev/docs/pid_integration_summary.md) and [path tracking](../camera_lidar_bev/docs/path_tracking.md) for the upstream fields and their limitations.
+
+## One command for every off-car check
+
+```bash
+bash bev_bridge/tests/run_offline.sh
+```
+
+Runs `test_bridge.py` (via the [rclpy stub](tests/rclpy_stub/README.md)), `test_telemetry.py` and
+`check_loopback.py`. On the Jetson, drop the stub from `PYTHONPATH` to use the real `rclpy`.

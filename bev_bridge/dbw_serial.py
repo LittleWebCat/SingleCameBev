@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """Explicit serial transport; no discovery, retries, or shutdown commands.
 
-Expected existing adapter line: 'steer_deg speed_mph pedal mode\n'.
-The actual adapter firmware protocol must be verified before actuation.
+Command out (adapter ESP -> CAN 0x740 -> dbw_esp_full):
+    'steer_deg speed_mph pedal mode\n'      steer deg are STEERING-WHEEL deg, + = RIGHT.
+
+Telemetry back (dbw_esp_full 0x741 -> adapter -> USB), ~20 Hz, one ASCII line:
+    'T,<ms>,<angle_deg>,<mph>,<engaged>,<setpoint_deg>,<blinkL>,<blinkR>'
+poll() parses it so the caller can compare COMMANDED against MEASURED. Without this the
+bridge is blind: dbw_esp_full only actuates longitudinally while CAN 0x284 wheel-speed is
+fresh (300 ms), so a stale 0x284 leaves the car stationary under a nonzero speed command
+with nothing in the command path to show it.
 """
 import math
 import os
@@ -39,6 +46,14 @@ class DBW:
         self.last_mode=0
         self.moving=False
         self.failed=False
+        self._rx=''
+        self.meas_deg=None
+        self.meas_mph=None
+        self.fw_sp_deg=None
+        self.engaged=False
+        self.meas_mono=None
+        self.telem_lines=0
+        self.telem_bad=0
 
     def _send(self,line,deadline_mono):
         if self.failed or self.ser is None or time.monotonic()>=deadline_mono:return False
@@ -70,12 +85,50 @@ class DBW:
         return True
 
     def drain(self):
+        """Complete lines only; a partially received line is held for the next call."""
         if self.failed or self.ser is None:return ''
-        try:return self.ser.read(4096).decode('ascii',errors='replace')
+        try:self._rx+=self.ser.read(4096).decode('ascii',errors='replace')
         except (serial.SerialException,OSError):
             self.failed=True
             self.close()
             return ''
+        done,_,self._rx=self._rx.rpartition('\n')
+        self._rx=self._rx[-512:]
+        return done
+
+    def poll(self,now_mono=None):
+        """Parse any pending 0x741 telemetry; keep the newest. Returns meas_age()."""
+        now=time.monotonic() if now_mono is None else now_mono
+        for line in self.drain().splitlines():
+            parts=line.strip().split(',')
+            if len(parts)<6 or parts[0]!='T':continue
+            self.telem_lines+=1
+            try:
+                deg,mph,setpoint=float(parts[2]),float(parts[3]),float(parts[5])
+                engaged=parts[4].strip()
+            except ValueError:
+                self.telem_bad+=1
+                continue
+            if engaged not in ('0','1') or not all(math.isfinite(v) for v in (deg,mph,setpoint)):
+                self.telem_bad+=1
+                continue
+            if abs(deg)>720 or not -5<=mph<=120 or abs(setpoint)>720:
+                self.telem_bad+=1          # implausible: do not let it drive a safety decision
+                continue
+            self.meas_deg,self.meas_mph,self.fw_sp_deg=deg,mph,setpoint
+            self.engaged=engaged=='1'
+            self.meas_mono=now
+        return self.meas_age(now)
+
+    def meas_age(self,now_mono=None):
+        """Seconds since the last accepted telemetry line (inf if none yet)."""
+        if self.meas_mono is None:return float('inf')
+        return (time.monotonic() if now_mono is None else now_mono)-self.meas_mono
+
+    def telemetry(self):
+        return dict(meas_deg=self.meas_deg,meas_mph=self.meas_mph,fw_setpoint_deg=self.fw_sp_deg,
+                    firmware_engaged=self.engaged,age_s=None if self.meas_mono is None else round(self.meas_age(),4),
+                    lines=self.telem_lines,rejected=self.telem_bad)
 
     def close(self):
         # A never-engaged bridge must not emit steering/brake commands on exit.

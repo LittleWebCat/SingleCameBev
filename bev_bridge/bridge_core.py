@@ -138,6 +138,72 @@ class InputGate:
         return not self.release_required
 
 
+class ResponseMonitor:
+    """Trip on what the CAR did, not on what we wrote.
+
+    dbw_esp_full echoes 0x741 (measured wheel angle, measured mph, engaged, firmware setpoint) at
+    ~20 Hz. The command path alone cannot see a runaway, a dead speed-hold or a stuck wheel, so the
+    October 2026 hardware sessions recorded 17.6 mph against a 7 mph command and 10+ s stationary
+    against a 5-7 mph command with nothing in the bridge able to notice either.
+
+    Trips (first one wins; the caller latches a stop):
+      telemetry_never_arrived / telemetry_lost -- no fresh 0x741 after we started commanding.
+      overspeed                 -- measured above the cap + margin. dbw_esp_full has NO overspeed trip.
+      speed_hold_not_responding -- speed commanded, car stationary. The stale-0x284 case: the firmware
+                                   rests the pedals whenever wheel speed is more than 300 ms old.
+      steering_not_tracking     -- measured wheel far from the commanded wheel for steer_grace.
+
+    No ROS, no device, explicit clock -- so the whole trip matrix is testable off the car.
+    """
+    def __init__(self, max_speed_mph, overspeed_margin_mph=2., telemetry_timeout=1.,
+                 no_motion_grace=3., steer_tol_deg=60., steer_grace=2.,
+                 motion_cmd_mph=1., motion_meas_mph=.5):
+        for value in (overspeed_margin_mph, telemetry_timeout, no_motion_grace, steer_tol_deg, steer_grace):
+            if number(value) <= 0:
+                raise ValueError('response monitor thresholds must be positive')
+        if number(max_speed_mph) < 0:
+            raise ValueError('max_speed_mph must be nonnegative')
+        self.max_speed_mph, self.overspeed_margin_mph = max_speed_mph, overspeed_margin_mph
+        self.telemetry_timeout, self.no_motion_grace = telemetry_timeout, no_motion_grace
+        self.steer_tol_deg, self.steer_grace = steer_tol_deg, steer_grace
+        self.motion_cmd_mph, self.motion_meas_mph = motion_cmd_mph, motion_meas_mph
+        self.seen = False
+        self.no_motion_since = None
+        self.steer_bad_since = None
+
+    def reset(self):
+        self.no_motion_since = self.steer_bad_since = None
+
+    def update(self, now, telem_age, meas_mph, meas_deg, cmd_speed_mph, cmd_steer_deg, armed_since):
+        """`armed_since` is the monotonic time of the first command, or None if we have not commanded
+        yet (nothing is armed before that). Returns a trip name, or None."""
+        if armed_since is None:
+            return None
+        if telem_age <= self.telemetry_timeout:
+            self.seen = True
+        elif now-armed_since > self.telemetry_timeout:
+            return 'telemetry_lost' if self.seen else 'telemetry_never_arrived'
+        if not self.seen or telem_age > self.telemetry_timeout:
+            return None
+        if meas_mph is not None and meas_mph > self.max_speed_mph+self.overspeed_margin_mph:
+            return 'overspeed'
+        if meas_mph is not None and cmd_speed_mph > self.motion_cmd_mph and meas_mph < self.motion_meas_mph:
+            if self.no_motion_since is None:
+                self.no_motion_since = now
+            elif now-self.no_motion_since > self.no_motion_grace:
+                return 'speed_hold_not_responding'
+        else:
+            self.no_motion_since = None
+        if meas_deg is not None and abs(meas_deg-cmd_steer_deg) > self.steer_tol_deg:
+            if self.steer_bad_since is None:
+                self.steer_bad_since = now
+            elif now-self.steer_bad_since > self.steer_grace:
+                return 'steering_not_tracking'
+        else:
+            self.steer_bad_since = None
+        return None
+
+
 class PedalPI:
     """PI for diagnostic comparison; no open-loop creep without feedback."""
     def __init__(self, kp=.15, ki=.05, limit=.5, stop_brake=.2):
