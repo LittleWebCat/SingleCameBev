@@ -9,8 +9,9 @@ motion is removed. Tracking and prediction come from tools/prediction_models.py,
 tools/eval_prediction.py scores on recorded drives:
   * --model imm (default): vehicles use a straight + turning IMM filter with CenterPoint's box heading;
     cyclists and pedestrians a constant-velocity Kalman filter. --model cv is the first version.
-  * --lanes: also predict vehicles along the mapped route when they drive along it (helped turns,
-    not straight driving, in the benchmark, so it is off by default).
+  * lanes: with the aligned HD map (MAP/hdmap/hdmap3d_enu.json) vehicles are predicted rule-based along its lane
+    graph (tools/hdmap_lanes.py: lane match, branch from the turn rate, stop and go at stop lines); --lanes route
+    uses the mapped route instead (the older option), --no-lanes the filter alone.
   * tracks slower than 1.5 (vehicle) / 1.0 (cyclist) / 0.5 (pedestrian) m/s are shown as parked / still;
   * horizons --vehicle-horizon-s 5 (vehicles, cyclists) and --pedestrian-horizon-s 4.
 Publishes /camera_lidar_bev/prediction/markers (enu: fading predicted path, 2-sigma discs every second,
@@ -18,7 +19,7 @@ translucent box at the horizon, "#id speed" label) and /camera_lidar_bev/predict
 with id, class, position, velocity and the predicted points) for recording and later planner use.
 
   source /opt/ros/jazzy/setup.bash && source install/setup.bash
-  /usr/bin/python3 tools/object_prediction.py [--model imm] [--lanes]
+  /usr/bin/python3 tools/object_prediction.py [--model imm] [--lanes route|hd] [--no-lanes]
 """
 import argparse
 from collections import deque
@@ -47,7 +48,10 @@ COLOURS = {'vehicle': (0.62, 0.45, 1.0), 'pedestrian': (1.0, 0.72, 0.1), 'cyclis
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--model', choices=('imm', 'cv'), default='imm')
-    parser.add_argument('--lanes', action='store_true', help='vehicles driving along the mapped route follow it')
+    parser.add_argument('--lanes', nargs='?', const='route', choices=('route', 'hd'),
+                        help='vehicles follow lanes: route = the mapped route (old --lanes), hd = rule-based along the '
+                             'aligned HD map lane graph (tools/hdmap_lanes.py; default when MAP/hdmap/hdmap3d_enu.json exists)')
+    parser.add_argument('--no-lanes', action='store_true', help='tracker prediction only')
     parser.add_argument('--map', type=Path, default=ROOT / 'maps/local_gps_recording_002')
     parser.add_argument('--vehicle-horizon-s', type=float, default=5.0, help='vehicles and cyclists')
     parser.add_argument('--pedestrian-horizon-s', type=float, default=4.0)
@@ -55,10 +59,17 @@ def main():
     parser.add_argument('--max-range-m', type=float, default=80.0)
     args = parser.parse_args()
 
-    lanes = None
-    if args.lanes:
+    lanes, hd_file = None, args.map / 'hdmap/hdmap3d_enu.json'
+    if args.lanes is None and not args.no_lanes and hd_file.exists():
+        args.lanes = 'hd'
+    if args.no_lanes:
+        args.lanes = None
+    if args.lanes == 'route':
         from route_geometry import Route
         lanes = RouteLanes(Route(args.map / 'gps_alignment/trajectory_enu.csv'))
+    elif args.lanes == 'hd':
+        from hdmap_lanes import HDMapLanes
+        lanes = HDMapLanes(hd_file)
     tracker = Tracker(args.model, lanes=lanes)
     rclpy.init()
     node = rclpy.create_node('object_prediction')
@@ -137,12 +148,12 @@ def main():
             ghost.scale.x, ghost.scale.y, ghost.scale.z = length, width, tr.size[2]
             ghost.color.r, ghost.color.g, ghost.color.b, ghost.color.a = r, g, b, 0.18
         marker_pub.publish(out)
-        objects_pub.publish(String(data=json.dumps({'stamp': round(t, 3), 'model': args.model + ('+lanes' if lanes else ''),
+        objects_pub.publish(String(data=json.dumps({'stamp': round(t, 3), 'model': args.model + ({'route': '+map', 'hd': '+hd'}.get(args.lanes, '')),
                                                     'tracks': report})))
 
     node.create_subscription(Odometry, '/camera_lidar_bev/localization/odometry', on_odometry, 50)
     node.create_subscription(Detection3DArray, '/camera_lidar_bev/lidar_detections_3d', on_detections, 10)
-    node.get_logger().info(f'Predicting with {args.model}{" + lane following" if lanes else ""}: vehicles / cyclists '
+    node.get_logger().info(f'Predicting with {args.model}{" + HD map lanes (rule-based)" if args.lanes == "hd" else " + route lanes" if lanes else ""}: vehicles / cyclists '
                            f'{args.vehicle_horizon_s:g} s, pedestrians {args.pedestrian_horizon_s:g} s ahead (display and logging only)')
     try:
         rclpy.spin(node)

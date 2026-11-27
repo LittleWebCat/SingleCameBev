@@ -19,40 +19,81 @@ See the [visual results gallery](docs/results.md) for the GPS/LiDAR drive compar
 ## Live 3D BEV with prediction and planning
 
 One RViz 3D view of the localized car with CenterPoint 3D boxes (vehicles, pedestrians, cyclists), their
-predicted paths (5 s vehicles, 4 s pedestrians), the mapped route, the kept stop signs and stop lines, and a
-planned trajectory, plus charts of measured vs planned vx, vy, ax, ay and a recording of every drive.
-**It plans, displays and records only; nothing commands the vehicle.** Start the 20 Hz LiDAR in one
-terminal, then everything else in a second:
+predicted paths (5 s vehicles, 4 s pedestrians), the aligned HD map (lanes, kerbs, crosswalks, stop lines), the
+mapped route, the kept stop signs and a planned trajectory, plus charts of measured vs planned vx, vy, ax, ay and a
+recording of every drive. **It plans, displays and records only; nothing commands the vehicle.** One command, from
+the repository root (`~/SingleCameraBev`):
 
 ```bash
-cd /home/agxthor/SingleCameraBev/camera_lidar_bev
-source /opt/ros/jazzy/setup.bash && source /home/agxthor/sensors_ws/install/setup.bash && source install/setup.bash
-export ROS_DOMAIN_ID=1 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp CYCLONEDDS_URI=file://$PWD/config/transport/cyclonedds_large_clouds.xml
-/usr/bin/python3 tools/start_lidar.py --params-file config/sensors/ouster_baseline.yaml --startup-timeout 90
+bash camera_lidar_bev/tools/run_bev_3d.sh
 ```
+
+It starts the Ouster LiDAR at 1024x20 (20 Hz), map localization (and waits for `localized`: start on or near the
+mapped route), CenterPoint, the RViz bridge, object prediction, the route planner with recording
+(`data/drive_<UTC>/`), the charts, the HD map and the 3D view, reusing anything already running; Ctrl+C stops what
+it started (`--no-plots` skips the charts). Measured with everything running: LiDAR 20 Hz, localization 18 Hz,
+3D boxes 17 Hz, about 5 ms per plan. See the [live 3D BEV guide](docs/live_3d_planning.md) for the details.
+
+What runs in it (all rule-based, see the guide):
+
+- **Prediction:** IMM / Kalman tracking of the CenterPoint boxes in the map frame; vehicles follow the HD map's
+  lanes (lane match, turn branch from the turn rate, stop and go at mapped stop lines). Benchmarked on two drives.
+- **Planner (shadow mode):** follows the mapped route at the 10 mph cap; stops at the kept stop signs; follows the
+  car ahead on tracked objects (kept through missed detections); yields to pedestrians and cars whose predicted
+  path enters the lane; brakes harder than 4 m/s^2 only when it must; stops at red / yellow traffic lights at the
+  three signalized intersections (in simulation: on the car there is no light-colour input yet, so live the
+  lights change nothing).
+- **HD map:** the HD map of 2026-11-25 aligned to the saved map (`tools/align_hdmap.py`, median 0.22 m) and shown
+  in the view (`tools/hdmap_publisher.py`).
+
+### Test the planner without driving
+
+All from `camera_lidar_bev/`; the ROS-free ones need only numpy, scipy (and matplotlib for charts).
+
+| What | Command |
+| --- | --- |
+| Traffic simulation: 10 scenarios (car ahead braking, stopped car, cut-in, pull-out, crossing pedestrian / car, oncoming, stop-and-go, ...) with realistic detection misses, scored for collisions | `python3 tools/simulate_planner.py --episodes 40` |
+| Traffic lights in simulation: red, green, yellow in the dilemma zone, light cycles, queues | `python3 tools/simulate_planner.py --scenarios light_red light_green light_yellow light_cycle light_red_queue --duration-s 45 --max-speed-mps 8.94 --unknown-light stop` |
+| Watch simulated episodes live in the 3D view (own ROS domain 78) | `bash tools/run_sim_live.sh [--scenarios light_yellow cut_in ...] [--rate 2]` |
+| Replay a recorded drive through the current prediction and planner in the 3D view (domain 77) | `bash tools/run_planner_replay.sh --start-s 870 --duration-s 300` |
+| First vs current planner on a whole recorded drive (chart) | `python3 tools/compare_planner_replay.py` |
+
+Simulation results (400 episodes): no collision that braking could have avoided at 10 mph (the first planner
+had 7, mostly from forgetting the car ahead after one missed detection); at 20 mph with lights unseen treated as
+red, no red-light runs. Results are in `evaluation/planner_sim_*.json`.
+
+### Traffic-light camera: narrow or wide
+
+`python3 tools/compare_light_cameras.py` predicts from the calibration and the wide camera's measured detection
+that the narrow camera sees the lights from 80-120 m and the wide one only from 0-27 m (the light model shrinks
+the 1920 px wide image 3x). To measure both on a drive, with `run_bev_3d.sh` running, in a second terminal:
 
 ```bash
-bash /home/agxthor/SingleCameraBev/camera_lidar_bev/tools/run_bev_3d.sh
+bash camera_lidar_bev/tools/run_light_camera_test.sh
 ```
 
-The launcher starts localization (and waits for `localized`), CenterPoint, the RViz bridge, object
-prediction, the route planner with recording (`data/drive_<UTC>/`), the charts and the 3D view, reusing
-anything already running; Ctrl+C stops what it started. Measured with everything running: LiDAR 20 Hz,
-localization 18 Hz, 3D boxes 17 Hz. See the [live 3D BEV guide](docs/live_3d_planning.md) for the view,
-CenterPoint multi-sweep, mapped stop signs / traffic lights and their review page, the front-camera
-traffic-light check, the planner (stop lines, car following, 10 mph cap) and the recording format.
+Ctrl+C after the signalized intersections prints the measured detection rate by distance for wide, narrow and both.
 
-**Object prediction can be developed on any PC** without ROS: the tracking/prediction code, a 24-minute
-replay of real detections (`datasets/prediction/`, 12.9 MB) and the benchmark need only numpy and scipy.
+### Prediction on any PC
+
+**Object prediction can be developed on any PC** without ROS: the tracking/prediction code, two recorded drives of
+real detections (`datasets/prediction/`, 24 and 20 minutes) and the benchmark need only numpy and scipy.
 
 ```bash
 python3 -m pip install -r tools/requirements-prediction.txt
 python3 tools/eval_prediction.py --quick
+python3 -m unittest discover -s tests -p 'test_hdmap_planner.py'   # HD map rules, planner, simulation, lights
 ```
 
 See [prediction development](docs/prediction_development.md) for the metrics, adding your own model as a
-plugin and exporting more drives. Current vehicle error at 3 s is about 1.5 m (held-out half) to 3.7 m (busier
-first half), almost all along the direction of travel.
+plugin and exporting more drives. Vehicle error at 3 s is about 1.5 to 3.6 m depending on traffic, almost all
+along the direction of travel (speed changes), which the HD map cannot fix.
+
+### Lanes: camera vs LiDAR
+
+`bash tools/run_lane_compare.sh --rviz --view` compares real-time lane lines, road boundaries and lane centre from
+TwinLiteNet on the narrow and wide front cameras (one process each, GPU) and from the LiDAR; see
+[lane detection comparison](docs/lane_detection_comparison.md).
 
 ## Record camera + LiDAR test data
 
@@ -191,8 +232,8 @@ The project provides live sensor inputs and recording, camera-colored LiDAR, sta
 - [CenterPoint 3D detection](docs/live_3d_planning.md#centerpoint-3d-detection): CenterPoint-PointPillar (nuScenes weights, 10 classes, 360 degrees, +-51.2 m) in native C++/TensorRT with 3 merged sweeps placed by localization poses and the Ouster gyro (`model:=centerpoint`). Ouster-domain accuracy remains unvalidated.
 - [TransFusion-L / BEVFusion-L offline comparison](docs/lidar_transfusion.md): both nuScenes checkpoints of the sparse-voxel transformer detector run on the Thor (spconv built for CUDA 13 / compute 11.0) and are compared with CenterPoint on a recorded drive ([full analysis](docs/lidar_detector_comparison.md)): much steadier boxes and far fewer apparent false people, but about 200 ms per scan in PyTorch. Not live.
 - [Mapped stop signs, traffic lights and stop lines](docs/live_3d_planning.md#stop-signs-traffic-lights-and-stop-lines-on-the-map): camera detections located with LiDAR during a drive, reviewed on a local page (`tools/review_landmarks.py`), and shown in RViz; stop lines are estimated at the route point nearest each sign, not detected paint.
-- [Route planner and drive recording](docs/live_3d_planning.md#route-planner-shadow-mode-and-drive-recording): a shadow-mode speed/path planner along the mapped route with stops at kept stop lines and IDM car following, live measured-vs-planned charts, and per-drive CSV / plan / MCAP recordings. No vehicle commands.
-- [Object tracking and prediction](docs/live_3d_planning.md#object-tracking-and-prediction): map-frame Kalman/IMM tracking of CenterPoint boxes with 4-5 s predictions, a replay benchmark, and a ROS-free [development setup](docs/prediction_development.md).
+- [Route planner and drive recording](docs/live_3d_planning.md#route-planner-shadow-mode-and-drive-recording): a shadow-mode speed/path planner along the mapped route with stops at kept stop lines, IDM car following on tracked objects, yielding to crossing / cutting-in objects, live measured-vs-planned charts, and per-drive CSV / plan / MCAP recordings. No vehicle commands. A ROS-free [traffic simulation](docs/live_3d_planning.md#traffic-simulation-safety-test) tests it in ten randomized scenarios (no avoidable collisions in 400 episodes at 10 mph).
+- [Object tracking and prediction](docs/live_3d_planning.md#object-tracking-and-prediction): map-frame Kalman/IMM tracking of CenterPoint boxes with 4-5 s predictions, vehicles following the aligned HD map's lanes (rule-based: lane match, turn branch, stop lines), a replay benchmark on two drives, and a ROS-free [development setup](docs/prediction_development.md).
 - [3D BEV view and launcher](docs/live_3d_planning.md#the-3d-view): `tools/run_bev_3d.sh` and `config/rviz/bev_planning_3d.rviz`.
 - Documentation, an intentionally incomplete calibration example, and a first-recording checklist.
 

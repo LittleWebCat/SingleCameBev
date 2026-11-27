@@ -15,6 +15,8 @@ Models are looked up by name in MODELS (register_model adds your own). Detection
 (group, class, enu position (3), size (3), enu box yaw). Lane following ('+map'): a moving vehicle or cyclist within 6 m of the mapped route and heading along it
 (same or opposite direction, within 35 degrees) is predicted along the route at its lateral offset;
 anything else keeps the tracker's own prediction.
+HD map ('+hd', tools/hdmap_lanes.py): rule-based along the aligned HD map's lane graph instead: lane match, branch
+choice at forks from the turn rate, curve speed limit, stop and go at mapped stop lines, lateral offset fading out.
 """
 from collections import deque
 import itertools
@@ -217,6 +219,10 @@ class IMMTrack:
         s = self.combined()[0]
         return np.array([s[2] * math.cos(s[3]), s[2] * math.sin(s[3])])
 
+    @property
+    def turn_rate(self):
+        return float(self.combined()[0][4])
+
     def update(self, t, det):
         _, self.cls, pos, self.size, yaw = det
         self.z = pos[2]
@@ -352,8 +358,9 @@ class Tracker:
         if speed < MIN_SPEED[tr.group]:
             return False, [(k * step_s, x, y, 0.0, 0.0) for k in range(int(round(horizon_s / step_s)) + 1)]
         path = tr.future(horizon_s, step_s)
-        if self.lanes is not None and tr.group != 'pedestrian':
-            lane = self.lanes.follow(x, y, math.atan2(vel[1], vel[0]), speed, horizon_s, step_s)  # direction of motion
+        if self.lanes is not None and tr.group in getattr(self.lanes, 'groups', ('vehicle', 'cyclist')):
+            extra = {'turn_rate': float(getattr(tr, 'turn_rate', 0.0))} if getattr(self.lanes, 'uses_turn_rate', False) else {}
+            lane = self.lanes.follow(x, y, math.atan2(vel[1], vel[0]), speed, horizon_s, step_s, **extra)  # direction of motion
             if lane is not None:
                 path = [(t, px, py, ph, r) for (t, px, py, ph), (_, _, _, _, r) in zip(lane, path)]
         return True, path

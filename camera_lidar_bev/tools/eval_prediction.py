@@ -20,7 +20,7 @@ Your own predictor: write a file that calls prediction_models.register_model('mi
 with --plugin that_file.py --models imm mine (see docs/prediction_development.md).
 
   pip install numpy scipy        # any PC; on the car /usr/bin/python3 already has them
-  python3 tools/eval_prediction.py [--dataset datasets/prediction/<drive>.npz] [--models cv imm imm+map]
+  python3 tools/eval_prediction.py [--dataset datasets/prediction/<drive>.npz] [--models cv imm imm+map imm+hd]
   python3 tools/eval_prediction.py --plugin my_model.py --models imm mine --quick   # first 4 minutes only
   # straight from a bag on the car (needs ROS): --bag data/drive_<UTC>/bag
 """
@@ -78,8 +78,8 @@ def gt_at(track, t, max_gap=0.25):
     return xy[i - 1] * (1 - a) + xy[i] * a
 
 
-def run(model, frames, gt, per_frame, route, every_s):
-    lanes = RouteLanes(route) if model.endswith('+map') else None
+def run(model, frames, gt, per_frame, route, every_s, hdmap=None):
+    lanes = RouteLanes(route) if model.endswith('+map') else hdmap if model.endswith('+hd') else None
     tracker = Tracker(model.split('+')[0], lanes=lanes)
     last_pred, samples = {}, []
     for (t, dets), here in zip(frames, per_frame):
@@ -143,8 +143,11 @@ def main():
     parser.add_argument('--dataset', type=Path, default=ROOT / 'datasets/prediction/drive_20261124T213905Z.npz')
     parser.add_argument('--bag', type=Path, help='read a recorded drive directly instead (needs ROS 2)')
     parser.add_argument('--map', type=Path, default=ROOT / 'maps/local_gps_recording_002', help='route for --bag')
-    parser.add_argument('--models', nargs='+', default=['cv', 'imm', 'imm+map'],
-                        help="registered model names, '+map' adds lane following along the mapped route")
+    parser.add_argument('--models', nargs='+', default=['cv', 'imm', 'imm+map', 'imm+hd'],
+                        help="registered model names, '+map' adds lane following along the mapped route, '+hd' rule-based "
+                             "prediction along the HD map lanes (tools/hdmap_lanes.py)")
+    parser.add_argument('--hdmap', type=Path, default=ROOT / 'maps/local_gps_recording_002/hdmap/hdmap3d_enu.json',
+                        help="aligned HD map for '+hd'")
     parser.add_argument('--plugin', type=Path, action='append', default=[],
                         help='python file that registers extra models with prediction_models.register_model')
     parser.add_argument('--min-score', type=float, default=0.35, help='detections below this are dropped (live: 0.35)')
@@ -158,6 +161,10 @@ def main():
     unknown = [m for m in args.models if m.split('+')[0] not in MODELS]
     if unknown:
         parser.error(f'unknown model(s) {unknown}; registered: {sorted(MODELS)}')
+    hdmap = None
+    if any(m.endswith('+hd') for m in args.models):
+        from hdmap_lanes import HDMapLanes
+        hdmap = HDMapLanes(args.hdmap)
     t0 = time.time()
     if args.bag:
         frames, route = frames_from_bag(args.bag, args.min_score), Route(args.map / 'gps_alignment/trajectory_enu.csv')
@@ -175,7 +182,7 @@ def main():
               'split': 'dev = first half of the drive, test = second half', 'models': {}}
     for model in args.models:
         t1 = time.time()
-        samples = run(model, frames, gt, per_frame, route, args.every_s)
+        samples = run(model, frames, gt, per_frame, route, args.every_s, hdmap)
         report['models'][model] = score(samples, gt, t_split)
         print(f'{model}: {len(samples)} predictions ({time.time() - t1:.0f} s)', flush=True)
     name = args.bag.parent.name if args.bag else args.dataset.stem

@@ -1,0 +1,60 @@
+{
+ "dataset": "/home/agxthor/SingleCameraBev/camera_lidar_bev/datasets/prediction/drive_20261126T013444Z.npz",
+ "max_speed_mps": 4.4704,
+ "versions": {
+  "first": {
+   "frames": 22210,
+   "on_route": 21932,
+   "modes": {
+    "curve": 11250,
+    "cruise": 9152,
+    "follow": 788,
+    "stop_line": 430,
+    "off_route": 278,
+    "stopped_at_stop_line": 199,
+    "route_end": 113
+   },
+   "frames_with_lead": 1601,
+   "hard_brake_frames_planned_lt_-3": 722,
+   "emergency_frames_planned_lt_-4": 275,
+   "yield_events": {},
+   "yield_frames": 0,
+   "plan_minus_driven_speed_1s_mps": {
+    "median": 0.98,
+    "p10": -1.59,
+    "p90": 1.01
+   }
+  },
+  "current": {
+   "frames": 22210,
+   "on_route": 21932,
+   "modes": {
+    "curve": 11258,
+    "cruise": 8940,
+    "follow": 799,
+    "stop_line": 427,
+    "off_route": 278,
+    "stopped_at_stop_line": 199,
+    "yield": 196,
+    "route_end": 113
+   },
+   "frames_with_lead": 1977,
+   "hard_brake_frames_planned_lt_-3": 753,
+   "emergency_frames_planned_lt_-4": 283,
+   "yield_events": {
+    "person": 2,
+    "car": 5,
+    "truck": 2,
+    "bus": 3,
+    "bicycle": 1,
+    "motorcycle": 2
+   },
+   "yield_frames": 196,
+   "plan_minus_driven_speed_1s_mps": {
+    "median": 0.98,
+    "p10": -1.6,
+    "p90": 1.01
+   }
+  }
+ }
+}

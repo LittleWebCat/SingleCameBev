@@ -18,7 +18,8 @@ Writes data/traffic_light_eval_<UTC>/frames.jsonl (one line per processed frame)
 exit; --record also saves the annotated view as annotated.mp4.
 
   source /opt/ros/jazzy/setup.bash && source install/setup.bash
-  ../.venv/bin/python tools/traffic_light_camera_view.py [--camera front_wide] [--record]
+  ../.venv/bin/python tools/traffic_light_camera_view.py [--camera front_wide|front_narrow] [--record]
+  # both at once (two windows, two result folders): bash tools/run_light_camera_test.sh
 """
 import argparse
 from collections import Counter, deque
@@ -38,7 +39,14 @@ from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 from vision_msgs.msg import Detection2DArray
 
-from map_landmarks import CAMERAS, Camera, quat_to_matrix, stamp_ns
+from map_landmarks import CAMERAS as LANDMARK_CAMERAS, Camera, quat_to_matrix, stamp_ns
+
+RIG = Path(__file__).resolve().parents[1] / 'config/calibration/rig_20261125'
+# name: (COCO detections topic for the reference boxes, intrinsics, extrinsics); the two front cameras use the
+# 2026-11-25 rig (new narrow camera on USB 4.1.3.3, image /camera/front_narrow/image_raw as run_lane_compare.sh starts it)
+CAMERAS = {**LANDMARK_CAMERAS,
+           'front_wide': ('/camera_lidar_bev/front_wide/detections_2d', RIG / 'front_wide_1920x1080.yaml', RIG / 'front_wide_T_os_sensor.yaml'),
+           'front_narrow': ('/camera_lidar_bev/detections_2d', RIG / 'front_narrow_1024x768.yaml', RIG / 'front_narrow_T_os_sensor.yaml')}
 
 ROOT = Path(__file__).resolve().parents[1]
 COLOURS = {'red': (40, 40, 255), 'yellow': (0, 210, 255), 'green': (60, 220, 60)}  # BGR
@@ -194,7 +202,7 @@ def main():
     reviewed = args.map / 'landmarks/landmarks_reviewed.json'
     lights = [l for l in json.loads(reviewed.read_text())['landmarks']
               if l.get('keep') and l['type'] == 'traffic_light'] if reviewed.exists() else []
-    out = ROOT / 'data' / f"traffic_light_eval_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
+    out = ROOT / 'data' / f"traffic_light_eval_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}_{args.camera}"
     out.mkdir(parents=True)
     log = (out / 'frames.jsonl').open('w')
 

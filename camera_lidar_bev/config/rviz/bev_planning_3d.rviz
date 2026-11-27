@@ -66,6 +66,28 @@ Visualization Manager:
     Use rainbow: false
     Value: true
   - Class: rviz_default_plugins/MarkerArray
+    Name: Simulation (traffic lights, true road users)
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/sim/markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: HD map (lanes, kerbs, crosswalks, stop lines)
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/hdmap/markers
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
     Name: Route + stop signs
     Enabled: true
     Value: true
@@ -122,6 +144,68 @@ Visualization Manager:
       Durability Policy: Volatile
       History Policy: Keep Last
       Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Lanes: LiDAR (orange lines, red road edge, green centre)'
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/lanes/lidar_markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+  - Class: rviz_default_plugins/MarkerArray
+    Name: 'Lanes: cameras narrow + wide fused (blue lines, violet road edge, cyan centre)'
+    Enabled: true
+    Value: true
+    Namespaces: {}
+    Topic:
+      Value: /camera_lidar_bev/lanes/camera_narrow_wide_markers
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+  - Alpha: 0.6
+    Autocompute Intensity Bounds: true
+    Class: rviz_default_plugins/PointCloud2
+    Color Transformer: RGB8
+    Decay Time: 0
+    Enabled: true
+    Name: 'Segmentation front_wide (road green, lane blue, on the road plane)'
+    Position Transformer: XYZ
+    Selectable: false
+    Size (Pixels): 3
+    Size (m): 0.01
+    Style: Points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /camera_lidar_bev/lanes/camera_front_wide/segmentation
+    Use Fixed Frame: true
+    Value: true
+  - Alpha: 0.6
+    Autocompute Intensity Bounds: true
+    Class: rviz_default_plugins/PointCloud2
+    Color Transformer: RGB8
+    Decay Time: 0
+    Enabled: true
+    Name: 'Segmentation front_narrow (road green, lane blue, on the road plane)'
+    Position Transformer: XYZ
+    Selectable: false
+    Size (Pixels): 3
+    Size (m): 0.01
+    Style: Points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /camera_lidar_bev/lanes/camera_front_narrow/segmentation
+    Use Fixed Frame: true
+    Value: true
   Enabled: true
   Global Options:
     Background Color: 16; 18; 24

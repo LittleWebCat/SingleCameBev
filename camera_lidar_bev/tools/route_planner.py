@@ -10,8 +10,14 @@ measured state:
   * speed: min(--max-speed-mps, sqrt(lateral accel limit / curvature)), reachable with the comfort
     deceleration; a full stop before every kept stop line (MAP/landmarks/landmarks_reviewed.json,
     stop_line_estimated), held --stop-dwell-s once stopped, then released; a stop at the route end;
-  * front vehicle: CenterPoint objects (/camera_lidar_bev/lidar_detections_3d) inside the lane corridor
-    ahead; IDM car following with a standstill gap and a time gap, lead speed tracked along the route;
+    traffic lights (kept lights grouped by HD-map intersection, planner_core.load_signals): stop on red, on yellow
+    if --yellow-max-decel-mps2 is enough; there is no live colour input yet, so live they are 'unknown' and
+    --unknown-light go (default) ignores them (tested in tools/simulate_planner.py light_* scenarios);
+  * front vehicle: CenterPoint objects (/camera_lidar_bev/lidar_detections_3d), tracked (constant-velocity
+    Kalman filter, kept through dropouts of up to 1 s, confirmed in consecutive frames), inside the lane corridor
+    ahead; IDM car following with a standstill gap and a time gap, the lead speed from its track; moving objects
+    whose predicted path enters the lane ahead (crossing pedestrians and cars, cut-ins) are yielded to; braking
+    harder than --max-decel-mps2 (up to --emergency-decel-mps2) only when needed to stop in time;
   * horizon --horizon-s at 0.1 s: time, position, speed, longitudinal / lateral acceleration.
 Speeds and accelerations are in the vehicle frame (x forward, y left) at the rear axle; the planned
 vy is 0 (kinematic, no slip) and the planned ay = v^2 * curvature. Measured values come from fits to
@@ -20,7 +26,8 @@ brought to the newest pose), plus the Ouster IMU (gravity removed with the local
 low-pass). Each plan starts from the measured speed (shadow mode: you drive, the plan shows what it
 would do from here). With --continuity-mps > 0 a plan instead continues the previous plan's speed when
 that is within the tolerance of the measurement (for when the plan drives the vehicle, e.g. a closed-loop
-simulation); the plan_start column says which. Geometry comes from config/tracking/pure_pursuit.yaml.
+simulation); the plan_start column says which. Geometry comes from config/tracking/pure_pursuit.yaml. The decisions are in tools/planner_core.py (ROS-free,
+shared with tools/simulate_planner.py).
 
 Publishes /camera_lidar_bev/planner/trajectory (nav_msgs/Path, enu), /planner/markers (speed-coloured
 plan, stop target, lead vehicle, status) and /planner/state (JSON for tools/planner_plots.py).
@@ -55,6 +62,7 @@ from std_msgs.msg import ColorRGBA, String
 from vision_msgs.msg import Detection3DArray
 from visualization_msgs.msg import Marker, MarkerArray
 
+from planner_core import PlannerConfig, RoutePlanner, load_signals, load_stops
 from route_geometry import Route
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,6 +140,13 @@ def main():
     parser.add_argument('--continuity-mps', type=float, default=0.0,
                         help='continue the previous plan when it is this close to the measured speed (0 = always measured)')
     parser.add_argument('--lidar-to-front-m', type=float, default=2.35, help='measured LiDAR to front bumper')
+    parser.add_argument('--emergency-decel-mps2', type=float, default=6.5, help='only when max decel cannot stop in time')
+    parser.add_argument('--no-track-objects', dest='track_objects', action='store_false',
+                        help='first version: raw detections, no tracking or crossing checks')
+    parser.add_argument('--conflict-horizon-s', type=float, default=4.0, help='predicted paths checked for entering the lane')
+    parser.add_argument('--unknown-light', choices=('go', 'stop'), default='go',
+                        help='traffic light not seen: go (map only; live has no colour input yet) or stop within 30 m')
+    parser.add_argument('--yellow-max-decel-mps2', type=float, default=3.0, help='on yellow, stop if this braking is enough')
     parser.add_argument('--out', type=Path, help='default: data/drive_<UTC>')
     parser.add_argument('--no-bag', action='store_true')
     parser.add_argument('--bag-points', action='store_true', help='also bag the raw /points scan (large)')
@@ -140,14 +155,9 @@ def main():
     route = Route(args.map / 'gps_alignment/trajectory_enu.csv')
     lever = (tracking['lidar_forward_from_rear_axle_m'], tracking['lidar_left_from_rear_axle_m'])
     half_width = 1.791 / 2  # 2025 Nissan LEAF body width without mirrors
-    reviewed = args.map / 'landmarks/landmarks_reviewed.json'
-    stops = []
-    for l in json.loads(reviewed.read_text())['landmarks'] if reviewed.exists() else []:
-        if l.get('keep') and l['type'] == 'stop_sign' and l.get('stop_line_estimated'):
-            line_s = float(route.raw_s[l['stop_line_estimated']['route_index']])
-            # Route positions are the LiDAR; stop with the front bumper stop_margin before the line.
-            stops.append({'id': l['id'], 'line_s': line_s, 'stop_s': line_s - args.lidar_to_front_m - args.stop_margin_m,
-                          'state': 'armed', 'stopped_since': None})
+    cfg = PlannerConfig.from_args(args)
+    stops = load_stops(route, args.map, cfg)
+    core = RoutePlanner(route, stops, cfg, load_signals(route, args.map, cfg))
     out = args.out or ROOT / 'data' / f"drive_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     out.mkdir(parents=True, exist_ok=False)
     rows = (out / 'drive.csv').open('w', newline='')
@@ -177,7 +187,7 @@ def main():
         bag = subprocess.Popen(['ros2', 'bag', 'record', '-s', 'mcap', '-o', str(out / 'bag')] + topics,
                                stdout=(out / 'bag_record.log').open('w'), stderr=subprocess.STDOUT, start_new_session=True)
 
-    state = {'s': None, 'detections': None, 'pose': None, 'imu': None, 'imu_t': None, 'lead': None, 'last_plan': None}
+    state = {'s': None, 'detections': None, 'det_pose': None, 'poses': deque(maxlen=40), 'pose': None, 'imu': None, 'imu_t': None, 'lead': None, 'last_plan': None}
     motion = MotionEstimate()
 
     def on_imu(m):
@@ -196,102 +206,33 @@ def main():
 
     def on_detections(m):
         state['detections'] = m
+        t = m.header.stamp.sec + m.header.stamp.nanosec * 1e-9
+        near = min(state['poses'], key=lambda p: abs(p[0] - t), default=None)
+        state['det_pose'] = near[1:] if near is not None and abs(near[0] - t) < 0.1 else None
 
-    def lead_vehicle(t, rot, pos, s_ego):
-        """Closest object in the corridor ahead: (gap bumper-to-bumper m, speed along route m/s, class)."""
+    def lead_vehicle(t, rot, pos, s_ego, v_ego):
+        """Closest object in the corridor ahead (or a crossing / cutting-in object to yield to):
+        (gap bumper-to-bumper m, speed along route m/s, class). Detections are placed with the pose at their stamp."""
         m = state['detections']
-        if m is None or abs(m.header.stamp.sec + m.header.stamp.nanosec * 1e-9 - t) > 0.5:
+        if m is None:
             return None
-        best = None
-        for d in m.detections:
-            if not d.results or d.results[0].hypothesis.score < args.min_detection_score:
-                continue
-            c = d.bbox.center.position
-            p = rot @ np.array([c.x, c.y, c.z]) + pos
-            proj = route.project(p[0], p[1], 0.0, s_prev=s_ego, max_dist=args.corridor_half_width_m + 3.0,
-                                 max_heading=math.pi + 0.1, ahead_m=80.0)
-            if proj is None or proj[0] <= s_ego:
-                continue
-            obj_half_w = min(d.bbox.size.x, d.bbox.size.y) / 2
-            if abs(proj[1]) - obj_half_w > args.corridor_half_width_m:
-                continue
-            gap = proj[0] - s_ego - args.lidar_to_front_m - max(d.bbox.size.x, d.bbox.size.y) / 2
-            if best is None or gap < best[0]:
-                best = (gap, proj[0], p, d.results[0].hypothesis.class_id)
-        if best is None:
-            state['lead'] = None
-            return None
-        gap, s_obj, p, cls = best
-        prev = state['lead']
-        speed = 0.0
-        if prev is not None and np.linalg.norm(prev['p'][:2] - p[:2]) < 3.0 and t > prev['t']:
-            raw = (s_obj - prev['s']) / (t - prev['t'])
-            speed = prev['speed'] + min(1.0, (t - prev['t']) / 0.5) * (raw - prev['speed'])
-        state['lead'] = {'t': t, 's': s_obj, 'p': p, 'speed': speed}
-        return max(gap, 0.0), max(speed, 0.0), cls
-
-    def plan(s_ego, lateral, v0, lead):
-        """Speed and path over the horizon from the measured state; returns arrays and the active reason."""
-        dt, n = 0.1, int(round(args.horizon_s / 0.1))
-        ds = 0.5
-        reach = s_ego + np.arange(0.0, args.max_speed_mps * args.horizon_s + 60.0, ds)
-        reach = reach[reach <= route.length]
-        _, _, _, _, kap = route.at(reach)
-        v_static = np.minimum(args.max_speed_mps, np.sqrt(args.lateral_accel_mps2 / np.maximum(np.abs(kap), 1e-4)))
-        targets = [(route.length - 1.0, 'route_end', None)]
-        for st in stops:
-            if st['state'] == 'stopping' or (st['state'] == 'armed' and st['stop_s'] > s_ego - 3.0):
-                targets.append((st['stop_s'], 'stop_line', st['id']))
-        stop_s, stop_kind, stop_id = min(targets)
-        def reachable(v_max):  # backward pass: every speed can slow to the next with comfort deceleration
-            v_max = v_max.copy()
-            for i in range(len(v_max) - 2, -1, -1):
-                v_max[i] = min(v_max[i], math.sqrt(v_max[i + 1] ** 2 + 2 * args.comfort_decel_mps2 * ds))
-            return v_max
-        v_curve = reachable(v_static)  # curves only, to label why the plan slows
-        v_allow = reachable(np.where(reach >= stop_s, 0.0, v_static))
-        t_arr, s_arr, v_arr, a_arr, reason = [0.0], [s_ego], [v0], [], []
-        s, v = s_ego, v0
-        for k in range(n):
-            step = max(v * dt + 0.5 * args.max_accel_mps2 * dt * dt, 0.05)
-            target = float(np.interp(s + step, reach, v_allow)) if len(reach) > 1 else 0.0
-            a = (target * target - v * v) / (2 * step)  # exactly the allowed speed one step ahead
-            here = float(np.interp(s + step, reach, v_curve)) if len(reach) > 1 else 0.0
-            why = stop_kind if target < here - 0.05 else ('curve' if target < args.max_speed_mps - 0.05 else 'cruise')
-            if lead is not None:
-                gap0, v_lead, _ = lead
-                gap = gap0 + v_lead * (k * dt) - (s - s_ego)
-                desired = args.standstill_gap_m + v * args.time_gap_s + v * (v - v_lead) / (
-                    2 * math.sqrt(args.max_accel_mps2 * args.comfort_decel_mps2))
-                interaction = args.max_accel_mps2 * (max(desired, args.standstill_gap_m) / max(gap, 0.1)) ** 2
-                a_idm = args.max_accel_mps2 * (1 - (v / max(target, 0.1)) ** 4) - interaction
-                if a_idm < a:
-                    a = a_idm
-                    why = 'follow' if interaction > 0.1 else why  # the front vehicle is what holds the plan back
-            if why in ('cruise', 'curve'):  # above the cap or a curve speed: slow comfortably, brake hard only to stop
-                a = max(a, -args.comfort_decel_mps2)
-            a = float(np.clip(a, -args.max_decel_mps2, args.max_accel_mps2))
-            if v <= 0.0 and a < 0:
-                a = 0.0
-            v_next = max(0.0, v + a * dt)
-            s += 0.5 * (v + v_next) * dt
-            v = v_next
-            t_arr.append((k + 1) * dt)
-            s_arr.append(min(s, route.length))
-            v_arr.append(v)
-            a_arr.append(a)
-            reason.append(why)
-        a_arr.append(a_arr[-1] if a_arr else 0.0)
-        s_arr = np.array(s_arr)
-        x, y, z, h, kap = route.at(s_arr)
-        # Start at the vehicle and blend onto the route (smoothstep over max(8 m, 2 s of travel)).
-        u = np.clip((s_arr - s_ego) / max(8.0, 2.0 * v0), 0, 1)
-        offset = lateral * (1 - u * u * (3 - 2 * u))
-        x, y = x - np.sin(h) * offset, y + np.cos(h) * offset
-        v_arr = np.array(v_arr)
-        return {'t': np.array(t_arr), 's': s_arr, 'x': x, 'y': y, 'z': z, 'v': v_arr, 'ax': np.array(a_arr),
-                'ay': v_arr ** 2 * kap, 'kappa': kap, 'reason': reason[0] if reason else 'cruise',
-                'stop': (stop_s, stop_kind, stop_id)}
+        t_det = m.header.stamp.sec + m.header.stamp.nanosec * 1e-9
+        if abs(t_det - t) > 0.5:
+            objects, t_det = [], t  # stale: no detections this cycle (tracks coast, then expire)
+        else:
+            rot_d, pos_d = state['det_pose'] or (rot, pos)
+            ego_yaw = math.atan2(rot_d[1, 0], rot_d[0, 0])
+            objects = []
+            for d in m.detections:
+                if not d.results:
+                    continue
+                c, q = d.bbox.center.position, d.bbox.center.orientation
+                p = rot_d @ np.array([c.x, c.y, c.z]) + pos_d
+                objects.append((p[0], p[1], p[2], max(d.bbox.size.x, d.bbox.size.y), min(d.bbox.size.x, d.bbox.size.y),
+                                d.results[0].hypothesis.class_id, d.results[0].hypothesis.score, yaw_of(q) + ego_yaw))
+        lead = core.lead_vehicle(t_det, objects, s_ego, now=t, v_ego=v_ego)
+        state['lead'] = core.lead_state
+        return lead
 
     def colour(v):
         f = min(1.0, v / max(args.max_speed_mps, 0.1))  # red (stopping) -> yellow -> green (full speed)
@@ -356,6 +297,7 @@ def main():
         rot, pos = quat_matrix(q), np.array([pp.x, pp.y, pp.z])
         state['pose'] = (rot, pos)
         t = m.header.stamp.sec + m.header.stamp.nanosec * 1e-9
+        state['poses'].append((t, rot, pos))
         yaw = yaw_of(q)
         rear = (pos[0] - math.cos(yaw) * lever[0] + math.sin(yaw) * lever[1],
                 pos[1] - math.sin(yaw) * lever[0] - math.cos(yaw) * lever[1])
@@ -389,25 +331,14 @@ def main():
             v_prev = float(np.interp(t - last[0], last[1], last[2]))
             if args.continuity_mps > 0 and abs(v_prev - v_meas) <= args.continuity_mps:
                 v0, plan_start = v_prev, 'continued'
-        for st in stops:  # stop-line state machine (re-armed when far behind the line again)
-            to_go = st['stop_s'] - s_ego
-            if st['state'] in ('released', 'passed') and to_go > 30:
-                st['state'], st['stopped_since'] = 'armed', None
-            elif st['state'] in ('armed', 'stopping'):
-                if -3.0 < to_go < 2.0 and v_meas < 0.3:
-                    st['state'] = 'stopping'
-                    st['stopped_since'] = st['stopped_since'] or t
-                    if t - st['stopped_since'] >= args.stop_dwell_s:
-                        st['state'] = 'released'
-                elif to_go < -3.0:
-                    st['state'] = 'passed'  # drove through without the planned stop (logged)
-                else:
-                    st['stopped_since'] = None
-        lead = lead_vehicle(t, rot, pos, s_ego)
-        p = plan(s_ego, lateral, v0, lead)
+        core.update_stops(s_ego, v_meas, t)
+        core.update_signals(s_ego, v_meas, t)  # no colour input live yet: signals stay 'unknown'
+        lead = lead_vehicle(t, rot, pos, s_ego, v_meas)
+        p = core.plan(s_ego, lateral, v0, lead)
         state['last_plan'] = (t, p['t'], p['v'])
         stop_s, stop_kind, stop_id = p['stop']
-        nearest_stop = min((st for st in stops if st['stop_s'] > s_ego - 3.0), key=lambda st: st['stop_s'], default=None)
+        nearest_stop = core.nearest_stop(s_ego)
+        signal = min((sg for sg in core.signals if -1.0 < sg['stop_s'] - s_ego < 80), key=lambda sg: sg['stop_s'], default=None)
         mode = p['reason']
         if nearest_stop is not None and nearest_stop['state'] == 'stopping':
             mode = 'stopped_at_stop_line'
@@ -435,12 +366,17 @@ def main():
                       stop=None if nearest_stop is None else {'id': nearest_stop['id'], 'distance': nearest_stop['stop_s'] - s_ego,
                                                                'state': nearest_stop['state']},
                       lead=None if lead is None else {'gap': lead[0], 'speed': lead[1], 'class': lead[2],
-                                                      'desired_gap': args.standstill_gap_m + v_meas * args.time_gap_s})
+                                                      'desired_gap': args.standstill_gap_m + v_meas * args.time_gap_s},
+                      conflict=core.conflict)
         state_pub.publish(String(data=json.dumps(report)))
         parts = [mode.replace('_', ' ').upper(), f"v {v_meas:.1f} -> {p['v'][i3]:.1f} m/s in 3 s"]
         if nearest_stop is not None and nearest_stop['stop_s'] - s_ego < 60:
             parts.append(f"stop #{nearest_stop['id']} {nearest_stop['stop_s'] - s_ego:.0f} m ({nearest_stop['state']})")
-        if lead is not None:
+        if signal is not None:
+            parts.append(f"light #{signal['id']} {signal['stop_s'] - s_ego:.0f} m ({signal['state']}{', stopping' if signal['target'] else ''})")
+        if core.conflict is not None:
+            parts.append(f"yield: {core.conflict['class']} entering lane in {core.conflict['enters_in_s']:.1f} s")
+        elif lead is not None:
             parts.append(f'{lead[2]} {lead[0]:.0f} m @ {lead[1]:.1f} m/s')
         publish(m.header, p, pos, ' | '.join(parts), None if state['lead'] is None else state['lead']['p'])
 

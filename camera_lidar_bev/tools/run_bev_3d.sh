@@ -113,6 +113,7 @@ fi
 
 echo "8/8 BEV scene + RViz"
 running 'tools/[b]ev_scene_markers.py' && echo "  scene already running (reused)" || start scene /usr/bin/python3 tools/bev_scene_markers.py --map "$MAP"
+[ -f "$MAP/hdmap/hdmap3d_enu.json" ] && { running 'tools/[h]dmap_publisher.py' && echo "  HD map already running (reused)" || start hdmap /usr/bin/python3 tools/hdmap_publisher.py --map "$MAP"; }
 running 'rviz2 -d config/rviz/[b]ev_planning_3d.rviz' && echo "  RViz already open (reused)" || start rviz rviz2 -d config/rviz/bev_planning_3d.rviz
 
 echo

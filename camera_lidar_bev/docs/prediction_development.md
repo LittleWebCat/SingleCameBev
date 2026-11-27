@@ -11,15 +11,20 @@ git clone https://github.com/LittleWebCat/SingleCameBev.git
 cd SingleCameBev/camera_lidar_bev
 python3 -m pip install -r tools/requirements-prediction.txt   # numpy, scipy
 python3 -m unittest discover -s tests -p 'test_prediction_models.py'
+python3 -m unittest discover -s tests -p 'test_hdmap_planner.py'   # HD-map rules, planner, simulation
 ```
 
 ## Run the benchmark
 
 ```bash
 python3 tools/eval_prediction.py --quick                 # first 4 minutes, ~15 s
-python3 tools/eval_prediction.py                         # whole 24-minute drive, cv + imm + imm+map, ~5 min
+python3 tools/eval_prediction.py                         # whole 24-minute drive, cv + imm + imm+map + imm+hd, ~5 min
+python3 tools/eval_prediction.py --dataset datasets/prediction/drive_20261126T013444Z.npz   # second drive, 20 min
 python3 tools/eval_prediction.py --models cv imm         # chosen models
 ```
+
+Two drives of the same loop are included: `drive_20261124T213905Z` (24 min) and `drive_20261126T013444Z`
+(20 min, more traffic in the second half). Check a change on both.
 
 It prints median (mean) [count] tables for the first half of the drive (**dev**, use it for tuning) and the
 second half (**test**, check it last so it stays an honest score), and writes
@@ -59,7 +64,10 @@ new detection `det = (group, class, enu_xyz, (length, width, height), enu_box_ya
 
 Subclassing `CVTrack` or `IMMTrack` and overriding `future()` changes only the prediction; overriding
 `predict` / `update` changes the filter too. A model name with `+map` adds lane following along the mapped
-route (`RouteLanes`). Run the plugin live on the car by registering it in `prediction_models.MODELS` (or
+route (`RouteLanes`); `+hd` adds the rule-based HD map lane following of
+[`tools/hdmap_lanes.py`](../tools/hdmap_lanes.py) (the aligned map `maps/local_gps_recording_002/hdmap/hdmap3d_enu.json`,
+`--hdmap` for another), e.g. `--models mine mine+hd`. Its rules are module constants (`STOP_DECEL`,
+`STOP_WAIT_S`, `LATERAL_FADE_S`, `LAT_ACCEL`, ...) that a plugin can change. Run the plugin live on the car by registering it in `prediction_models.MODELS` (or
 importing it there) and starting `tools/object_prediction.py --model <name>` (the `--model` choices list
 needs the new name added).
 
@@ -74,8 +82,9 @@ vehicle error is almost all **along the direction of travel**, mainly from
 3. few turning examples in this drive (about 50), so turn handling is weakly measured.
 
 Good first experiments: a constant-acceleration or IMM model with an acceleration state; initialising
-speed from the first few detections; slowing vehicles that approach a mapped stop line or a stopped car;
-using the route / lane markings for direction at intersections.
+speed from the first few detections; slowing vehicles that approach a stopped car. Direction at
+intersections and stops at mapped stop lines are now in `+hd` (better in busy and turning traffic, see the live
+guide); the speed error along the lane is what is left.
 
 ## Add more drives
 
